@@ -1653,15 +1653,27 @@ def qiqo_webhook(request):
 
 @api_view()
 def dollar_impact(request):
-    expenses = DollarsSaved.objects.all()
-    for expense in expenses:
-        cumulative_impact = expense.dollar_value_impact
-        total_expense = expense.total_expenses
+    impact = DollarsSaved.objects.all()
+    history = []
+    total_value = 0
+    total_expense = 0
+    for data in impact:
+        year = data.year
+        if year is not None:
+            public_value = data.public_value_created
+            expense = data.expense
+            history.append(
+                {"year": year, "public_value": public_value, "expense": expense}
+            )
+            total_value += public_value
+            total_expense += expense
+    roi = (total_value - total_expense) / total_expense
 
-        roi = (cumulative_impact - total_expense) / total_expense
-        print(roi)
-        est_impact = cumulative_impact
+    res = {
+        "history": history,
+        "total_impact": total_value,
+        "total_expense": total_expense,
+        "roi": roi,
+    }
 
-        data = {"roi": roi, "est_impact": est_impact}
-
-        return JsonResponse(data)
+    return JsonResponse(res)

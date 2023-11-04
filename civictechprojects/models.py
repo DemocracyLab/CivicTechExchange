@@ -2082,8 +2082,13 @@ class Testimonial(models.Model):
 
 
 class DollarsSaved(models.Model):
-    dollar_value_impact = models.IntegerField(default=4516625)
-    total_expenses = models.IntegerField(default=294483)
+    year = models.DateField(null=True, blank=True)
+    public_value_created = models.IntegerField(default=0)
+    expense = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.dollar_value_impact.__str__()
+        return "{year} - {public_value_created} {expense}".format(
+            year=self.year.__str__(),
+            public_value_created=self.public_value_created,
+            expense=self.expense,
+        )
