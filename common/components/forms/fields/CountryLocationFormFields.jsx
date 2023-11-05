@@ -54,8 +54,6 @@ class CountryLocationFormFields extends React.Component<Props, State> {
     this.onSelection(this.props.countryFieldId, null);
   }
 
-
-//find a way to let country form have clear feature!
   render(): ?React$Node {
     return (
       <React.Fragment>
@@ -69,7 +67,6 @@ class CountryLocationFormFields extends React.Component<Props, State> {
               this.onSelection(this.props.countryFieldId, country);
               this.onSelection(this.props.locationFieldId, null);
             }}
-
           />
 
           <Button
