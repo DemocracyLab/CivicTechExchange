@@ -69,13 +69,17 @@ class CountryLocationFormFields extends React.Component<Props, State> {
               this.onSelection(this.props.countryFieldId, country);
               this.onSelection(this.props.locationFieldId, null);
             }}
+
           />
+
           <Button
             variant="primary"
             size="sm"
             onClick={this.clearCountrySelection}
+            style={{ marginTop: '10px' }}
           >
-            clear</Button>
+            Clear selected country</Button>
+
         </div>
 
         <div className="form-group">
