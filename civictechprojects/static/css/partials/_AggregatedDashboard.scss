@@ -1,11 +1,15 @@
+// .AggregatedDashboard-title {
+//     display: -webkit-box;
+//     -webkit-line-clamp: 2; // make titles two rows maximum
+//     -webkit-box-orient: vertical;
+//     font-size: 23px;
+//     font-weight: medium;
+//     overflow: hidden;
+//     align-self: start; // stops character descenders from getting clipped, weird but works
+// }
 .AggregatedDashboard-title {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; // make titles two rows maximum
-    -webkit-box-orient: vertical;
-    font-size: 23px;
-    font-weight: medium;
-    overflow: hidden;
-    align-self: start; // stops character descenders from getting clipped, weird but works
+  margin: 1rem 0;
+  text-align: center;
 }
 
 .Aggregated-dashboard {
@@ -28,18 +32,27 @@
 }
 
 @include media-breakpoint-up(xs) {
+  // .AggregatedDashboard-title {
+  //   font-size: 19px;
+  // }
+  .AggregatedDashboard-title {
+    margin: 1rem 0 1.5rem 0;
+  }
   .Aggregated-dashboard {
     flex-direction: row;
     flex-wrap: wrap;
     .card {
-      flex-basis: 90%;
-      min-width: 90%;
+      flex-basis: 100%;
+      min-width: 100%;
       margin-bottom: 24px;
     }
   }
 }
 
 @include media-breakpoint-up(sm) {
+  .AggregatedDashboard-title {
+    margin: 1rem 0 1.5rem 0;
+  }
   .Aggregated-dashboard {
     flex-direction: row;
     flex-wrap: wrap;
@@ -52,6 +65,9 @@
 }
 
 @include media-breakpoint-up(md) {
+  .AggregatedDashboard-title {
+    margin: 1rem 0 1.5rem 0;
+  }
   .Aggregated-dashboard {
     flex-direction: row;
     flex-wrap: wrap;

@@ -8,6 +8,13 @@
     align-self: start; // stops character descenders from getting clipped, weird but works
 }
 
+.impact-across-sectors-chart{
+    // width: 650px !important;
+    // height: 895px !important;
+    width: 250px !important;
+    height: 500px !important;
+    // overflow-x: auto;
+}
 .Impact-across-sectors-summary {
     display: flex;
     justify-content: center;

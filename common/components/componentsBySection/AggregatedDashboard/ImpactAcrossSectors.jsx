@@ -17,7 +17,9 @@ const data = {
 };
 
 const options = {
-  // responsive: true,
+  responsive: true,
+  maintainAspectRatio: false,
+  indexAxis: 'y',
   plugins: {
     legend: {
       position: 'bottom',
@@ -27,6 +29,7 @@ const options = {
         font: {
           family: "Montserrat",
           weight: "normal",
+          size: 8,
         },
         padding: 32,
       },
@@ -42,11 +45,15 @@ const options = {
     },
     y: {
       ticks: {
-        callback: function(tick, index, array) {
-          return (index % 2) ? "" : tick;
-        },
+        // callback: function(tick, index, array) {
+        //   return (index % 2) ? "" : tick;
+        // },
+        autoSkip: false,
+        maxRotation: 45,
+        minRotation: 45,
         font: {
-          family:'Montserrat'
+          family:'Montserrat',
+          size: 8,
         }
       }
     }
@@ -84,7 +91,7 @@ class ImpactAcrossSectors extends React.PureComponent<Props, State> {
             </span>
           </div>
         </div>
-        <div>
+        <div className="impact-across-sectors-chart">
           <Bar
             options={options}
             data={data}
