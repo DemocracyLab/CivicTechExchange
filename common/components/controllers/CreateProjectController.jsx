@@ -6,7 +6,6 @@ import CurrentUser from "../../components/utils/CurrentUser.js";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
-import Headers from "../common/Headers.jsx";
 import ProjectOverviewForm from "../componentsBySection/CreateProject/ProjectOverviewForm.jsx";
 import ProjectInfoForm from "../componentsBySection/CreateProject/ProjectInfoForm.jsx";
 import ProjectPreviewForm from "../componentsBySection/CreateProject/ProjectPreviewForm.jsx";
@@ -198,10 +197,6 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="Create a Project | DemocracyLab"
-          description="Create project page"
-        />
         <div className="form-body">
           {!CurrentUser.isLoggedIn() ? (
             <LogInController prevPage={Section.CreateProject} />

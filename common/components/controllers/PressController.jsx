@@ -2,7 +2,6 @@
 
 import _ from "lodash";
 import React from "react";
-import Headers from "../common/Headers.jsx";
 import cdn from "../utils/cdn.js";
 import LoadingMessage from "../chrome/LoadingMessage.jsx";
 
@@ -32,14 +31,6 @@ class PressController extends React.PureComponent<{||}, State> {
     this.state = {
       stats: null,
     };
-  }
-
-  _renderHeader(): React$Node {
-    const title: string = "DemocracyLab | News Feed";
-    const description: string =
-      "Read external articles and blog posts describing DemocracyLab's work.";
-
-    return <Headers title={title} description={description} />;
   }
 
   _renderTitle(): React$Node {
@@ -108,7 +99,6 @@ class PressController extends React.PureComponent<{||}, State> {
   render(): $React$Node {
     return (
       <React.Fragment>
-        {this._renderHeader()}
         <div className="container-fluid pl-0 pr-0 press-root">
           {this._renderTitle()}
         </div>
