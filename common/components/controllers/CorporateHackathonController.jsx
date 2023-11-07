@@ -43,13 +43,6 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           ? tabOptions[tabArg]
           : tabOptions.hackathon,
     };
-    // if GOOGLE_PROPERTY_ID is not set in the environment, then google's gtag snippet will not get loaded and 
-    // window.gtag won't be defined.  We should make a global fix to this issue, but for now we are tring to limit changes
-    // to this one file as we research the differences and tradeoffs between gtags and google tag managers
-    //
-    // it is called like this (gtag('event',tab_option),true) within events because event handlers need to return true
-    // for the event propogation to continue.
-    if(!window.gtag) window.gtag=()=>{}
   }
 
   render(): $React$Node {
