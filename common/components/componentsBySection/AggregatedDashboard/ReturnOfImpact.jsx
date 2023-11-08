@@ -26,6 +26,13 @@ const data = {
 };
 
 const options = {
+  responsive: true,
+  maintainAspectRatio: false,
+  // layout: {
+  //   padding: {
+  //     bottom: -50
+  //   }
+  // },
   plugins: {
     legend: {
       position: 'bottom',
@@ -36,7 +43,7 @@ const options = {
           family: "Montserrat",
           weight: "normal",
         },
-        padding: 32,
+        padding: 32
       },
       title: {
         display: true,
@@ -50,7 +57,7 @@ const options = {
         },
         text: ["Total expenses calculated between 1 January 2018 and 18 October 2023.","ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses)*100."],
       }
-    }
+    },
   },
   scales: {
     x: {
@@ -106,21 +113,23 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           </div>
         </div>
 
-        <div>
-          <Line
-            data={data}
-            options={options}
-            redraw={true}
-            plugins={[
-              {
-                beforeDraw(c) {
-                  var legends = c.legend.legendItems;
-                  legends[0].fillStyle = "#F79E02";
-                  legends[1].fillStyle = "#FDE2B3";
+        <div className="roi-chart">
+          <div className="roi-line">
+            <Line
+              data={data}
+              options={options}
+              redraw={true}
+              plugins={[
+                {
+                  beforeDraw(c) {
+                    var legends = c.legend.legendItems;
+                    legends[0].fillStyle = "#F79E02";
+                    legends[1].fillStyle = "#FDE2B3";
+                  }
                 }
-              }
-            ]}
-          />
+              ]}
+            />
+          </div>
         </div>
       </React.Fragment>
     );

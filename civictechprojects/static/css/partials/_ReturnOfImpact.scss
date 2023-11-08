@@ -10,7 +10,9 @@
 
 .Return-impact-summary {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
+    // justify-content: center;
     align-items: center;
     margin-top: 88px;
     margin-bottom: 56px;
@@ -21,6 +23,7 @@
 .Return-impact-summary .card-number {
     text-align: center;
     align-items: center;
+    height: auto;
 }
 
 .Return-impact-summary .card-number span {
@@ -53,4 +56,194 @@
     text-align: left;
     margin: 0;
     padding: 0;
+}
+
+.roi-chart {
+    overflow-x: auto;
+}
+
+@include media-breakpoint-up(xs) {
+
+    // .roi-chart {
+    //     max-width: 100%;
+    //     overflow-x: auto;
+    // }
+    .roi-chart {
+        margin-bottom: 32px;
+        .roi-line {
+            width: 550px !important;
+            height: 450px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 40px;
+
+        .card-number span {
+            font-size: 50px;
+        }
+
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(sm) {
+
+    // .roi-chart {
+    //     // height: 200px;
+    //     max-width: 100%;
+    //     overflow-x: auto;
+    // }
+    .roi-chart {
+        margin-bottom: 32px;
+        .roi-line {
+            width: 550px !important;
+            height: 450px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 40px;
+
+        .card-number span {
+            font-size: 50px;
+        }
+
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+
+    // .roi-chart {
+    //     max-width: 100%;
+    //     overflow-x: auto;
+    //     // height: 200px;
+    // }
+    .roi-chart {
+        margin-bottom: 32px;
+        .roi-line {
+            width: 550px !important;
+            height: 450px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 40px;
+
+        .card-number span {
+            font-size: 50px;
+        }
+
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+
+    // .roi-chart {
+    //     max-width: 100%;
+    //     overflow-x: auto;
+    //     // height: 500px;
+    // }
+    .roi-chart {
+        margin-bottom: 200px;
+        display: flex;
+        justify-content: space-around;
+        .roi-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+
+        .card-number span {
+            font-size: 80px;
+        }
+
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+
+    // .roi-chart {
+    //     max-width: 100%;
+    //     overflow-x: auto;
+    //     // height: 500px;
+    // }
+    .roi-chart {
+        margin-bottom: 200px;
+        display: flex;
+        justify-content: space-around;
+        .roi-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+
+        .card-number span {
+            font-size: 80px;
+        }
+
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+
+    // .roi-chart {
+    //     height: 500px;
+    // }
+    .roi-chart {
+        margin-bottom: 200px;
+        display: flex;
+        justify-content: space-around;
+        .roi-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+
+    .Return-impact-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+
+        .card-number span {
+            font-size: 80px;
+        }
+
+        .card-text {
+            margin-left: 128px;
+        }
+    }
 }
