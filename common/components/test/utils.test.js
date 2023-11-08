@@ -10,7 +10,6 @@ import GroupBy from "../utils/groupBy.js";
 import array from "../utils/array.js";
 import utils from "../utils/utils.js";
 import Guard from "../utils/guard.js";
-
 describe("utils", () => {
   test("async.doWhenReady", () => {
     const readyFunc = () => true;
@@ -104,6 +103,9 @@ describe("utils", () => {
 
     urlHelper.navigateToSection("LogIn");
     expect(NavigationStore.getSection()).toEqual("LogIn");
+    
+    urlHelper.ifAuthThenRedirect()
+    expect(NavigationStore.getSection()).toEqual('Home');
 
     let url = urlHelper.section("FindProjects", { next: 1 });
     expect(url).toEqual("/projects?next=1");
