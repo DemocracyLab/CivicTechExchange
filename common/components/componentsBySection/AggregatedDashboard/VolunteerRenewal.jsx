@@ -3,97 +3,123 @@ import { Line } from "react-chartjs-2"; // References: https://react-chartjs-2.j
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-const data = {
-  labels: ["2019", "2020", "2021", "2022", "2023*"], // TODO
-  datasets: [
-    {
-      label: "Number of volunteers joined every year",
-      data: [300, 600, 1020, 1250, 1670], // TODO
-      fill: false,
-      borderColor: "#F79E02",
-      tension: 0.5,
-      pointBackgroundColor: "#F79E02"
-    },
-    {
-      label: "Number of volunteers renewed every year",
-      data: [120, 380, 620, 820, 1150], // TODO
-      fill: false,
-      borderColor: "#FDE2B3",
-      tension: 0.5,
-      pointBackgroundColor: "#FDE2B3"
-    }
-  ]
-};
-
-const options = {
-  plugins: {
-    legend: {
-      position: 'bottom',
-      labels: {
-        usePointStyle: true,
-        color: "#191919",
-        font: {
-          family: "Montserrat",
-          weight: "normal",
-        },
-        padding: 32,
-      },
-      title: {
-        display: true,
-        color: "#191919",
-        font: {
-          family: "Montserrat",
-          weight: "normal",
-        },
-        padding: {
-          top: 32,
-        },
-        text: "2023* - Projected values based on volunteer activity recorded till date.",
-      }
-    }
-  },
-  scales: {
-    x: {
-      ticks: {
-        font: {
-          family:'Montserrat'
-        }
-      }
-    },
-    y: {
-      ticks: {
-        count: 5,
-        font: {
-          family:'Montserrat'
-        }
-      }
-    }
-  }
-};
-
 type Props = {|
 |};
 
 type State = {|
+  renewalRate: number,
+  renewalNumberList: Array<number>,
+  joinedNumberList: Array<number>,
+  yearList: Array<string>,
 |};
+
 
 class VolunteerRenewal extends React.PureComponent<Props, State> {
   constructor(props) {
     super();
-    this.state = { };
+    this.state = {
+      renewalRate: 0,
+      renewalNumberList: [],
+      joinedNumberList: [],
+      yearList: [],
+    };
   }
 
   componentDidMount() {
+    const url_impact: string = "/api/volunteers_history_stats";
+    fetch(new Request(url_impact))
+      .then(response => response.json())
+      .then(getResponse =>
+        this.setState({
+          renewalRate: getResponse.cumulative_renewal_percentage,
+          renewalNumberList: getResponse.yearly_stats.map(item => item.renewals),
+          joinedNumberList: getResponse.yearly_stats.map(item => item.approved),
+          yearList: getResponse.yearly_stats.map((item, i, array) => {
+            if (i === array.length - 1) {
+              return item.year + '*';
+            } else {
+              return item.year + '';
+            }
+          }),
+        })
+      );
   }
 
   render(): React$Node {
+    const data = {
+      labels: this.state.yearList,
+      datasets: [
+        {
+          label: "Number of volunteers joined every year",
+          data: this.state.joinedNumberList,
+          fill: false,
+          borderColor: "#F79E02",
+          tension: 0.5,
+          pointBackgroundColor: "#F79E02"
+        },
+        {
+          label: "Number of volunteers renewed every year",
+          data: this.state.renewalNumberList,
+          fill: false,
+          borderColor: "#FDE2B3",
+          tension: 0.5,
+          pointBackgroundColor: "#FDE2B3"
+        }
+      ]
+    };
+
+    const options = {
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            color: "#191919",
+            font: {
+              family: "Montserrat",
+              weight: "normal",
+            },
+            padding: 32,
+          },
+          title: {
+            display: true,
+            color: "#191919",
+            font: {
+              family: "Montserrat",
+              weight: "normal",
+            },
+            padding: {
+              top: 32,
+            },
+            text: `${this.state.yearList[this.state.yearList.length-1]} - Projected values based on volunteer activity recorded till date.`,
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: {
+            font: {
+              family:'Montserrat'
+            }
+          }
+        },
+        y: {
+          ticks: {
+            count: 5,
+            font: {
+              family:'Montserrat'
+            }
+          }
+        }
+      }
+    };
 
     return (
       <React.Fragment>
         <h2 className="text-center AggregatedDashboard-title">Volunteer Renewal</h2>
         <div className="volunteer-experience-summary">
           <div className="card-number">
-            <span>87%</span>
+            <span>{this.state.renewalRate}%</span>
             <h4>Volunteers renewed</h4>
           </div>
           <div className="card-text">

@@ -33,7 +33,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
       .then(getResponse =>
         this.setState({
           returnOfImpact: getResponse.roi,
-          estimatedImpact: getResponse.est_impact,
+          estimatedImpact: getResponse.total_impact,
         })
       );
     const url_stats: string = "/api/volunteers_stats";
@@ -50,7 +50,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <h2 className="text-center AggregatedDashboard-title">DemocarcyLab's Impact</h2>
+        <h2 className="text-center AggregatedDashboard-title">DemocracyLab's Impact</h2>
         <div className="Aggregated-dashboard" id="dashboardDisplay">
             <div className="card card1">
                 <span>{Math.round(this.state.returnOfImpact*100)}%</span>
