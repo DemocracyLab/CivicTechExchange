@@ -40,19 +40,16 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      // labels: this.state.yearList,
-      labels: ['2019', '2020', '2021', '2022', '2023'],
+      labels: this.state.yearList,
       datasets: [
         {
           label: 'Number of volunteer applications every year',
-          // data: this.state.applicationNumberList,
-          data: [150, 450, 700, 1100, 1550],
+          data: this.state.applicationNumberList,
           backgroundColor: '#F9B135',
         },
         {
           label: 'Number of volunteer approvals every year',
-          // data: this.state.approvedNumberList,
-          data: [50, 200, 350, 700, 850],
+          data: this.state.approvedNumberList,
           backgroundColor: '#FDE2B3',
         },
       ],

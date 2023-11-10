@@ -47,13 +47,11 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      // labels: this.state.yearList,
-      labels: ["2019", "2020", "2021", "2022", "2023*"], // {this.state.yearList[this.state.yearList.length-1]}
+      labels: this.state.yearList,
       datasets: [
         {
           label: "Number of volunteers joined every year",
-          // data: this.state.joinedNumberList,
-          data: [300, 600, 1020, 1250, 1670], // TODO
+          data: this.state.joinedNumberList,
           fill: false,
           borderColor: "#F79E02",
           tension: 0.5,
@@ -61,8 +59,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
         },
         {
           label: "Number of volunteers renewed every year",
-          // data: this.state.renewalNumberList,
-          data: [120, 380, 620, 820, 1150],
+          data: this.state.renewalNumberList,
           fill: false,
           borderColor: "#FDE2B3",
           tension: 0.5,
@@ -140,7 +137,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
           </div>
         </div>
         <div class="volunteer-renewal-chart-desc">
-          <p> 2023* - Projected values based on volunteer activity recorded till date.</p>
+          <p> {this.state.yearList[this.state.yearList.length-1]} - Projected values based on volunteer activity recorded till date.</p>
         </div>
       </React.Fragment>
     );
