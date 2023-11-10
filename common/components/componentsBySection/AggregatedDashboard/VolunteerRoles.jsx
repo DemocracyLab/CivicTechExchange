@@ -1,11 +1,22 @@
 import React from "react";
 import { Doughnut } from 'react-chartjs-2'; // References: https://react-chartjs-2.js.org/
 
+// 570	Business
+// 1304	Data
+// 3156	Design
+// 23	Fundraising
+// 218	Marketing
+// 151	Operations
+// 500	Product
+// 2026	Software Development
+// 66	Subject Matter Expert
+// 241	Testing
+
 const data = {
-  labels: ['Business', 'Data', 'Design', 'Fundraising', 'Marketing', 'Operations', 'Product', 'Software Development', 'Subject Matter Expert'],
+  labels: ['Business', 'Data', 'Design', 'Fundraising', 'Marketing', 'Operations', 'Product', 'Software Development', 'Subject Matter Expert', 'Testing'],
   datasets: [
     {
-      data: [13, 5, 2, 6, 8, 7, 10, 9, 6],
+      data: [570, 1304, 3156, 23, 218, 151, 500, 2026, 66, 241],
       backgroundColor: [
         '#F79E02',
         '#C8BFAF',
@@ -16,12 +27,18 @@ const data = {
         '#D19732',
         '#F9B135',
         '#B37508',
+        '#C47002',
       ],
     },
   ],
 };
 
 const options = {
+  elements: {
+    arc: {
+        borderWidth: 1
+    }
+  },
   cutout: '65%',
   plugins: {
     legend: {
@@ -63,7 +80,7 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
         <div className="volunteer-roles-detail">
           <div className="volunteer-roles-summary">
             <div className="card-number">
-              <span>5k+</span>
+              <span>8k+</span>
               <h4>Number of volunteers</h4>
             </div>
             <div className="card-text">
@@ -89,6 +106,7 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
                     legends[6].fillStyle = "#D19732";
                     legends[7].fillStyle = "#F9B135";
                     legends[8].fillStyle = "#B37508";
+                    legends[9].fillStyle = "#C47002";
                   }
                 }
               ]}

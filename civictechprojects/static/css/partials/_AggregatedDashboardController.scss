@@ -12,8 +12,61 @@
 }
 
 .Dashboard-section {
-  width: 80%;
+  width: 90%;
   margin-left: auto;
   margin-right: auto;
-  // padding-bottom: 200px;
+}
+
+@include media-breakpoint-up(xs) {
+  .Dashboard-detail {
+    padding-top: 64px;
+  }
+  .Dashboard-section {
+    width: 90%;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .Dashboard-detail {
+    padding-top: 64px;
+  }
+  .Dashboard-section {
+    width: 90%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
 }

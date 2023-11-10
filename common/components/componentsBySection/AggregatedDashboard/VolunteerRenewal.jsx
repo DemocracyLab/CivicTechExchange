@@ -31,7 +31,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
       .then(response => response.json())
       .then(getResponse =>
         this.setState({
-          renewalRate: getResponse.cumulative_renewal_percentage,
+          renewalRate: Math.round(getResponse.cumulative_renewal_percentage*100),
           renewalNumberList: getResponse.yearly_stats.map(item => item.renewals),
           joinedNumberList: getResponse.yearly_stats.map(item => item.approved),
           yearList: getResponse.yearly_stats.map((item, i, array) => {
@@ -47,11 +47,13 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      labels: this.state.yearList,
+      // labels: this.state.yearList,
+      labels: ["2019", "2020", "2021", "2022", "2023*"], // {this.state.yearList[this.state.yearList.length-1]}
       datasets: [
         {
           label: "Number of volunteers joined every year",
-          data: this.state.joinedNumberList,
+          // data: this.state.joinedNumberList,
+          data: [300, 600, 1020, 1250, 1670], // TODO
           fill: false,
           borderColor: "#F79E02",
           tension: 0.5,
@@ -59,7 +61,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
         },
         {
           label: "Number of volunteers renewed every year",
-          data: this.state.renewalNumberList,
+          // data: this.state.renewalNumberList,
+          data: [120, 380, 620, 820, 1150],
           fill: false,
           borderColor: "#FDE2B3",
           tension: 0.5,
@@ -69,6 +72,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
     };
 
     const options = {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: 'bottom',
@@ -79,20 +84,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
               family: "Montserrat",
               weight: "normal",
             },
-            padding: 32,
+            padding: 25,
           },
-          title: {
-            display: true,
-            color: "#191919",
-            font: {
-              family: "Montserrat",
-              weight: "normal",
-            },
-            padding: {
-              top: 32,
-            },
-            text: `${this.state.yearList[this.state.yearList.length-1]} - Projected values based on volunteer activity recorded till date.`,
-          }
         }
       },
       scales: {
@@ -128,21 +121,26 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
           </div>
         </div>
 
-        <div>
-          <Line
-            data={data}
-            options={options}
-            redraw={true}
-            plugins={[
-              {
-                beforeDraw(c) {
-                  var legends = c.legend.legendItems;
-                  legends[0].fillStyle = "#F79E02";
-                  legends[1].fillStyle = "#FDE2B3";
+        <div className="volunteer-renewal-chart">
+          <div className="volunteer-renewal-line">
+            <Line
+              data={data}
+              options={options}
+              redraw={true}
+              plugins={[
+                {
+                  beforeDraw(c) {
+                    var legends = c.legend.legendItems;
+                    legends[0].fillStyle = "#F79E02";
+                    legends[1].fillStyle = "#FDE2B3";
+                  }
                 }
-              }
-            ]}
-          />
+              ]}
+            />
+          </div>
+        </div>
+        <div class="volunteer-renewal-chart-desc">
+          <p> 2023* - Projected values based on volunteer activity recorded till date.</p>
         </div>
       </React.Fragment>
     );

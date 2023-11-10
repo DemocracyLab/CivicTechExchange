@@ -10,11 +10,12 @@
 
 .Volunteer-matching-summary {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
+    // justify-content: center;
     align-items: center;
     margin-top: 88px;
     margin-bottom: 56px;
-    margin-left: 60px;
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -22,6 +23,7 @@
 .Volunteer-matching-summary .card-number {
     text-align: center;
     align-items: center;
+    height: auto;
 }
 
 .Volunteer-matching-summary .card-number span {
@@ -54,4 +56,176 @@
     text-align: left;
     margin: 0;
     padding: 0;
+}
+
+.volunteer-matching-chart {
+    overflow-x: auto;
+}
+
+@include media-breakpoint-up(xs) {
+    .volunteer-matching-chart {
+        display: flex;
+        // justify-content: space-around;
+        margin-bottom: 64px;
+        .volunteer-matching-bar canvas {
+            width: 290px !important;
+            height: 300px !important;
+        }
+    }
+    .Volunteer-matching-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+        .card-text span {
+            font-size: 15px;
+        }
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .volunteer-matching-chart {
+        display: flex;
+        // justify-content: space-around;
+        margin-bottom: 64px;
+        .volunteer-matching-bar canvas {
+            width: 290px !important;
+            height: 300px !important;
+        }
+    }
+    .Volunteer-matching-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+        .card-text span {
+            font-size: 15px;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .volunteer-matching-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 100px;
+        .volunteer-matching-bar canvas {
+            width: 600px !important;
+            height: 350px !important;
+        }
+    }
+
+    .Volunteer-matching-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .volunteer-matching-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 200px;
+        .volunteer-matching-bar canvas {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+
+    .Volunteer-matching-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .volunteer-matching-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 200px;
+        .volunteer-matching-bar canvas {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+
+    .Volunteer-matching-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .volunteer-matching-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 200px;
+        .volunteer-matching-bar canvas {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+    .Volunteer-matching-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
 }

@@ -89,20 +89,8 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
               family: "Montserrat",
               weight: "normal",
             },
-            padding: 32
+            padding: 25
           },
-          title: {
-            display: true,
-            color: "#191919",
-            font: {
-              family: "Montserrat",
-              weight: "normal",
-            },
-            padding: {
-              top: 32,
-            },
-            text: [`Total expenses calculated between ${this.state.dateList[0]} and ${this.state.dateList[this.state.dateList.length-1]}.`,"ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses)*100."],
-          }
         },
       },
       scales: {
@@ -126,6 +114,12 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         }
       }
     };
+    let totalImpactConverted = String(this.state.totalImpact);
+    totalImpactConverted = totalImpactConverted.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let totalExpenseConverted = String(this.state.totalExpense);
+    totalExpenseConverted = totalExpenseConverted.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    let returnOfImpactConverted = String(this.state.returnOfImpact);
+    returnOfImpactConverted = returnOfImpactConverted.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     return (
       <React.Fragment>
@@ -136,9 +130,9 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
             <h4>Calculated ROI</h4>
           </div>
           <div className="card-text">
-            <span>Since its inception, DemocracyLab has created impact valued at ${this.state.totalImpact} for various nonprofits and
-              tech-for-good projects by connecting them with volunteers. With total expense standing at ${this.state.totalExpense},
-              this has generated {this.state.returnOfImpact}% return of impact for every dollar spent. </span>
+            <span>Since its inception, DemocracyLab has created impact valued at ${totalImpactConverted} for various nonprofits and
+              tech-for-good projects by connecting them with volunteers. With total expense standing at ${totalExpenseConverted},
+              this has generated {returnOfImpactConverted}% return of impact for every dollar spent. </span>
           </div>
         </div>
 
@@ -159,6 +153,10 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
               ]}
             />
           </div>
+        </div>
+        <div class="roi-chart-desc">
+          <p>Total expenses calculated between {this.state.dateList[0]} and {this.state.dateList[this.state.dateList.length-1]}.</p>
+          <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses)*100.</p>
         </div>
       </React.Fragment>
     );

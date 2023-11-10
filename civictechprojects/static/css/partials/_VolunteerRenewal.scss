@@ -10,11 +10,13 @@
 
 .volunteer-experience-summary {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: space-around;
+    // justify-content: center;
     align-items: center;
     margin-top: 88px;
     margin-bottom: 56px;
-    margin-left: 60px;
+    // margin-left: 60px;
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -22,6 +24,7 @@
 .volunteer-experience-summary .card-number {
     text-align: center;
     align-items: center;
+    height: auto;
 }
 
 .volunteer-experience-summary .card-number span {
@@ -54,4 +57,226 @@
     text-align: left;
     margin: 0;
     padding: 0;
+}
+
+.volunteer-renewal-chart {
+    overflow-x: auto;
+}
+
+.volunteer-renewal-chart-desc p {
+    color: #191919;
+    font-family: Montserrat;
+    font-weight: normal;
+    text-align: center;
+    font-size: 12px;
+    margin: 0px;
+    white-space: normal;
+}
+
+@include media-breakpoint-up(xs) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 275px !important;
+            height: 350px !important;
+        }
+    }
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 64px;
+        p {
+            text-align: left;
+        }
+    }
+    .volunteer-experience-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+        .card-text span {
+            font-size: 15px;
+        }
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 275px !important;
+            height: 350px !important;
+        }
+    }
+
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 64px;
+        p {
+            text-align: left;
+            padding: 0 20px;
+        }
+    }
+
+    .volunteer-experience-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+        .card-text span {
+            font-size: 15px;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 550px !important;
+            height: 450px !important;
+        }
+    }
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 100px;
+        p {
+            text-align: center;
+            padding: 0 20px;
+        }
+    }
+    .volunteer-experience-summary {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 40px;
+        padding-left: 0px;
+        padding-right: 0px;
+        .card-number span {
+            font-size: 50px;
+        }
+        .card-text {
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 200px;
+        p {
+            text-align: center;
+            padding: 0 20px;
+        }
+    }
+    .volunteer-experience-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 200px;
+        p {
+            text-align: center;
+            padding: 0 20px;
+        }
+    }
+    .volunteer-experience-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .volunteer-renewal-chart {
+        display: flex;
+        justify-content: space-around;
+        .volunteer-renewal-line {
+            width: 895px !important;
+            height: 500px !important;
+        }
+    }
+    .volunteer-renewal-chart-desc {
+        margin-top: 20px;
+        margin-bottom: 200px;
+        p {
+            text-align: center;
+            padding: 0 20px;
+        }
+    }
+    .volunteer-experience-summary {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 56px;
+        padding-left: 20px;
+        padding-right: 20px;
+        .card-number span {
+            font-size: 80px;
+        }
+        .card-text {
+            margin-left: 128px;
+        }
+    }
 }

@@ -40,23 +40,27 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      labels: this.state.yearList,
+      // labels: this.state.yearList,
+      labels: ['2019', '2020', '2021', '2022', '2023'],
       datasets: [
         {
           label: 'Number of volunteer applications every year',
-          data: this.state.applicationNumberList,
+          // data: this.state.applicationNumberList,
+          data: [150, 450, 700, 1100, 1550],
           backgroundColor: '#F9B135',
         },
         {
           label: 'Number of volunteer approvals every year',
-          data: this.state.approvedNumberList,
+          // data: this.state.approvedNumberList,
+          data: [50, 200, 350, 700, 850],
           backgroundColor: '#FDE2B3',
         },
       ],
     };
 
     const options = {
-      // responsive: true,
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: {
         legend: {
           position: 'bottom',
@@ -67,7 +71,7 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
               family: "Montserrat",
               weight: "normal",
             },
-            padding: 32,
+            padding: 25,
           },
         }
       },
@@ -105,21 +109,23 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
             </span>
           </div>
         </div>
-        <div>
-          <Bar
-            options={options}
-            data={data}
-            redraw={true}
-            plugins={[
-              {
-                beforeDraw(c) {
-                  var legends = c.legend.legendItems;
-                  legends[0].fillStyle = "#F9B135";
-                  legends[1].fillStyle = "#FDE2B3";
+        <div className="volunteer-matching-chart">
+          <div className="volunteer-matching-bar">
+            <Bar
+              options={options}
+              data={data}
+              redraw={true}
+              plugins={[
+                {
+                  beforeDraw(c) {
+                    var legends = c.legend.legendItems;
+                    legends[0].fillStyle = "#F9B135";
+                    legends[1].fillStyle = "#FDE2B3";
+                  }
                 }
-              }
-            ]}
-          />
+              ]}
+            />
+          </div>
         </div>
       </React.Fragment>
     );

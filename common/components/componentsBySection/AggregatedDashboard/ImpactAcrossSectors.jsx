@@ -4,13 +4,14 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 const data = {
-  labels: ['Civic Infrastructure', 'No Specific/Other Issue', 'Education', 'Environment', 'Political Reform',
-            'Social Justice', 'Health Care', 'Economy', 'Homelessness', 'Public Safety', 'International Issues',
-            'Transportation', 'Immigration', 'Cultural Issues', 'Housing Policies', 'National Security', 'Taxes'],
+  labels: ['Civic Infrastructure', 'Education', 'Other Issue', '1st Amendment', 'Health Care',
+            'Environment', '2nd Amendment', 'Economy', 'No Specific Issue', 'Political Reform', 'Social Justice',
+            'Homelessness', 'Cultural Issues', 'Public Safety', 'Transportation', 'International Issues',
+            'Housing Policies', 'Immigration', 'National Security', 'Taxes'],
   datasets: [
     {
       label: 'Number of projects in different categories since inception',
-      data: [48, 26, 21, 20, 20, 17, 15, 14, 12, 11, 10, 10, 10, 9, 9, 8, 8],
+      data: [124, 90, 62, 50, 47, 44, 43, 39, 35, 26, 24, 18, 18, 15, 9, 8, 7, 4, 4, 1],
       backgroundColor: '#F9B135',
     },
   ],
@@ -19,7 +20,6 @@ const data = {
 const options = {
   responsive: true,
   maintainAspectRatio: false,
-  indexAxis: 'y',
   plugins: {
     legend: {
       position: 'bottom',
@@ -29,9 +29,8 @@ const options = {
         font: {
           family: "Montserrat",
           weight: "normal",
-          size: 8,
         },
-        padding: 32,
+        padding: 25,
       },
     }
   },
@@ -45,15 +44,11 @@ const options = {
     },
     y: {
       ticks: {
-        // callback: function(tick, index, array) {
-        //   return (index % 2) ? "" : tick;
-        // },
-        autoSkip: false,
-        maxRotation: 45,
-        minRotation: 45,
+        callback: function(tick, index, array) {
+          return (index % 2) ? "" : tick;
+        },
         font: {
-          family:'Montserrat',
-          size: 8,
+          family:'Montserrat'
         }
       }
     }
@@ -92,19 +87,21 @@ class ImpactAcrossSectors extends React.PureComponent<Props, State> {
           </div>
         </div>
         <div className="impact-across-sectors-chart">
-          <Bar
-            options={options}
-            data={data}
-            redraw={true}
-            plugins={[
-              {
-                beforeDraw(c) {
-                  var legends = c.legend.legendItems;
-                  legends[0].fillStyle = "#F9B135";
+          <div className="impact-across-sectors-bar">
+            <Bar
+              options={options}
+              data={data}
+              redraw={true}
+              plugins={[
+                {
+                  beforeDraw(c) {
+                    var legends = c.legend.legendItems;
+                    legends[0].fillStyle = "#F9B135";
+                  }
                 }
-              }
-            ]}
-          />
+              ]}
+            />
+          </div>
         </div>
       </React.Fragment>
     );
