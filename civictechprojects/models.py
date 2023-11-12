@@ -287,6 +287,11 @@ class Project(Archived):
             link_project=self, link_event=None, link_group=None, link_user=None
         )
 
+    def get_project_issue_area(self):
+        return Tag.hydrate_to_json(
+                self.id, list(self.project_issue_area.all().values())
+            )
+
     def get_project_positions(self):
         return ProjectPosition.objects.filter(
             position_project=self, position_event=None
@@ -1792,6 +1797,16 @@ class VolunteerRelation(Archived):
 
         return volunteer_json
 
+    def get_role(self):
+        volunteer = self.volunteer
+        hydrated_roles = Tag.hydrate_to_json(volunteer.id, self.role.all().values())
+
+        # Check if there are no roles assigned
+        if len(hydrated_roles) == 0:
+            return "Unassigned"
+        else:
+            return hydrated_roles[0]["display_name"]
+
     def hydrate_project_volunteer_info(self):
         volunteer_json = self.to_json()
         project_json = self.project.hydrate_to_list_json()
@@ -2091,4 +2106,14 @@ class DollarsSaved(models.Model):
             year=self.year.__str__(),
             public_value_created=self.public_value_created,
             expense=self.expense,
+        )
+
+class Hackathons(models.Model):
+    total_hackathon_count = models.IntegerField(default=0)
+    total_hackathon_participants = models.IntegerField(default=0)
+
+    def __str__(self):
+        return "hackathon organized = {total_hackathon_count}, hackathon participants = {total_hackathon_participants}".format(
+            total_hackathon_count=self.total_hackathon_count,
+            total_hackathon_participants=self.total_hackathon_participants
         )

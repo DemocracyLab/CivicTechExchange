@@ -33,6 +33,7 @@ from .models import (
     EventConferenceRoom,
     EventConferenceRoomParticipant,
     DollarsSaved,
+    Hackathons
 )
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
@@ -111,6 +112,7 @@ from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
 from collections import defaultdict
+from collections import Counter
 import requests
 
 
@@ -1669,6 +1671,9 @@ def dollar_impact(request):
             )
             total_value += public_value
             total_expense += expense
+
+    # Sort the history list by year
+    history = sorted(history, key=lambda x: x['year'])
     roi = (total_value - total_expense) / total_expense
 
     res = {
@@ -1692,10 +1697,11 @@ def volunteer_history(request):
     else:
         cumulative_renewal_percentage = 0
         volunteer_matching = 0
+    sorted_yearly_stats = sorted(yearly_stats.items(), key=lambda x: x[0])
     # Convert the dictionary to a list of JSON objects
     stats_list = [
         {"year": year, **data}
-        for year, data in yearly_stats.items()
+        for year, data in sorted_yearly_stats
     ]
     data = {
         "yearly_stats" : stats_list,
@@ -1704,3 +1710,44 @@ def volunteer_history(request):
     }
 
     return JsonResponse(data)
+
+@api_view()
+def volunteer_roles(request):
+    volunteers = VolunteerRelation.objects.filter(is_approved=True)
+
+    role_counts = Counter()
+    for volunteer in volunteers:
+        role = volunteer.get_role()
+        role_counts[role] += 1
+
+    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[1], reverse=True))
+
+    return JsonResponse(role_counts_sorted)
+
+@api_view()
+def project_area(request):
+    projects = Project.objects.all()
+
+    area_counts = Counter()
+    for project in projects:
+        project_areas = project.get_project_issue_area()
+        # Check if there are no issue areas assigned
+        if len(project_areas) == 0:
+            area = "No Specific Issue"
+        else:
+            area = project_areas[0]["display_name"]
+
+        area_counts[area] += 1
+
+    # Sort area_counts by count number in descending order and then convert to dictionary
+    area_counts_sorted = dict(sorted(area_counts.items(), key=lambda x: x[1], reverse=True))
+
+    return JsonResponse(area_counts_sorted)
+
+@api_view()
+def hackathon_stats(request):
+    hackathon_data = Hackathons.objects.all()[0]
+
+    return JsonResponse({"total_hackathon_count":hackathon_data.total_hackathon_count,
+                         "total_hackathon_participants":hackathon_data.total_hackathon_participants})
+

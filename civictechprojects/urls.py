@@ -263,5 +263,8 @@ urlpatterns = [
     ),
     re_path(r"^api/volunteers_stats", views.get_site_stats, name="active_volunteers"),
     re_path(r"^api/impact_data", views.dollar_impact, name="impact_data"),
-    re_path(r"^api/volunteers_history_stats", views.volunteer_history, name="volunteer_history")
+    re_path(r"^api/volunteers_history_stats", views.volunteer_history, name="volunteer_history"),
+    re_path(r"^api/volunteer_roles", views.volunteer_roles, name="volunteer_roles"),
+    re_path(r"^api/project_issue_areas", views.project_area, name="project_issue_areas"),
+    re_path(r"^api/hackathon_stats", views.hackathon_stats, name="hackathon_stats")
 ]
