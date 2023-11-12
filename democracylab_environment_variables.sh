@@ -8,9 +8,6 @@ exit 1
 #export AWS_SECRET_ACCESS_KEY=ASK
 #export S3_BUCKET=ASK
 
-# Password for account used to send email
-export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
-
 # Url prefix to generate links on the back-end
 export PROTOCOL_DOMAIN=http://127.0.0.1:8000
 
@@ -69,7 +66,6 @@ export VOLUNTEER_RENEW_REMINDER_PERIODS='[7,7,-1]'
 # export MAILCHIMP_SUBSCRIBE_LIST_ID=SECRET
 
 export S3_BUCKET=democracylab-marlok
-export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
