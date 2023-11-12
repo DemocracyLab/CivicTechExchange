@@ -33,6 +33,11 @@ const tabOptions: Dictionary<string> = {
   sponsorship: "tab-sponsorship",
 };
 
+// for now we are trying to test this with a one file change. In the future we should handle this when and where the GOOGLE PROPERTY ID is set
+// safeGtag needs to return true because event handlers need to return true for the event to keep propogating
+//
+const safeGtag=(...args)=>(window.gtag && gtag(...args),true)
+
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
@@ -112,7 +117,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-tab-section">
-          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
+          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs" 
+                onSelect={tab_option=>safeGtag('event',tab_option)}>
             <Tab
               eventKey={tabOptions.hackathon}
               title="Host a Tech-for-Good Hackathon"
@@ -194,6 +200,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-hackathon"
                 className="corporate-block-button"
+                onClick={e=>safeGtag('event','contact-hackathon')}
               >
                 Get Started
               </Button>
@@ -333,6 +340,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-sponsor"
                 className="corporate-block-button"
+                onClick={e=>safeGtag('event','contact-sponsor')}
               >
                 Get Started
               </Button>
@@ -443,6 +451,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         href={cdn.document(
           "2023+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
+        onClick={e=>safeGtag('event','HackathonProspectus')}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
@@ -455,6 +464,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
         href={cdn.document(
           "2023+DemocracyLab+Sponsorship+Prospectus.pdf"
         )}
+        onClick={e=>safeGtag('event','SponsorProspectus')}
       >
         Sponsor Prospectus PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
