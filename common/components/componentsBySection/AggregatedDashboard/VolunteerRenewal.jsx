@@ -50,7 +50,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
       labels: this.state.yearList,
       datasets: [
         {
-          label: "Number of volunteers joined every year",
+          label: "Number of volunteers joined",
           data: this.state.joinedNumberList,
           fill: false,
           borderColor: "#F79E02",
@@ -58,7 +58,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
           pointBackgroundColor: "#F79E02"
         },
         {
-          label: "Number of volunteers renewed every year",
+          label: "Number of volunteers renewed",
           data: this.state.renewalNumberList,
           fill: false,
           borderColor: "#FDE2B3",

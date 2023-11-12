@@ -34,6 +34,8 @@ const data = {
 };
 
 const options = {
+  responsive: true,
+  maintainAspectRatio: false,
   elements: {
     arc: {
         borderWidth: 1
@@ -52,7 +54,7 @@ const options = {
           family: "Montserrat",
           weight: "normal",
         },
-        padding: 32,
+        padding: 25,
       }
     }
   }
@@ -80,7 +82,7 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
         <div className="volunteer-roles-detail">
           <div className="volunteer-roles-summary">
             <div className="card-number">
-              <span>8k+</span>
+              <span>8255</span>
               <h4>Number of volunteers</h4>
             </div>
             <div className="card-text">
@@ -89,28 +91,30 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
             </div>
           </div>
           <div className="volunteer-roles-chart">
-            <Doughnut
-              data={data}
-              options={options}
-              redraw={true}
-              plugins={[
-                {
-                  beforeDraw(c) {
-                    var legends = c.legend.legendItems;
-                    legends[0].fillStyle = "#F79E02";
-                    legends[1].fillStyle = "#C8BFAF";
-                    legends[2].fillStyle = "#DFD3BF";
-                    legends[3].fillStyle = "#FDE2B3";
-                    legends[4].fillStyle = "#C3A97A";
-                    legends[5].fillStyle = "#FAC567";
-                    legends[6].fillStyle = "#D19732";
-                    legends[7].fillStyle = "#F9B135";
-                    legends[8].fillStyle = "#B37508";
-                    legends[9].fillStyle = "#C47002";
+            <div className="volunteer-roles-doughnut">
+              <Doughnut
+                data={data}
+                options={options}
+                redraw={true}
+                plugins={[
+                  {
+                    beforeDraw(c) {
+                      var legends = c.legend.legendItems;
+                      legends[0].fillStyle = "#F79E02";
+                      legends[1].fillStyle = "#C8BFAF";
+                      legends[2].fillStyle = "#DFD3BF";
+                      legends[3].fillStyle = "#FDE2B3";
+                      legends[4].fillStyle = "#C3A97A";
+                      legends[5].fillStyle = "#FAC567";
+                      legends[6].fillStyle = "#D19732";
+                      legends[7].fillStyle = "#F9B135";
+                      legends[8].fillStyle = "#B37508";
+                      legends[9].fillStyle = "#C47002";
+                    }
                   }
-                }
-              ]}
-            />
+                ]}
+              />
+            </div>
           </div>
         </div>
       </React.Fragment>

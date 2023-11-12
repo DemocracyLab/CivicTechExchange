@@ -10,7 +10,7 @@ type State = {|
 class Hackathons extends React.PureComponent<Props, State> {
   constructor(props) {
     super();
-    this.state = { };
+    this.state = {};
   }
 
   componentDidMount() {
@@ -19,15 +19,15 @@ class Hackathons extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-       <h2 className="text-center AggregatedDashboard-title">Hackathons</h2>
-       <div className="hackathon-section">
+        <h2 className="text-center AggregatedDashboard-title">Hackathons</h2>
+        <div className="hackathon-section">
           <div className="hackathon-card">
-              <span>30+</span>
-              <h4>Hackathons organized</h4>
+            <span>30+</span>
+            <h4>Hackathons organized</h4>
           </div>
           <div className="hackathon-card">
-              <span>2.5k+</span>
-              <h4>Hackathon participants</h4>
+            <span>2.5k+</span>
+            <h4>Hackathon participants</h4>
           </div>
         </div>
         <h4 className="bottom-text">

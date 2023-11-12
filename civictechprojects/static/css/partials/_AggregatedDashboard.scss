@@ -1,16 +1,16 @@
-// .AggregatedDashboard-title {
-//     display: -webkit-box;
-//     -webkit-line-clamp: 2; // make titles two rows maximum
-//     -webkit-box-orient: vertical;
-//     font-size: 23px;
-//     font-weight: medium;
-//     overflow: hidden;
-//     align-self: start; // stops character descenders from getting clipped, weird but works
-// }
 .AggregatedDashboard-title {
-  margin: 1rem 0;
-  text-align: center;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // make titles two rows maximum
+    -webkit-box-orient: vertical;
+    font-size: 23px;
+    font-weight: medium;
+    overflow: hidden;
+    align-self: start; // stops character descenders from getting clipped, weird but works
 }
+// .AggregatedDashboard-title {
+//   margin: 1rem 0;
+//   text-align: center;
+// }
 
 .Aggregated-dashboard {
   display: flex;
@@ -32,9 +32,9 @@
 }
 
 @include media-breakpoint-up(xs) {
-  // .AggregatedDashboard-title {
-  //   font-size: 19px;
-  // }
+  .AggregatedDashboard-title {
+    font-size: 21px !important;
+  }
   .AggregatedDashboard-title {
     margin: 1rem 0 1.5rem 0;
   }
@@ -50,8 +50,11 @@
 }
 
 @include media-breakpoint-up(sm) {
+  // .AggregatedDashboard-title {
+  //   margin: 1rem 0 1.5rem 0;
+  // }
   .AggregatedDashboard-title {
-    margin: 1rem 0 1.5rem 0;
+    font-size: 21px !important;
   }
   .Aggregated-dashboard {
     flex-direction: row;
@@ -65,8 +68,11 @@
 }
 
 @include media-breakpoint-up(md) {
+  // .AggregatedDashboard-title {
+  //   margin: 1rem 0 1.5rem 0;
+  // }
   .AggregatedDashboard-title {
-    margin: 1rem 0 1.5rem 0;
+    font-size: 21px !important;
   }
   .Aggregated-dashboard {
     flex-direction: row;
@@ -80,6 +86,9 @@
 }
 
 @include media-breakpoint-up(lg) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
   .Aggregated-dashboard {
     flex-wrap: nowrap;
     .card {
@@ -90,6 +99,9 @@
 }
 
 @include media-breakpoint-up(xl) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
   .Aggregated-dashboard {
     flex-wrap: nowrap;
     .card {
@@ -100,6 +112,9 @@
 }
 
 @include media-breakpoint-up(xxl) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
   .Aggregated-dashboard {
     flex-wrap: nowrap;
     .card {

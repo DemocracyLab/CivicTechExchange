@@ -76,7 +76,7 @@ class ImpactAcrossSectors extends React.PureComponent<Props, State> {
         <h2 className="text-center AggregatedDashboard-title">Impact Across Sectors</h2>
         <div className="Impact-across-sectors-summary">
           <div className="card-number">
-            <span>20+</span>
+            <span>20</span>
             <h4>Areas Served</h4>
           </div>
           <div className="card-text">

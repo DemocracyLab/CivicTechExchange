@@ -43,12 +43,12 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
       labels: this.state.yearList,
       datasets: [
         {
-          label: 'Number of volunteer applications every year',
+          label: 'Number of volunteer applications',
           data: this.state.applicationNumberList,
           backgroundColor: '#F9B135',
         },
         {
-          label: 'Number of volunteer approvals every year',
+          label: 'Number of volunteer approvals',
           data: this.state.approvedNumberList,
           backgroundColor: '#FDE2B3',
         },

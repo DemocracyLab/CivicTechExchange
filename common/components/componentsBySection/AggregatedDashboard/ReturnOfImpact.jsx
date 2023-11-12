@@ -59,7 +59,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       labels: this.state.yearList,
       datasets: [
         {
-          label: "Cumulative impact created",
+          label: "Annual impact created",
           data: this.state.impactList,
           fill: false,
           borderColor: "#F79E02",
@@ -67,7 +67,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           pointBackgroundColor: "#F79E02"
         },
         {
-          label: "Cumulative expenses",
+          label: "Annual expenses",
           data: this.state.expenseList,
           fill: false,
           borderColor: "#FDE2B3",
