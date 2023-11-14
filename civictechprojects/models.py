@@ -230,8 +230,8 @@ class Project(Archived):
         }
 
         if (
-            self.project_location_coords is not None
-            and not self.project_location_coords.empty
+                self.project_location_coords is not None
+                and not self.project_location_coords.empty
         ):
             project["project_latitude"] = self.project_location_coords.x
             project["project_longitude"] = self.project_location_coords.y
@@ -289,8 +289,8 @@ class Project(Archived):
 
     def get_project_issue_area(self):
         return Tag.hydrate_to_json(
-                self.id, list(self.project_issue_area.all().values())
-            )
+            self.id, list(self.project_issue_area.all().values())
+        )
 
     def get_project_positions(self):
         return ProjectPosition.objects.filter(
@@ -1214,15 +1214,15 @@ class TrelloAction(models.Model):
 
     @staticmethod
     def create(
-        project,
-        id,
-        fullname,
-        member_id,
-        member_avatar_base_url,
-        board_id,
-        action_type,
-        action_date,
-        action_data,
+            project,
+            id,
+            fullname,
+            member_id,
+            member_avatar_base_url,
+            board_id,
+            action_type,
+            action_date,
+            action_data,
     ):
 
         trello_action = TrelloAction()
@@ -1478,9 +1478,9 @@ class ProjectPosition(models.Model):
             )
 
         return (
-            len(added_positions) > 0
-            or len(updated_positions) > 0
-            or len(deleted_position_ids) > 0
+                len(added_positions) > 0
+                or len(updated_positions) > 0
+                or len(deleted_position_ids) > 0
         )
 
 
@@ -1515,7 +1515,7 @@ class ProjectFile(models.Model):
 
     @staticmethod
     def create(
-        owner, file_url, file_name, file_key, file_type, file_category, file_visibility
+            owner, file_url, file_name, file_key, file_type, file_category, file_visibility
     ):
         # TODO: Validate input
         file = ProjectFile()
@@ -1650,10 +1650,10 @@ class ProjectFile(models.Model):
             return EventProject.get(self.file_event.id, self.file_project.id)
         else:
             return (
-                self.file_project
-                or self.file_group
-                or self.file_event
-                or self.file_user
+                    self.file_project
+                    or self.file_group
+                    or self.file_event
+                    or self.file_user
             )
 
     @staticmethod
@@ -1772,10 +1772,10 @@ class VolunteerRelation(Archived):
 
     def __str__(self):
         return (
-            "Project: "
-            + str(self.project.project_name)
-            + ", User: "
-            + str(self.volunteer.email)
+                "Project: "
+                + str(self.project.project_name)
+                + ", User: "
+                + str(self.volunteer.email)
         )
 
     def to_json(self):
@@ -1815,9 +1815,9 @@ class VolunteerRelation(Archived):
     def is_up_for_renewal(self, now=None):
         now = now or timezone.now()
         return (
-            self.is_approved
-            and (self.projected_end_date - now)
-            < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
+                self.is_approved
+                and (self.projected_end_date - now)
+                < settings.VOLUNTEER_REMINDER_OVERALL_PERIOD
         )
 
     @staticmethod
@@ -1910,10 +1910,10 @@ class RSVPVolunteerRelation(Archived):
 
     @staticmethod
     def create(
-        event: Event,
-        volunteer: Contributor,
-        is_remote: bool,
-        event_location_time_zone_json: object,
+            event: Event,
+            volunteer: Contributor,
+            is_remote: bool,
+            event_location_time_zone_json: object,
     ):
         time_zone = (
             EventLocationTimeZone.create(event, event_location_time_zone_json)
@@ -2001,11 +2001,11 @@ class EventConferenceRoom(models.Model):
 
     @staticmethod
     def create(
-        event: Event,
-        zoom_id: int,
-        join_url: str,
-        admin_url: str,
-        event_project: EventProject = None,
+            event: Event,
+            zoom_id: int,
+            join_url: str,
+            admin_url: str,
+            event_project: EventProject = None,
     ):
         room_number = event_project.project.id if event_project else 0
         room = (
@@ -2107,6 +2107,7 @@ class DollarsSaved(models.Model):
             public_value_created=self.public_value_created,
             expense=self.expense,
         )
+
 
 class Hackathons(models.Model):
     total_hackathon_count = models.IntegerField(default=0)

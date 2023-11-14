@@ -20,6 +20,7 @@ from .models import (
     EventConferenceRoomParticipant,
     EventLocationTimeZone,
     DollarsSaved,
+    Hackathons,
 )
 
 project_text_fields = [
@@ -337,3 +338,4 @@ admin.site.register(EventConferenceRoom, EventConferenceRoomAdmin)
 admin.site.register(EventConferenceRoomParticipant, EventConferenceRoomParticipantAdmin)
 admin.site.register(EventLocationTimeZone, EventLocationTimeZoneAdmin)
 admin.site.register(DollarsSaved)
+admin.site.register(Hackathons)
