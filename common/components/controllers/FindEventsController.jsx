@@ -1,6 +1,5 @@
 // @flow
 
-import Headers from "../common/Headers.jsx";
 import EventCardsContainer from "../componentsBySection/FindEvents/EventCardsContainer.jsx";
 import React from "react";
 import urls from "../utils/url.js";
@@ -30,10 +29,6 @@ class FindEventsController extends React.PureComponent {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="DemocracyLab"
-          description="Optimizing the connection between skilled volunteers and tech-for-good events"
-        />
         <div className="FindEventsController-root">
           <div className="container">
             <div className="row justify-content-center">

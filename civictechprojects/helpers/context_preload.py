@@ -23,7 +23,6 @@ def about_project_preload(context, request):
         print('Failed to preload project info, no cache entry found: ' + project_id)
     return context
 
-
 def about_event_preload(context, request):
     context = default_preload(context, request)
     query_args = url_params(request)
@@ -79,14 +78,14 @@ def about_group_preload(context, request):
 
 def companies_preload(context, request):
     context = default_preload(context, request)
-    context['title'] = 'DemocracyLab | Corporate Engagement'
+    context['title'] = 'Corporate Engagement | DemocracyLab'
     context['description'] = 'Do well by doing good! Engage employees at custom events to build culture and spark innovation. Differentiate your brand by sponsoring our public hackathons.'
     return context
 
 
 def about_us_preload(context, request):
     context = default_preload(context, request)
-    context['title'] = 'DemocracyLab | About'
+    context['title'] = 'About | DemocracyLab'
     context['description'] = 'Learn About democracyLab, the nonprofit connecting skilled individuals to tech-for-good projects.'
     return context
 
@@ -111,6 +110,17 @@ def create_event_preload(context, request):
     context['description'] = 'Create event page'
     return context
 
+def create_group_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Create a Group | DemocracyLab'
+    context['description'] = 'Create group page'
+    return context
+
+def create_project_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Create a Project | DemocracyLab'
+    context['description'] = 'Create project page'
+    return context  
 
 def my_projects_preload(context, request):
     context = default_preload(context, request)
@@ -118,13 +128,29 @@ def my_projects_preload(context, request):
     context['description'] = 'My Projects page'
     return context
 
-
 def my_groups_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'My Groups | DemocracyLab'
     context['description'] = 'My Groups page'
     return context
 
+def find_events_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Find Events | DemocracyLab'
+    context['description'] = 'Optimizing the connection between skilled volunteers and tech-for-good events'
+    return context
+
+def find_groups_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Find Groups | DemocracyLab'
+    context['description'] = 'Optimizing the connection between skilled volunteers and tech-for-good groups'
+    return context
+
+def find_projects_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Find Projects | DemocracyLab'
+    context['description'] = 'Optimizing the connection between skilled volunteers and tech-for-good projects'
+    return context
 
 def my_events_preload(context, request):
     context = default_preload(context, request)
@@ -144,6 +170,23 @@ def terms_preload(context, request):
     context['description'] = 'Terms of Use page'
     return context
 
+def sign_up_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Sign Up | DemocracyLab'
+    context['description'] = 'Sign up'
+    return context
+
+def contact_us_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Contact Us | DemocracyLab'
+    context['description'] = 'Contact information for DemocracyLab.'
+    return context
+
+def reset_password_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Reset Password | DemocracyLab'
+    context['description'] = 'Reset password page'
+    return context
 
 def videos_preload(context, request):
     context = default_preload(context, request)
@@ -182,6 +225,8 @@ preload_urls = [
     {'section': FrontEndSection.EditProfile.value, 'handler': edit_profile_preload},
     {'section': FrontEndSection.AboutUs.value, 'handler': about_us_preload},
     {'section': FrontEndSection.CreateEvent.value, 'handler': create_event_preload},
+    {'section': FrontEndSection.CreateGroup.value,'handler':create_group_preload},
+    {'section': FrontEndSection.CreateProject.value,'handler':create_project_preload},
     {'section': FrontEndSection.MyProjects.value, 'handler': my_projects_preload},
     {'section': FrontEndSection.MyGroups.value, 'handler': my_groups_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
@@ -191,7 +236,13 @@ preload_urls = [
     {'section': FrontEndSection.VideoOverview.value, 'handler': videos_preload},
     {'section': FrontEndSection.AboutEventProject.value, 'handler': about_event_project_preload},
     {'section': FrontEndSection.Privacy.value, 'handler': privacy_preload},
-    {'section': FrontEndSection.Terms.value, 'handler': terms_preload}
+    {'section': FrontEndSection.Terms.value, 'handler': terms_preload},
+    {'section': FrontEndSection.SignUp.value, 'handler': sign_up_preload},
+    {'section': FrontEndSection.ContactUs.value,'handler':contact_us_preload},
+    {'section': FrontEndSection.ResetPassword.value,'handler':reset_password_preload},
+    {'section': FrontEndSection.FindEvents.value,'handler':find_events_preload},
+    {'section': FrontEndSection.FindGroups.value,'handler':find_groups_preload},
+    {'section': FrontEndSection.FindProjects.value,'handler':find_projects_preload},
 ]
 
 

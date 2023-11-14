@@ -338,10 +338,13 @@ class MainHeader extends React.Component<{||}, State> {
   }
 
   _handleHeightChange(height: number) {
-    UniversalDispatcher.dispatch({
-      type: "SET_HEADER_HEIGHT",
-      headerHeight: height,
-    });
+    // Use setTimeout with a delay of 0 ms to break the dispatch chain
+    setTimeout(() => {
+      UniversalDispatcher.dispatch({
+        type: "SET_HEADER_HEIGHT",
+        headerHeight: height,
+      });
+    }, 0);
     this.props.onMainHeaderHeightChange(height);
   }
 
