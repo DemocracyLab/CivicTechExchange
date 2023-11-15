@@ -33,7 +33,7 @@ from .models import (
     EventConferenceRoom,
     EventConferenceRoomParticipant,
     DollarsSaved,
-    Hackathons
+    Hackathons,
 )
 from .sitemaps import SitemapPages
 from .caching.cache import ProjectSearchTagsCache
@@ -1673,7 +1673,7 @@ def dollar_impact(request):
             total_expense += expense
 
     # Sort the history list by year
-    history = sorted(history, key=lambda x: x['year'])
+    history = sorted(history, key=lambda x: x["year"])
     roi = (total_value - total_expense) / total_expense
 
     res = {
@@ -1685,31 +1685,32 @@ def dollar_impact(request):
 
     return JsonResponse(res)
 
+
 @api_view()
 def volunteer_history(request):
     yearly_stats = volunteer_history_list(request)
-    total_applications = sum(year_data['applications'] for year_data in yearly_stats.values())
-    total_approved = sum(year_data['approved'] for year_data in yearly_stats.values())
-    total_renewals = sum(year_data['renewals'] for year_data in yearly_stats.values())
+    total_applications = sum(
+        year_data["applications"] for year_data in yearly_stats.values()
+    )
+    total_approved = sum(year_data["approved"] for year_data in yearly_stats.values())
+    total_renewals = sum(year_data["renewals"] for year_data in yearly_stats.values())
     if total_approved > 0:
-        cumulative_renewal_percentage = (total_renewals / total_approved)
+        cumulative_renewal_percentage = total_renewals / total_approved
         volunteer_matching = total_approved / total_applications
     else:
         cumulative_renewal_percentage = 0
         volunteer_matching = 0
     sorted_yearly_stats = sorted(yearly_stats.items(), key=lambda x: x[0])
     # Convert the dictionary to a list of JSON objects
-    stats_list = [
-        {"year": year, **data}
-        for year, data in sorted_yearly_stats
-    ]
+    stats_list = [{"year": year, **data} for year, data in sorted_yearly_stats]
     data = {
-        "yearly_stats" : stats_list,
+        "yearly_stats": stats_list,
         "cumulative_renewal_percentage": cumulative_renewal_percentage,
-        "volunteer_matching" : volunteer_matching
+        "volunteer_matching": volunteer_matching,
     }
 
     return JsonResponse(data)
+
 
 @api_view()
 def volunteer_roles(request):
@@ -1720,9 +1721,10 @@ def volunteer_roles(request):
         role = volunteer.get_role()
         role_counts[role] += 1
 
-    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[1], reverse=True))
+    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[0]))
 
     return JsonResponse(role_counts_sorted)
+
 
 @api_view()
 def project_area(request):
@@ -1740,14 +1742,20 @@ def project_area(request):
         area_counts[area] += 1
 
     # Sort area_counts by count number in descending order and then convert to dictionary
-    area_counts_sorted = dict(sorted(area_counts.items(), key=lambda x: x[1], reverse=True))
+    area_counts_sorted = dict(
+        sorted(area_counts.items(), key=lambda x: x[1], reverse=True)
+    )
 
     return JsonResponse(area_counts_sorted)
+
 
 @api_view()
 def hackathon_stats(request):
     hackathon_data = Hackathons.objects.all()[0]
 
-    return JsonResponse({"total_hackathon_count":hackathon_data.total_hackathon_count,
-                         "total_hackathon_participants":hackathon_data.total_hackathon_participants})
-
+    return JsonResponse(
+        {
+            "total_hackathon_count": hackathon_data.total_hackathon_count,
+            "total_hackathon_participants": hackathon_data.total_hackathon_participants,
+        }
+    )

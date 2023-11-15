@@ -50,7 +50,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
       labels: this.state.yearList,
       datasets: [
         {
-          label: "Number of volunteers joined",
+          label: "Number of approved volunteers",
           data: this.state.joinedNumberList,
           fill: false,
           borderColor: "#F79E02",
@@ -58,7 +58,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
           pointBackgroundColor: "#F79E02"
         },
         {
-          label: "Number of volunteers renewed",
+          label: "Number of renewing volunteers",
           data: this.state.renewalNumberList,
           fill: false,
           borderColor: "#FDE2B3",
@@ -74,6 +74,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
       plugins: {
         legend: {
           position: 'bottom',
+          align: "start",
           labels: {
             usePointStyle: true,
             color: "#191919",
@@ -113,8 +114,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
             <h4>Volunteers renewed</h4>
           </div>
           <div className="card-text">
-            <span>We provide a smooth application process for our volunteers, and our platform also hosts
-              a variety of projects ensuring there is something for everyone. </span>
+            <span>The number of volunteers applying to DemocracyLab has shown steady growth
+              over the years, with a significant portion opting to extend their initial commitments. </span>
           </div>
         </div>
 
@@ -137,7 +138,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
           </div>
         </div>
         <div class="volunteer-renewal-chart-desc">
-          <p> {this.state.yearList[this.state.yearList.length-1]} - Projected values based on volunteer activity recorded till date.</p>
+          <p> {this.state.yearList[this.state.yearList.length-1]} - Projected values based on year to date volunteer activity.</p>
         </div>
       </React.Fragment>
     );

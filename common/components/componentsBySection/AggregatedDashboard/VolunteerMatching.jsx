@@ -61,6 +61,7 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
       plugins: {
         legend: {
           position: 'bottom',
+          align: "start",
           labels: {
             usePointStyle: true,
             color: "#191919",
@@ -101,8 +102,8 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
           </div>
           <div className="card-text">
             <span>
-              The onboarding process is selective, yet ensuring a good response rate
-              for a fair portion of total applicants.
+              Over the years, we have observed consistent growth in both
+              the number of volunteers applying and those receiving approval.
             </span>
           </div>
         </div>

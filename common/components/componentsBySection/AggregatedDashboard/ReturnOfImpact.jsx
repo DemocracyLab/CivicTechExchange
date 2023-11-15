@@ -82,6 +82,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       plugins: {
         legend: {
           position: 'bottom',
+          align: "start",
           labels: {
             usePointStyle: true,
             color: "#191919",
