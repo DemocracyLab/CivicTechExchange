@@ -2097,14 +2097,14 @@ class Testimonial(models.Model):
 
 
 class DollarsSaved(models.Model):
-    year = models.DateField(null=True, blank=True)
-    public_value_created = models.IntegerField(default=0)
+    quarterly = models.DateField(null=True, blank=True)
+    impact = models.IntegerField(default=0)
     expense = models.IntegerField(default=0)
 
     def __str__(self):
-        return "{year} - {public_value_created} {expense}".format(
-            year=self.year.__str__(),
-            public_value_created=self.public_value_created,
+        return "{quarterly} - {impact} {expense}".format(
+            quarterly=self.quarterly.__str__(),
+            impact=self.impact,
             expense=self.expense,
         )
 
