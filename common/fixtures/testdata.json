@@ -39,7 +39,7 @@
     {"model": "civictechprojects.DollarsSaved", "pk": 21, "fields": {
         "quarterly": "2023-03-31", "impact": 1129000, "expense": 4340}},
     {"model": "civictechprojects.DollarsSaved", "pk": 22, "fields": {
-        "quarterly": "2023-06-30", "impact": 139324, "expense": 4274}},
+        "quarterly": "2023-06-30", "impact": 1393125, "expense": 4274}},
     {"model": "civictechprojects.DollarsSaved", "pk": 23, "fields": {
         "quarterly": "2023-09-30", "impact": 1479000, "expense": 3157}},
     {"model": "civictechprojects.Hackathons", "pk": 1, "fields": {"total_hackathon_count": 31, "total_hackathon_participants": 2020}}]
