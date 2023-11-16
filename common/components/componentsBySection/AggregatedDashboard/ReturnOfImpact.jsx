@@ -21,7 +21,13 @@ type State = {|
   yearList: Array<string>,
   impactList: Array<number>,
   expenseList: Array<number>,
+  startYear: string,
+  endDay: string,
+  endMonth: string,
+  endYear: string,
 |};
+
+const monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 class ReturnOfImpact extends React.PureComponent<Props, State> {
   constructor(props) {
@@ -32,26 +38,36 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       dateList: [],
       yearList: [],
       impactList: [],
-      expenseList: []
+      expenseList: [],
+      startYear: '',
+      endDay: '',
+      endMonth: '',
+      endYear: '',
     };
   }
 
-  componentDidMount() {
-    const url_impact: string = "/api/impact_data";
-    fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(getResponse =>
-        this.setState({
-          returnOfImpact: Math.round(getResponse.roi*100),
-          historyData: getResponse.history,
-          totalImpact: getResponse.total_impact,
-          totalExpense: getResponse.total_expense,
-          dateList: getResponse.history.map(item => item.year),
-          yearList: getResponse.history.map(item => item.year.substring(0, 4)),
-          impactList: getResponse.history.map(item => item.public_value),
-          expenseList: getResponse.history.map(item => item.expense),
-        })
-      );
+  async componentDidMount() {
+    const url_impact = "/api/impact_data";
+    const response = await fetch(url_impact);
+    const getResponse = await response.json();
+
+    this.setState({
+      returnOfImpact: Math.round(getResponse.roi*100),
+      historyData: getResponse.history,
+      totalImpact: getResponse.total_impact,
+      totalExpense: getResponse.total_expense,
+      dateList: getResponse.history.map(item => item.quarter_date),
+      yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
+      impactList: getResponse.history.map(item => item.quarterly_impact),
+      expenseList: getResponse.history.map(item => item.expense),
+    });
+
+    this.setState({
+      startYear: this.state.yearList[0],
+      endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
+      endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
+      endYear: this.state.yearList[this.state.yearList.length-1],
+    });
   }
 
   render(): React$Node {
@@ -99,7 +115,10 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           ticks: {
             font: {
               family:'Montserrat'
-            }
+            },
+            callback: function(val, index) {
+              return (index % 4) ? null : this.getLabelForValue(val);
+            },
           }
         },
         y: {
@@ -131,9 +150,9 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
             <h4>Calculated ROI</h4>
           </div>
           <div className="card-text">
-            <span>Since its inception, DemocracyLab has created impact valued at ${totalImpactConverted} for various nonprofits and
+            <span>Since {this.state.startYear}, DemocracyLab has created impact valued at ${totalImpactConverted} for various nonprofits and
               tech-for-good projects by connecting them with volunteers. With total expense standing at ${totalExpenseConverted},
-              this has generated {returnOfImpactConverted}% return of impact for every dollar spent. </span>
+              this has generated {returnOfImpactConverted}% return of impact for every dollar spent.</span>
           </div>
         </div>
 
@@ -156,7 +175,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           </div>
         </div>
         <div class="roi-chart-desc">
-          <p>Total expenses calculated between {this.state.dateList[0]} and {this.state.dateList[this.state.dateList.length-1]}.</p>
+          <p>Total expenses calculated between 1 January {this.state.startYear} and {this.state.endDay} {this.state.endMonth} {this.state.endYear}.</p>
           <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses)*100.</p>
         </div>
       </React.Fragment>
