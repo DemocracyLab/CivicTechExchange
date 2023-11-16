@@ -26,8 +26,6 @@
         "quarterly": "2021-06-30", "impact": 469125, "expense": 41507}},
     {"model": "civictechprojects.DollarsSaved", "pk": 15, "fields": {
         "quarterly": "2021-09-30", "impact": 551750, "expense": 33305}},
-    {"model": "civictechprojects.DollarsSaved", "pk": 16, "fields": {
-        "quarterly": "2020-09-30", "impact": 373500, "expense": 34485}},
     {"model": "civictechprojects.DollarsSaved", "pk": 17, "fields": {
         "quarterly": "2021-12-31", "impact": 658750, "expense": 23708}},
     {"model": "civictechprojects.DollarsSaved", "pk": 18, "fields": {
@@ -36,6 +34,8 @@
         "quarterly": "2022-06-30", "impact": 761625, "expense": 6820}},
     {"model": "civictechprojects.DollarsSaved", "pk": 20, "fields": {
         "quarterly": "2022-09-30", "impact": 910625, "expense": 3830}},
+      {"model": "civictechprojects.DollarsSaved", "pk": 20, "fields": {
+        "quarterly": "2022-12-31", "impact": 1257625, "expense": 2987}},
     {"model": "civictechprojects.DollarsSaved", "pk": 21, "fields": {
         "quarterly": "2023-03-31", "impact": 1129000, "expense": 4340}},
     {"model": "civictechprojects.DollarsSaved", "pk": 22, "fields": {
