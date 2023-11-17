@@ -178,7 +178,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         </div>
         <div class="roi-chart-desc">
           <p>Total expenses calculated between 1 January {this.state.startYear} and {this.state.endDay} {this.state.endMonth} {this.state.endYear}.</p>
-          <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses)*100.</p>
+          <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses).</p>
         </div>
       </React.Fragment>
     );
