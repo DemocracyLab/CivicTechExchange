@@ -19,3 +19,7 @@ jobs:
 
     - name: Run Docker Container Python Test
       run: docker run civictechexchange-image python manage.py test
+
+    - name: Run JavaScript Tests
+      run: |
+        docker run npm run test
