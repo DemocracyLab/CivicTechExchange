@@ -50,7 +50,11 @@ from common.helpers.request_helpers import is_ajax
 from django.views.decorators.cache import cache_page
 from rest_framework.decorators import api_view
 import requests
+from cryptography.fernet import Fernet
 
+# define a encryption with a global key
+key = b'yLyb7itt7-e0Z9eiPiX-lVnppwbK0v3TjQsk3J4ZgbY='
+cipher_suite = Fernet(key)
 
 def tags(request):
     url_parts = request.GET.urlencode()
@@ -650,8 +654,12 @@ def presign_project_thumbnail_upload(request):
     file_type = request.GET['file_type']
     file_extension = file_type.split('/')[-1]
     unique_file_name = file_name + '_' + str(time())
+
+    # encode user name
+    encrypted_uploader = cipher_suite.encrypt(uploader.encode())
+
     s3_key = 'thumbnails/%s/%s.%s' % (
-        uploader, unique_file_name, file_extension)
+        encrypted_uploader, unique_file_name, file_extension)
     return presign_s3_upload(
         raw_key=s3_key, file_name=file_name, file_type=file_type, acl="public-read")
 
