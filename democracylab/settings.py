@@ -402,7 +402,7 @@ CSP_SCRIPT_SRC = (
     "*.doubleclick.net",
     "*.newrelic.com",
     "*.nr-data.net",
-    "*.hotjar.com",
+    "https://*.hotjar.com",
 )
 CSP_CONNECT_SRC = (
     "'self'",
@@ -412,7 +412,9 @@ CSP_CONNECT_SRC = (
     "*.google-analytics.com",
     "*.nr-data.net",
     "*.hereapi.com",
-    "*.hotjar.com",
+    "https://*.hotjar.com",
+    "https://*.hotjar.io",
+    "wss://*.hotjar.com",
 )
 CSP_FONT_SRC = (
     "'self'",
