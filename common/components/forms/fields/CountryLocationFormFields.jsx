@@ -50,10 +50,6 @@ class CountryLocationFormFields extends React.Component<Props, State> {
     });
   }
 
-  clearCountrySelection = () => {
-    this.onSelection(this.props.countryFieldId, null);
-  }
-
   render(): ?React$Node {
     return (
       <React.Fragment>
@@ -68,14 +64,6 @@ class CountryLocationFormFields extends React.Component<Props, State> {
               this.onSelection(this.props.locationFieldId, null);
             }}
           />
-
-          <Button
-            variant="primary"
-            size="sm"
-            onClick={this.clearCountrySelection}
-            style={{ marginTop: '10px' }}
-          >
-            Clear selected country</Button>
 
         </div>
 
