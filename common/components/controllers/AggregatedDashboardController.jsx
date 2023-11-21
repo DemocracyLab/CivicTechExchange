@@ -24,9 +24,18 @@ class AggregatedDashboardController extends React.PureComponent {
     document.getElementById('detailButton').style.display = 'none';
     document.getElementById('dashboardDisplay').style.marginTop = '80px';
     const url_impact: string = "/api/volunteers_history_stats";
-    fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(data => this.setState({ volunteerStats: data }));
+      fetch(new Request(url_impact))
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok: ' + response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => this.setState({ volunteerStats: data }))
+    .catch(error => {
+      console.error('There has been a problem with your fetch operation:', error);
+      this.setState({ volunteerStats: null });
+    });
   }
 
   render(): React$Node {

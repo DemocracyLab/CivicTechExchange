@@ -168,16 +168,13 @@ UserContextCache = UserContextCacheManager()
 class ImpactDashboardCacheManager:
     _cache_key_prefix = 'impact_'
 
-    def get(self, stats):
-        return Cache.get(self._get_key(stats))
+    def get(self, key):
+        return Cache.get(self._cache_key_prefix + key)
 
-    def refresh(self, stats, value, timeout):
-        print('Re-caching project ' + str(stats))
-        Cache.refresh(self._get_key(stats), value, timeout)
+    def refresh(self, key, value, timeout):
+        print('Re-caching key ' + key)
+        Cache.refresh(self._cache_key_prefix + key, value, timeout)
         return value
-
-    def _get_key(self, stats):
-        return self._cache_key_prefix + stats
 
 
 ImpactDashboardCache = ImpactDashboardCacheManager()
