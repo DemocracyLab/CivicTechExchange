@@ -15,15 +15,22 @@ import React from "react";
 class AggregatedDashboardController extends React.PureComponent {
   constructor(): void {
     super();
-    this.state = {};
+    this.state = {
+        volunteerStats: null,
+    };
   }
 
   componentDidMount(): void {
     document.getElementById('detailButton').style.display = 'none';
     document.getElementById('dashboardDisplay').style.marginTop = '80px';
+    const url_impact: string = "/api/volunteers_history_stats";
+    fetch(new Request(url_impact))
+      .then(response => response.json())
+      .then(data => this.setState({ volunteerStats: data }));
   }
 
   render(): React$Node {
+    const { volunteerStats } = this.state;
     return (
       <React.Fragment>
         <div className="Dashboard-summary">
@@ -39,12 +46,16 @@ class AggregatedDashboardController extends React.PureComponent {
           <div className="Dashboard-section">
             <VolunteerRoles />
           </div>
-          <div className="Dashboard-section">
-            <VolunteerRenewal />
-          </div>
-          <div className="Dashboard-section">
-            <VolunteerMatching />
-          </div>
+          {volunteerStats && (
+          <React.Fragment>
+            <div className="Dashboard-section">
+              <VolunteerRenewal data={volunteerStats} />
+            </div>
+            <div className="Dashboard-section">
+              <VolunteerMatching data={volunteerStats} />
+            </div>
+          </React.Fragment>
+        )}
           <div className="Dashboard-section">
             <Hackathons />
           </div>

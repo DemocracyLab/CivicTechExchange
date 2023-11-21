@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 type Props = {|
+    data: any
 |};
 
 type State = {|
@@ -15,7 +16,7 @@ type State = {|
 
 class VolunteerMatching extends React.PureComponent<Props, State> {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       matchingRate: 0,
       approvedNumberList: [],
@@ -25,17 +26,13 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const url_impact: string = "/api/volunteers_history_stats";
-    fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(getResponse =>
-        this.setState({
-          matchingRate: Math.round(getResponse.volunteer_matching*100),
-          approvedNumberList: getResponse.yearly_stats.map(item => item.approved),
-          applicationNumberList: getResponse.yearly_stats.map(item => item.applications),
-          yearList: getResponse.yearly_stats.map(item => item.year),
-        })
-      );
+    const { data } = this.props;
+    this.setState({
+      matchingRate: Math.round(data.volunteer_matching*100),
+      approvedNumberList: data.yearly_stats.map(item => item.approved),
+      applicationNumberList: data.yearly_stats.map(item => item.applications),
+      yearList: data.yearly_stats.map(item => item.year),
+    })
   }
 
   render(): React$Node {

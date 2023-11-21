@@ -4,6 +4,7 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 type Props = {|
+    data: any
 |};
 
 type State = {|
@@ -16,7 +17,7 @@ type State = {|
 
 class VolunteerRenewal extends React.PureComponent<Props, State> {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       renewalRate: 0,
       renewalNumberList: [],
@@ -26,23 +27,19 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const url_impact: string = "/api/volunteers_history_stats";
-    fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(getResponse =>
-        this.setState({
-          renewalRate: Math.round(getResponse.cumulative_renewal_percentage*100),
-          renewalNumberList: getResponse.yearly_stats.map(item => item.renewals),
-          joinedNumberList: getResponse.yearly_stats.map(item => item.approved),
-          yearList: getResponse.yearly_stats.map((item, i, array) => {
-            if (i === array.length - 1) {
-              return item.year + '*';
-            } else {
-              return item.year + '';
-            }
-          }),
-        })
-      );
+    const { data } = this.props;
+    this.setState({
+      renewalRate: Math.round(data.cumulative_renewal_percentage*100),
+      renewalNumberList: data.yearly_stats.map(item => item.renewals),
+      joinedNumberList: data.yearly_stats.map(item => item.approved),
+      yearList: data.yearly_stats.map((item, i, array) => {
+        if (i === array.length - 1) {
+          return item.year + '*';
+        } else {
+          return item.year + '';
+        }
+      }),
+    })
   }
 
   render(): React$Node {
