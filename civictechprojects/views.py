@@ -36,7 +36,7 @@ from .models import (
     Hackathons
 )
 from .sitemaps import SitemapPages
-from .caching.cache import ProjectSearchTagsCache
+from .caching.cache import ProjectSearchTagsCache, ImpactDashboardCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
 from .helpers.search.volunteers import volunteer_history_list
@@ -1687,6 +1687,13 @@ def dollar_impact(request):
 
 @api_view()
 def volunteer_history(request):
+    cache_key = 'volunteer_history'
+    cached_data = ImpactDashboardCache.get(cache_key)
+
+    if cached_data:
+        # If data is in cache, return it
+        return JsonResponse(cached_data)
+
     yearly_stats = volunteer_history_list(request)
     total_applications = sum(year_data['applications'] for year_data in yearly_stats.values())
     total_approved = sum(year_data['approved'] for year_data in yearly_stats.values())
@@ -1709,10 +1716,20 @@ def volunteer_history(request):
         "volunteer_matching" : volunteer_matching
     }
 
+    # Store the result in the cache for 24 hours
+    ImpactDashboardCache.refresh(cache_key, data, 86400)
+
     return JsonResponse(data)
 
 @api_view()
 def volunteer_roles(request):
+    cache_key = 'volunteer_roles'
+    cached_data = ImpactDashboardCache.get(cache_key)
+
+    if cached_data:
+        # If data is in cache, return it
+        return JsonResponse(cached_data)
+
     volunteers = VolunteerRelation.unfiltered_objects.filter(is_approved=True).prefetch_related('role')
 
     role_counts = Counter()
@@ -1722,10 +1739,20 @@ def volunteer_roles(request):
 
     role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[0]))
 
+    # Store the result in the cache for 24 hours
+    ImpactDashboardCache.refresh(cache_key, role_counts_sorted, 86400)
+
     return JsonResponse(role_counts_sorted)
 
 @api_view()
 def project_area(request):
+    cache_key = 'project_area'
+    cached_data = ImpactDashboardCache.get(cache_key)
+
+    if cached_data:
+        # If data is in cache, return it
+        return JsonResponse(cached_data)
+
     projects = Project.objects.all()
 
     area_counts = Counter()
@@ -1741,6 +1768,9 @@ def project_area(request):
 
     # Sort area_counts by count number in descending order and then convert to dictionary
     area_counts_sorted = dict(sorted(area_counts.items(), key=lambda x: x[1], reverse=True))
+
+    # Store the result in the cache for 24 hours
+    ImpactDashboardCache.refresh(cache_key, area_counts_sorted, 86400)
 
     return JsonResponse(area_counts_sorted)
 
