@@ -1661,6 +1661,7 @@ def dollar_impact(request):
     history = []
     total_impact_value = 0
     total_expense = 0
+    roi = 0
     for data in impact:
         quarter_date = data.quarterly
         if quarter_date is not None:
@@ -1673,8 +1674,9 @@ def dollar_impact(request):
             total_expense += expense
 
     # Sort the history list by year
-    history = sorted(history, key=lambda x: x['quarter_date'])
-    roi = (total_impact_value - total_expense) / total_expense
+    if len(history) > 0:
+        history = sorted(history, key=lambda x: x['quarter_date'])
+        roi = (total_impact_value - total_expense) / total_expense
 
     res = {
         "history": history,
@@ -1776,10 +1778,14 @@ def project_area(request):
 
 @api_view()
 def hackathon_stats(request):
-    hackathon_data = Hackathons.objects.all()[0]
+    hackathon_data = Hackathons.objects.all()
 
-    return JsonResponse({"total_hackathon_count":hackathon_data.total_hackathon_count,
-                         "total_hackathon_participants":hackathon_data.total_hackathon_participants})
+    if hackathon_data:
+        return JsonResponse({"total_hackathon_count":hackathon_data[0].total_hackathon_count,
+                         "total_hackathon_participants":hackathon_data[0].total_hackathon_participants})
+    else:
+        return JsonResponse({"total_hackathon_count": 0,
+                             "total_hackathon_participants": 0})
 
 @api_view()
 def get_overall_stats(request):
