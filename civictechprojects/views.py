@@ -1713,14 +1713,14 @@ def volunteer_history(request):
 
 @api_view()
 def volunteer_roles(request):
-    volunteers = VolunteerRelation.objects.filter(is_approved=True)
+    volunteers = VolunteerRelation.unfiltered_objects.filter(is_approved=True)
 
     role_counts = Counter()
     for volunteer in volunteers:
         role = volunteer.get_role()
         role_counts[role] += 1
 
-    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[1], reverse=True))
+    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[0]))
 
     return JsonResponse(role_counts_sorted)
 
@@ -1750,4 +1750,17 @@ def hackathon_stats(request):
 
     return JsonResponse({"total_hackathon_count":hackathon_data.total_hackathon_count,
                          "total_hackathon_participants":hackathon_data.total_hackathon_participants})
+
+@api_view()
+def get_overall_stats(request):
+    active_volunteers = VolunteerRelation.objects.filter(is_approved=True)
+
+    stats = {
+        "projectCount": Project.objects.filter(
+            is_searchable=True, deleted=False
+        ).count(),
+        "activeVolunteerCount": active_volunteers.distinct("volunteer__id").count(),
+    }
+
+    return JsonResponse(stats)
 

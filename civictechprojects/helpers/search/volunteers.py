@@ -14,7 +14,7 @@ def volunteer_history_list(request):
     yearly_data = defaultdict(lambda: {'approved': 0, 'renewals': 0, 'applications': 0})
 
     # Get all volunteers
-    all_volunteers = VolunteerRelation.objects.all()
+    all_volunteers = VolunteerRelation.unfiltered_objects.all()
 
     # Count all applications per year
     application_counts = all_volunteers.annotate(

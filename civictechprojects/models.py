@@ -63,6 +63,11 @@ class DefaultManager(models.Manager):
     def get_queryset(self):
         return super(DefaultManager, self).get_queryset().filter(deleted=False)
 
+class UnfilteredManager(models.Manager):
+    def get_queryset(self):
+        # Return the queryset containing deleted and undeleted records
+        return super(UnfilteredManager, self).get_queryset()
+
 
 # This base class adds delete functionality to models using a flag, and filters deleted items out of the default result set
 class Archived(models.Model):
@@ -71,6 +76,7 @@ class Archived(models.Model):
 
     objects = DefaultManager()
     archives = ArchiveManager()
+    unfiltered_objects = UnfilteredManager()
     deleted = models.BooleanField(default=False)
 
     def delete(self):
