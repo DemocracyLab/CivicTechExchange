@@ -1713,7 +1713,7 @@ def volunteer_history(request):
 
 @api_view()
 def volunteer_roles(request):
-    volunteers = VolunteerRelation.objects.filter(is_approved=True).prefetch_related('role')
+    volunteers = VolunteerRelation.unfiltered_objects.filter(is_approved=True).prefetch_related('role')
 
     role_counts = Counter()
     for volunteer in volunteers:
