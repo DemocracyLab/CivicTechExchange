@@ -23,6 +23,7 @@ from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
+import json
 
 
 # Without the following classes, the following error occurs:
@@ -1805,7 +1806,7 @@ class VolunteerRelation(Archived):
         if len(hydrated_roles) == 0:
             return "Unassigned"
         else:
-            return hydrated_roles[0]["display_name"]
+            return hydrated_roles[0]["subcategory"]
 
     def hydrate_project_volunteer_info(self):
         volunteer_json = self.to_json()
