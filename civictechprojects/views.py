@@ -201,7 +201,7 @@ def get_group(request, group_id):
             return HttpResponse(status=404)
 
         if group.is_searchable or is_creator_or_staff(
-            get_request_contributor(request), group
+                get_request_contributor(request), group
         ):
             return JsonResponse(group.hydrate_to_json())
         else:
@@ -286,9 +286,9 @@ def get_event(request, event_id):
     try:
         event = Event.get_by_id_or_slug(event_id)
         if (
-            event_id.isnumeric()
-            and event.is_private
-            and not is_creator_or_staff(get_request_contributor(request), event)
+                event_id.isnumeric()
+                and event.is_private
+                and not is_creator_or_staff(get_request_contributor(request), event)
         ):
             # Don't let non-admins/non-owners load a private event by numeric id
             raise PermissionDenied()
@@ -563,9 +563,9 @@ def index(*args, **kwargs):
     # TODO: Add to redirectors.py
     # Redirect to AddUserDetails page if First/Last name hasn't been entered yet
     if (
-        page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value]
-        and request.user.is_authenticated
-        and (not request.user.first_name or not request.user.last_name)
+            page not in [FrontEndSection.AddUserDetails.value, FrontEndSection.SignUp.value]
+            and request.user.is_authenticated
+            and (not request.user.first_name or not request.user.last_name)
     ):
         from allauth.socialaccount.models import SocialAccount
 
@@ -610,9 +610,9 @@ def index(*args, **kwargs):
     GOOGLE_CONVERSION_ID = None
     context = context_preload(page, request, context)
     if (
-        page
-        and settings.GOOGLE_CONVERSION_IDS
-        and page in settings.GOOGLE_CONVERSION_IDS
+            page
+            and settings.GOOGLE_CONVERSION_IDS
+            and page in settings.GOOGLE_CONVERSION_IDS
     ):
         GOOGLE_CONVERSION_ID = settings.GOOGLE_CONVERSION_IDS[page]
     if settings.GOOGLE_PROPERTY_ID:
@@ -832,7 +832,7 @@ def get_project_volunteers(request, project_id):
     project = Project.objects.get(id=project_id)
     if project is not None:
         if project.is_searchable or is_co_owner_or_staff(
-            get_request_contributor(request), project
+                get_request_contributor(request), project
         ):
             data = {
                 "project_id": project_id,
@@ -862,16 +862,16 @@ def contact_project_owner(request, project_id):
     )
     email_template = (
         HtmlEmailTemplate(use_signature=False)
-        .subheader("Your project has a new message.")
-        .paragraph(
+            .subheader("Your project has a new message.")
+            .paragraph(
             "{firstname} {lastname} has sent the following message to {project}".format(
                 firstname=user.first_name,
                 lastname=user.last_name,
                 project=project.project_name,
             )
         )
-        .paragraph('"{message}"'.format(message=message))
-        .paragraph("To respond, you can reply to this email")
+            .paragraph('"{message}"'.format(message=message))
+            .paragraph("To respond, you can reply to this email")
     )
     send_to_project_owners(
         project=project, sender=user, subject=email_subject, template=email_template
@@ -899,17 +899,17 @@ def contact_project_volunteers(request, project_id):
     )
     email_template = (
         HtmlEmailTemplate(use_signature=False)
-        .header(
+            .header(
             "You have a new message from {projectname}".format(
                 projectname=project.project_name
             )
         )
-        .paragraph(
+            .paragraph(
             '"{message}" - {firstname} {lastname}'.format(
                 message=message, firstname=user.first_name, lastname=user.last_name
             )
         )
-        .paragraph("To respond, you can reply to this email.")
+            .paragraph("To respond, you can reply to this email.")
     )
 
     # Send to project owner if co-owner initiated
@@ -950,15 +950,15 @@ def contact_event_project_volunteers(request, event_id, project_id):
     )
     email_template = (
         HtmlEmailTemplate(use_signature=False)
-        .header(
+            .header(
             "You have a new message from {projectname}".format(projectname=project_name)
         )
-        .paragraph(
+            .paragraph(
             '"{message}" - {firstname} {lastname}'.format(
                 message=message, firstname=user.first_name, lastname=user.last_name
             )
         )
-        .paragraph("To respond, you can reply to this email.")
+            .paragraph("To respond, you can reply to this email.")
     )
 
     # TODO: add owner if co-owner initiated
@@ -991,17 +991,17 @@ def contact_project_volunteer(request, application_id):
     )
     email_template = (
         HtmlEmailTemplate(use_signature=False)
-        .header(
+            .header(
             "You have a new message from {projectname}".format(
                 projectname=project.project_name
             )
         )
-        .paragraph(
+            .paragraph(
             '"{message}" - {firstname} {lastname}'.format(
                 message=message, firstname=user.first_name, lastname=user.last_name
             )
         )
-        .paragraph("To respond, you can reply to this email.")
+            .paragraph("To respond, you can reply to this email.")
     )
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
@@ -1150,26 +1150,26 @@ def reject_project_volunteer(request, application_id):
         message = request.data["rejection_message"]
         email_template = (
             HtmlEmailTemplate()
-            .paragraph(
+                .paragraph(
                 "Hi {first_name},".format(
                     first_name=volunteer_relation.volunteer.first_name
                 )
             )
-            .paragraph(
+                .paragraph(
                 "Thank you for your interest in volunteering with {project_name}.".format(
                     project_name=volunteer_relation.project.project_name
                 )
             )
-            .paragraph(
+                .paragraph(
                 "Unfortunately, the project owner did not select you as a volunteer for this project."
             )
-            .paragraph(
+                .paragraph(
                 'Message from the project owner: "{message}"'.format(message=message)
             )
-            .paragraph(
+                .paragraph(
                 "We hope you'll consider other volunteer opportunities at DemocracyLab."
             )
-            .button(url=find_projects_page_url, text="Explore More Projects")
+                .button(url=find_projects_page_url, text="Explore More Projects")
         )
         email_subject = "Your volunteer application to join {project_name}".format(
             project_name=volunteer_relation.project.project_name
@@ -1231,12 +1231,12 @@ def demote_project_volunteer(request, application_id):
         message = request.data["demotion_message"]
         email_template = (
             HtmlEmailTemplate()
-            .paragraph(
+                .paragraph(
                 "The owner of {project_name} has removed you as a co-owner of the project for the following reason:".format(
                     project_name=volunteer_relation.project.project_name
                 )
             )
-            .paragraph('"{message}"'.format(message=message))
+                .paragraph('"{message}"'.format(message=message))
         )
         email_subject = (
             "You have been removed as a co-owner from {project_name}".format(
@@ -1265,13 +1265,13 @@ def leave_project(request, project_id):
         if len(message) > 0:
             email_template = (
                 HtmlEmailTemplate()
-                .paragraph(
+                    .paragraph(
                     "{volunteer_name} is leaving {project_name} because:".format(
                         volunteer_name=volunteer_relation.volunteer.full_name(),
                         project_name=volunteer_relation.project.project_name,
                     )
                 )
-                .paragraph('"{message}"'.format(message=message))
+                    .paragraph('"{message}"'.format(message=message))
             )
         else:
             email_template = HtmlEmailTemplate().paragraph(
@@ -1323,16 +1323,16 @@ def contact_group_owner(request, group_id):
     )
     email_template = (
         HtmlEmailTemplate(use_signature=False)
-        .header("Your group has a new message.")
-        .paragraph(
+            .header("Your group has a new message.")
+            .paragraph(
             "{firstname} {lastname} has sent the following message to {group}:".format(
                 firstname=user.first_name,
                 lastname=user.last_name,
                 group=group.group_name,
             )
         )
-        .paragraph('""{message}""'.format(message=message))
-        .paragraph("To respond, you can reply to this email.")
+            .paragraph('""{message}""'.format(message=message))
+            .paragraph("To respond, you can reply to this email.")
     )
     send_to_group_owners(
         group=group, sender=user, subject=email_subject, template=email_template
@@ -1687,6 +1687,7 @@ def dollar_impact(request):
 
     return JsonResponse(res)
 
+
 @api_view()
 def volunteer_history(request):
     cache_key = 'volunteer_history'
@@ -1713,15 +1714,16 @@ def volunteer_history(request):
         for year, data in sorted_yearly_stats
     ]
     data = {
-        "yearly_stats" : stats_list,
+        "yearly_stats": stats_list,
         "cumulative_renewal_percentage": cumulative_renewal_percentage,
-        "volunteer_matching" : volunteer_matching
+        "volunteer_matching": volunteer_matching
     }
 
     # Store the result in the cache for 24 hours
     ImpactDashboardCache.refresh(cache_key, data, 86400)
 
     return JsonResponse(data)
+
 
 @api_view()
 def volunteer_roles(request):
@@ -1745,6 +1747,7 @@ def volunteer_roles(request):
     ImpactDashboardCache.refresh(cache_key, role_counts_sorted, 86400)
 
     return JsonResponse(role_counts_sorted)
+
 
 @api_view()
 def project_area(request):
@@ -1776,16 +1779,18 @@ def project_area(request):
 
     return JsonResponse(area_counts_sorted)
 
+
 @api_view()
 def hackathon_stats(request):
     hackathon_data = Hackathons.objects.all()
 
     if hackathon_data:
-        return JsonResponse({"total_hackathon_count":hackathon_data[0].total_hackathon_count,
-                         "total_hackathon_participants":hackathon_data[0].total_hackathon_participants})
+        return JsonResponse({"total_hackathon_count": hackathon_data[0].total_hackathon_count,
+                             "total_hackathon_participants": hackathon_data[0].total_hackathon_participants})
     else:
         return JsonResponse({"total_hackathon_count": 0,
                              "total_hackathon_participants": 0})
+
 
 @api_view()
 def get_overall_stats(request):
@@ -1799,4 +1804,3 @@ def get_overall_stats(request):
     }
 
     return JsonResponse(stats)
-
