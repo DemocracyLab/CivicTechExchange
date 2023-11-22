@@ -43,31 +43,55 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       endDay: '',
       endMonth: '',
       endYear: '',
+      retryCount: 0,
+      maxRetries: 3, // Maximum number of retries
+      retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
   async componentDidMount() {
+    this.fetchImpactData();
+  }
+
+  fetchImpactData = async () => {
+    const { retryCount, maxRetries, retryDelay } = this.state;
     const url_impact = "/api/impact_data";
-    const response = await fetch(url_impact);
-    const getResponse = await response.json();
 
-    this.setState({
-      returnOfImpact: Math.round(getResponse.roi*100),
-      historyData: getResponse.history,
-      totalImpact: getResponse.total_impact,
-      totalExpense: getResponse.total_expense,
-      dateList: getResponse.history.map(item => item.quarter_date),
-      yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
-      impactList: getResponse.history.map(item => item.quarterly_impact),
-      expenseList: getResponse.history.map(item => item.expense),
-    });
-
-    this.setState({
-      startYear: this.state.yearList[0],
-      endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
-      endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
-      endYear: this.state.yearList[this.state.yearList.length-1],
-    });
+    try {
+      const response = await fetch(url_impact);
+      if (!response.ok) {
+        if (retryCount < maxRetries) {
+          setTimeout(() => {
+            this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
+            this.fetchImpactData();
+          }, retryDelay);
+        } else {
+          throw new Error('Max retries reached. ' + response.statusText);
+        }
+      } else {
+        const getResponse = await response.json();
+        this.setState({
+          returnOfImpact: Math.round(getResponse.roi*100),
+          historyData: getResponse.history,
+          totalImpact: getResponse.total_impact,
+          totalExpense: getResponse.total_expense,
+          dateList: getResponse.history.map(item => item.quarter_date),
+          yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
+          impactList: getResponse.history.map(item => item.quarterly_impact),
+          expenseList: getResponse.history.map(item => item.expense),
+          retryCount: 0 // Reset retry count on successful fetch
+        });
+        // Additional setState for startYear, endDay, endMonth, endYear
+        this.setState({
+          startYear: this.state.yearList[0],
+          endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
+          endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
+          endYear: this.state.yearList[this.state.yearList.length-1],
+        });
+      }
+    } catch (error) {
+      console.error('There has been a problem with your fetch operation:', error);
+    }
   }
 
   render(): React$Node {

@@ -15,19 +15,44 @@ class Hackathons extends React.PureComponent<Props, State> {
     this.state = {
       hackathonCount: 0,
       hackathonParticipants: 0
+      retryCount: 0,
+      maxRetries: 3, // Maximum number of retries
+      retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
   componentDidMount() {
-    const url_impact: string = "/api/hackathon_stats";
+    this.fetchHackathonStats();
+  }
+
+  fetchHackathonStats = () => {
+    const { retryCount, maxRetries, retryDelay } = this.state;
+    const url_impact = "/api/hackathon_stats";
+
     fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(getResponse =>
+      .then(response => {
+        if (!response.ok) {
+          if (retryCount < maxRetries) {
+            setTimeout(() => {
+              this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
+              this.fetchHackathonStats();
+            }, retryDelay);
+          } else {
+            throw new Error('Max retries reached. ' + response.statusText);
+          }
+        }
+        return response.json();
+      })
+      .then(getResponse => {
         this.setState({
           hackathonCount: getResponse.total_hackathon_count,
           hackathonParticipants: getResponse.total_hackathon_participants,
-        })
-      );
+          retryCount: 0 // Reset retry count on successful fetch
+        });
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
   }
 
 

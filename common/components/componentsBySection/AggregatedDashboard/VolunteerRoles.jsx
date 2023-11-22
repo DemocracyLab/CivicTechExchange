@@ -42,20 +42,47 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
       roleList: [],
       roleCountList: [],
       totalVolunteers: 0,
+      retryCount: 0,
+      maxRetries: 3, // Maximum number of retries
+      retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
   componentDidMount() {
+    this.fetchVolunteerRoles();
+  }
+
+  fetchVolunteerRoles() {
+    const { retryCount, maxRetries, retryDelay } = this.state;
     const url_impact: string = "/api/volunteer_roles";
+
     fetch(new Request(url_impact))
-      .then(response => response.json())
-      .then(getResponse =>
+      .then(response => {
+        if (!response.ok) {
+          if (retryCount < maxRetries) {
+            // Retry after a delay
+            setTimeout(() => {
+              this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
+              this.fetchVolunteerRoles();
+            }, retryDelay);
+          } else {
+            // Exceeded max retries, handle as an error
+            throw new Error('Max retries reached. ' + response.statusText);
+          }
+        }
+        return response.json();
+      })
+      .then(getResponse => {
         this.setState({
           roleList: Object.keys(getResponse),
           roleCountList: Object.values(getResponse),
           totalVolunteers: Object.values(getResponse).reduce((sum, curValue) => sum + curValue, 0),
-        })
-      );
+          retryCount: 0 // Reset retry count on successful fetch
+        });
+      })
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+      });
   }
 
 
