@@ -72,11 +72,13 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      labels: this.state.yearList,
+      // labels: this.state.yearList,
+      labels: [2019, 2022, 2023],
       datasets: [
         {
           label: "Quarterly impact created",
-          data: this.state.impactList,
+          // data: this.state.impactList,
+          data: [1000000,1200000,1400000],
           fill: false,
           borderColor: "#F79E02",
           tension: 0.5,
@@ -84,7 +86,8 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         },
         {
           label: "Quarterly expenses",
-          data: this.state.expenseList,
+          // data: this.state.expenseList,
+          data: [1200000,1400000,1600000],
           fill: false,
           borderColor: "#FDE2B3",
           tension: 0.5,
@@ -123,10 +126,9 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         },
         y: {
           max: 2000000,
+          min: 0,
           ticks: {
-            beginAtZero: true,
             count: 5,
-            // suggestedMax: 2000000,
             callback: function(value, index, values) {
               return '$' + value/1000000 + 'M';
             },
