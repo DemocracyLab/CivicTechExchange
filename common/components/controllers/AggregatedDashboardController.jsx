@@ -17,25 +17,43 @@ class AggregatedDashboardController extends React.PureComponent {
     super();
     this.state = {
         volunteerStats: null,
+        retryCount: 0,
+        maxRetries: 3,  // Maximum number of retries
+        retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
   componentDidMount(): void {
     document.getElementById('detailButton').style.display = 'none';
     document.getElementById('dashboardDisplay').style.marginTop = '80px';
+    this.fetchVolunteerStats();
+  }
+
+  fetchVolunteerStats() {
+    const { retryCount, maxRetries, retryDelay } = this.state;
     const url_impact: string = "/api/volunteers_history_stats";
-      fetch(new Request(url_impact))
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok: ' + response.statusText);
-      }
-      return response.json();
-    })
-    .then(data => this.setState({ volunteerStats: data }))
-    .catch(error => {
-      console.error('There has been a problem with your fetch operation:', error);
-      this.setState({ volunteerStats: null });
-    });
+
+    fetch(new Request(url_impact))
+      .then(response => {
+        if (!response.ok) {
+          if (retryCount < maxRetries) {
+            // Retry after a delay
+            setTimeout(() => {
+              this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
+              this.fetchVolunteerStats();
+            }, retryDelay);
+          } else {
+            // Exceeded max retries, handle as an error
+            throw new Error('Max retries reached. ' + response.statusText);
+          }
+        }
+        return response.json();
+      })
+      .then(data => this.setState({ volunteerStats: data, retryCount: 0 }))
+      .catch(error => {
+        console.error('There has been a problem with your fetch operation:', error);
+        this.setState({ volunteerStats: null });
+      });
   }
 
   render(): React$Node {
