@@ -58,10 +58,10 @@ class AggregatedDashboardController extends React.PureComponent {
           {volunteerStats && (
           <React.Fragment>
             <div className="Dashboard-section">
-              <VolunteerRenewal data={volunteerStats} />
+              <VolunteerMatching data={volunteerStats} />
             </div>
             <div className="Dashboard-section">
-              <VolunteerMatching data={volunteerStats} />
+              <VolunteerRenewal data={volunteerStats} />
             </div>
           </React.Fragment>
         )}
