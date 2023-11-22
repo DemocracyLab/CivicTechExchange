@@ -124,6 +124,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         y: {
           max: 2000000,
           ticks: {
+            beginAtZero: true,
             count: 5,
             // suggestedMax: 2000000,
             callback: function(value, index, values) {
