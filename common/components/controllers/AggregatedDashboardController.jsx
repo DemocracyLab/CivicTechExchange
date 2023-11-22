@@ -46,15 +46,15 @@ class AggregatedDashboardController extends React.PureComponent {
           <AggregatedDashboard />
         </div>
         <div className="Dashboard-detail">
-{/*           <div className="Dashboard-section"> */}
-{/*             <ReturnOfImpact /> */}
-{/*           </div> */}
-{/*           <div className="Dashboard-section"> */}
-{/*             <ImpactAcrossSectors /> */}
-{/*           </div> */}
-{/*           <div className="Dashboard-section"> */}
-{/*             <VolunteerRoles /> */}
-{/*           </div> */}
+          <div className="Dashboard-section">
+            <ReturnOfImpact />
+          </div>
+          <div className="Dashboard-section">
+            <ImpactAcrossSectors />
+          </div>
+          <div className="Dashboard-section">
+            <VolunteerRoles />
+          </div>
           {volunteerStats && (
           <React.Fragment>
             <div className="Dashboard-section">
@@ -65,9 +65,9 @@ class AggregatedDashboardController extends React.PureComponent {
             </div>
           </React.Fragment>
         )}
-{/*           <div className="Dashboard-section"> */}
-{/*             <Hackathons /> */}
-{/*           </div> */}
+          <div className="Dashboard-section">
+            <Hackathons />
+          </div>
         </div>
         <SponsorFooter forceShow={true}/>
       </React.Fragment>
