@@ -37,9 +37,8 @@ class Hackathons extends React.PureComponent<Props, State> {
               this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
               this.fetchHackathonStats();
             }, retryDelay);
-          } else {
-            throw new Error('Max retries reached. ' + response.statusText);
           }
+          throw new Error('Max retries reached. ' + response.statusText);
         }
         return response.json();
       })

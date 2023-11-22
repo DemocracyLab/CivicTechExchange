@@ -42,10 +42,9 @@ class AggregatedDashboardController extends React.PureComponent {
               this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
               this.fetchVolunteerStats();
             }, retryDelay);
-          } else {
-            // Exceeded max retries, handle as an error
-            throw new Error('Max retries reached. ' + response.statusText);
           }
+          throw new Error('Max retries reached. ' + response.statusText);
+          
         }
         return response.json();
       })

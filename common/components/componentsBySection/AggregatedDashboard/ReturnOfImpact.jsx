@@ -65,9 +65,8 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
             this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
             this.fetchImpactData();
           }, retryDelay);
-        } else {
-          throw new Error('Max retries reached. ' + response.statusText);
         }
+        throw new Error('Max retries reached. ' + response.statusText);
       } else {
         const getResponse = await response.json();
         this.setState({
