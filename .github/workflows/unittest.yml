@@ -14,12 +14,14 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Build Docker Image
-      run: docker build -t civictechexchange-image .
+    - name: Build and run Docker containers
+      run: docker-compose -f docker-compose.yml up --build --detach
 
-    - name: Run Docker Container Python Test
-      run: docker run civictechexchange-image python manage.py test
+    - name: Run Python tests
+      run: docker-compose -f docker-compose.yml exec myapp python manage.py test
 
     - name: Run JavaScript Tests
-      run: |
-        docker run npm run test
+      run: docker-compose -f docker-compose.yml exec myapp npm run test
+
+    - name: Stop and remove containers
+      run: docker-compose -f path/to/your/docker-compose.yml down
