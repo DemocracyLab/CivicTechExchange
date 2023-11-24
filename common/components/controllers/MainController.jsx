@@ -7,7 +7,6 @@ import React from "react";
 import SponsorFooter from "../chrome/SponsorFooter.jsx";
 import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
-import { loadHeap } from "../utils/heapApi.js";
 import IframeResizerInParent from "../common/IframeResizerInParent.jsx";
 import urlHelper from "../../components/utils/url.js";
 import Section from "../enums/Section.js";
