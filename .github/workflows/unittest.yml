@@ -14,14 +14,40 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Build and run Docker containers
-      run: docker-compose -f docker-compose.yml up --build --detach
+    # - name: Build and run Docker containers
+    #   run: docker-compose -f docker-compose.yml up --build --detach
 
-    - name: Run Python tests
-      run: docker-compose -f docker-compose.yml exec myapp python manage.py test
+    # - name: Run Python tests
+    #   run: docker-compose -f docker-compose.yml exec myapp python manage.py test
+
+    # - name: Run JavaScript Tests
+    #   run: docker-compose -f docker-compose.yml exec myapp npm run test
+
+    # - name: Stop and remove containers
+    #   run: docker-compose -f path/to/your/docker-compose.yml down
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.10
+
+    - name: Install Python Dependencies
+      run: |
+        pip install -r requirements.txt
+
+    - name: Run Tests
+      run: |
+        python manage.py test
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install Node.js Dependencies
+      run: |
+        npm install
 
     - name: Run JavaScript Tests
-      run: docker-compose -f docker-compose.yml exec myapp npm run test
-
-    - name: Stop and remove containers
-      run: docker-compose -f path/to/your/docker-compose.yml down
+      run: |
+        npm run test
