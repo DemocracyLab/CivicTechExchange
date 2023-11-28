@@ -14,7 +14,7 @@ class Hackathons extends React.PureComponent<Props, State> {
     super();
     this.state = {
       hackathonCount: 0,
-      hackathonParticipants: 0
+      hackathonParticipants: 0,
       retryCount: 0,
       maxRetries: 3, // Maximum number of retries
       retryDelay: 1000 // Delay between retries in milliseconds

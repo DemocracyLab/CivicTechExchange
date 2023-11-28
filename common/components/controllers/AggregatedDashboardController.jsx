@@ -44,7 +44,7 @@ class AggregatedDashboardController extends React.PureComponent {
             }, retryDelay);
           }
           throw new Error('Max retries reached. ' + response.statusText);
-          
+
         }
         return response.json();
       })
