@@ -139,19 +139,21 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       scales: {
         x: {
           grid: {
-            display: false // Hide vertical grid lines
+            // Hide all the vertical stick lines
+            display: false,
           },
           ticks: {
             font: {
               family:'Montserrat'
             },
+            // Show the x-axis label for every 4 datapoints
             callback: function(val, index) {
               return (index % 4) ? null : this.getLabelForValue(val);
             },
           }
         },
         y: {
-          max: 2000000,
+          max: 2000000, // $2M (might need to be updated in the future)
           min: 0,
           ticks: {
             count: 5,
