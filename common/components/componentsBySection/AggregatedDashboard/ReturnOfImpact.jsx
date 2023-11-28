@@ -19,6 +19,7 @@ type State = {|
   totalExpense: number,
   dateList: Array<string>,
   yearList: Array<string>,
+  quarterList: Array<string>,
   impactList: Array<number>,
   expenseList: Array<number>,
   startYear: string,
@@ -37,6 +38,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       historyData: [],
       dateList: [],
       yearList: [],
+      quarterList: [],
       impactList: [],
       expenseList: [],
       startYear: '',
@@ -76,6 +78,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           totalExpense: getResponse.total_expense,
           dateList: getResponse.history.map(item => item.quarter_date),
           yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
+          quarterList: getResponse.history.map((item, index) => `Q${(index % 4) + 1} ${item.quarter_date.substring(0, 4)}`),
           impactList: getResponse.history.map(item => item.quarterly_impact),
           expenseList: getResponse.history.map(item => item.expense),
           retryCount: 0 // Reset retry count on successful fetch
@@ -95,7 +98,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const data = {
-      labels: this.state.yearList,
+      labels: this.state.quarterList,
       datasets: [
         {
           label: "Quarterly impact created",
@@ -135,6 +138,9 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
       },
       scales: {
         x: {
+          grid: {
+            display: false // Hide vertical grid lines
+          },
           ticks: {
             font: {
               family:'Montserrat'
