@@ -1690,7 +1690,7 @@ def dollar_impact(request):
 
 @api_view()
 def volunteer_history(request):
-    cache_key = 'volunteer_history'
+    cache_key = 'volunteer_history_projected'
     cached_data = ImpactDashboardCache.get(cache_key)
 
     if cached_data:
