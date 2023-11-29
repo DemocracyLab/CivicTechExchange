@@ -111,8 +111,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
             <h4>Volunteers renewed</h4>
           </div>
           <div className="card-text">
-            <span>The number of volunteers applying to DemocracyLab has shown steady growth
-              over the years, with a significant portion opting to extend their initial commitments. </span>
+            <span>The number of volunteers applying to DemocracyLab has shown steady growth over the years. Increasing the percentage
+              of volunteers who choose to renew their commitments is one of our key objectives for {parseInt(this.state.yearList[this.state.yearList.length-1])+1}.</span>
           </div>
         </div>
 
