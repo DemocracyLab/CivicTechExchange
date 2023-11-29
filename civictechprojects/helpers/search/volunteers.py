@@ -7,11 +7,17 @@ from django.db.models import Count, Q
 from django.db.models.functions import ExtractYear
 from collections import Counter
 from collections import defaultdict
+from datetime import datetime
 
 
 def volunteer_history_list(request):
     # Initialize the default dictionary with counts for approved, renewals, and total applications
     yearly_data = defaultdict(lambda: {'approved': 0, 'renewals': 0, 'applications': 0})
+
+    # Get the current year and today's date
+    current_year = datetime.now().year
+    today = datetime.now().date()
+    days_elapsed = (today - datetime(today.year, 1, 1).date()).days + 1  # Adding 1 because the first day counts
 
     # Get all volunteers
     all_volunteers = VolunteerRelation.unfiltered_objects.all()
@@ -53,6 +59,15 @@ def volunteer_history_list(request):
         # Count each year from application_date's year to re_enrolled_last_date's year
         for year in range(start_year, end_year + 1):
             yearly_data[year]['renewals'] += 1
+
+    # Calculate projected values for the current year and set values for previous years
+    for year, data in yearly_data.items():
+        if year == current_year:
+            data['projected_approved'] = round(data['approved'] * 365 / days_elapsed)
+            data['projected_renewals'] = round(data['renewals'] * 365 / days_elapsed)
+        else:
+            data['projected_approved'] = data['approved']
+            data['projected_renewals'] = data['renewals']
 
     # Convert defaultdict to a regular dict for serialization
     return dict(yearly_data)

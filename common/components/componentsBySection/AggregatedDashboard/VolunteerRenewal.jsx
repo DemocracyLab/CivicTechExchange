@@ -30,8 +30,8 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
     const { data } = this.props;
     this.setState({
       renewalRate: Math.round(data.cumulative_renewal_percentage*100),
-      renewalNumberList: data.yearly_stats.map(item => item.renewals),
-      joinedNumberList: data.yearly_stats.map(item => item.approved),
+      renewalNumberList: data.yearly_stats.map(item => item.projected_renewals),
+      joinedNumberList: data.yearly_stats.map(item => item.projected_approved),
       yearList: data.yearly_stats.map((item, i, array) => {
         if (i === array.length - 1) {
           return item.year + '*';
