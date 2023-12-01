@@ -184,7 +184,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
           </div>
           <div className="card-text">
             <span>Since {this.state.startYear}, DemocracyLab has created impact valued at ${totalImpactConverted} for various nonprofits and
-              tech-for-good projects by connecting them with volunteers. With total expense standing at ${totalExpenseConverted},
+              tech-for-good projects by connecting them with skilled volunteers. With total expense standing at ${totalExpenseConverted},
               this has generated {returnOfImpactConverted}% return of impact for every dollar spent.</span>
           </div>
         </div>
@@ -210,6 +210,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
         <div class="roi-chart-desc">
           <p>Total expenses calculated between 1 January {this.state.startYear} and {this.state.endDay} {this.state.endMonth} {this.state.endYear}.</p>
           <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses).</p>
+          <p>Impact is estimated by summing the number of weekly active volunteers, multiplying by an assumed 2.5 hours/week, and multiplying by an assumed $50/hour.</p>
         </div>
       </React.Fragment>
     );
