@@ -21,10 +21,10 @@ jobs:
       run: docker-compose -f docker-compose.yml up --build --detach
 
     - name: Run Python tests
-      run: docker-compose -f docker-compose.yml exec test python manage.py test
+      run: docker-compose -f docker-compose.yml exec test bash -c 'python manage.py test'
 
     - name: Run JavaScript Tests
-      run: docker-compose -f docker-compose.yml exec test npm run test
+      run: docker-compose -f docker-compose.yml exec test bash -c 'npm run test'
 
     - name: Stop and remove containers
       run: docker-compose -f path/to/your/docker-compose.yml down

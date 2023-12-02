@@ -71,13 +71,18 @@ services:
     build: .
     env_file:
       - ./.env
-    command: 
-      - python manage.py test
-      - npm run test
+    command: bash -c 'python manage.py test && npm run test'
+    volumes:
+      - ./civictechprojects/:/code/civictechprojects/
+      - ./common/:/code/common/
+      - ./democracylab/:/code/democracylab/
+      - ./oauth2/:/code/oauth2/
+      - ./.babelrc:/code/.babelrc
+      - ./manage.py:/code/manage.py
+      - ./webpack.common.js:/code/webpack.common.js
+      - ./webpack.dev.js:/code/webpack.dev.js
     depends_on:
       - db
-      - create_table
-      - migrate
 
 volumes:
   demolab:
