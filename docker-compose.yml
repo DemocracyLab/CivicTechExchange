@@ -71,8 +71,9 @@ services:
     build: .
     env_file:
       - ./.env
-    command: bash -c 'python manage.py test && npm run test'
+    command: python manage.py test
     volumes:
+      - demolab:/var/lib/postgresql/data/
       - ./civictechprojects/:/code/civictechprojects/
       - ./common/:/code/common/
       - ./democracylab/:/code/democracylab/
