@@ -12,7 +12,6 @@ import {
 } from "../LocationAutocompleteForm.jsx";
 import { LocationInfo } from "../../common/location/LocationInfo.js";
 import _ from "lodash";
-import Button from "react-bootstrap/Button";
 
 type Props = {|
   locationFormInputs: LocationFormInputsByEntity,
