@@ -23,6 +23,9 @@ jobs:
     - name: Run Python tests
       run: docker-compose -f docker-compose.yml exec myapp python manage.py test
 
+    - name: Print Docker Compose Logs
+      run: docker-compose -f docker-compose.yml logs
+
     - name: Run JavaScript Tests
       run: docker-compose -f docker-compose.yml exec myapp npm run test
 
