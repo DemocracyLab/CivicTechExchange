@@ -67,6 +67,17 @@ services:
       - ./manage.py:/code/manage.py
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js
+  test:
+    build: .
+    env_file:
+      - ./.env
+    command: 
+      - python manage.py test
+      - npm run test
+    depends_on:
+      - db
+      - create_table
+      - migrate
 
 volumes:
   demolab:
