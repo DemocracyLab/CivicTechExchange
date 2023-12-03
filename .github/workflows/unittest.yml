@@ -6,28 +6,59 @@ on:
       - '**/*.js'
       - '.github/workflows/unittest.yml'
 
+# jobs:
+#   Run-Unit-Test:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout Repository
+#       uses: actions/checkout@v2
+
+#     - name: Get env File
+#       run: cp ./example.env ./.env
+
+#     - name: Build and run Docker containers
+#       run: docker-compose -f docker-compose.yml up --build --detach
+
+#     - name: Run Python tests
+#       run: docker-compose -f docker-compose.yml exec test python manage.py test
+
+#     # - name: Run JavaScript Tests
+#     #   run: docker-compose -f docker-compose.yml exec test bash -c 'npm run test'
+
+#     - name: Stop and remove containers
+#       run: docker-compose -f path/to/your/docker-compose.yml down
+
+#     - name: Remove Copied Env file
+#       run: rm ./.env
+
 jobs:
-  Run-Unit-Test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Get env File
-      run: cp ./example.env ./.env
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.10
 
-    - name: Build and run Docker containers
-      run: docker-compose -f docker-compose.yml up --build --detach
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
 
-    - name: Run Python tests
-      run: docker-compose -f docker-compose.yml exec test python manage.py test
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          npm install
 
-    # - name: Run JavaScript Tests
-    #   run: docker-compose -f docker-compose.yml exec test bash -c 'npm run test'
+      - name: Run Django Tests
+        run: |
+          python manage.py test
 
-    - name: Stop and remove containers
-      run: docker-compose -f path/to/your/docker-compose.yml down
-
-    - name: Remove Copied Env file
-      run: rm ./.env
+      - name: Run Node.js Tests
+        run: |
+          npm run test
