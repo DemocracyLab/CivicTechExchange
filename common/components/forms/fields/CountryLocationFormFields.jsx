@@ -63,7 +63,6 @@ class CountryLocationFormFields extends React.Component<Props, State> {
               this.onSelection(this.props.locationFieldId, null);
             }}
           />
-
         </div>
 
         <div className="form-group">
