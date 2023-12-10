@@ -67,23 +67,6 @@ services:
       - ./manage.py:/code/manage.py
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js
-  test:
-    build: .
-    env_file:
-      - ./.env
-    command: python manage.py test
-    volumes:
-      - demolab:/var/lib/postgresql/data/
-      - ./civictechprojects/:/code/civictechprojects/
-      - ./common/:/code/common/
-      - ./democracylab/:/code/democracylab/
-      - ./oauth2/:/code/oauth2/
-      - ./.babelrc:/code/.babelrc
-      - ./manage.py:/code/manage.py
-      - ./webpack.common.js:/code/webpack.common.js
-      - ./webpack.dev.js:/code/webpack.dev.js
-    depends_on:
-      - db
 
 volumes:
   demolab:
