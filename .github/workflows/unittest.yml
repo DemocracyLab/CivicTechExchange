@@ -20,8 +20,8 @@ jobs:
     - name: Build and run Docker containers
       run: docker-compose -f docker-compose.yml up --build --detach
 
-    # - name: Run Python tests
-    #   run: docker-compose -f docker-compose.yml exec web python manage.py test
+    - name: Run Python tests
+      run: docker-compose -f docker-compose.yml exec -T web python manage.py test
 
     - name: Run JavaScript Tests
       run: docker-compose -f docker-compose.yml exec -T web npm run test
