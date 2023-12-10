@@ -20,11 +20,12 @@ jobs:
     - name: Build and run Docker containers
       run: docker-compose -f docker-compose.yml up --build --detach
 
+    # adding the "-T" flag to tell the docker to run the command without allocating a TTY (interact with a terminal).
     - name: Run Python tests
-      run: docker-compose -f docker-compose.yml exec web python manage.py test
+      run: docker-compose -f docker-compose.yml exec -T web python manage.py test
 
     - name: Run JavaScript Tests
-      run: docker-compose -f docker-compose.yml exec web npm run test
+      run: docker-compose -f docker-compose.yml exec -T web npm run test
 
     - name: Stop and remove containers
       run: docker-compose -f docker-compose.yml down
