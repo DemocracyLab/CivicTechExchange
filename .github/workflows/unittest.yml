@@ -24,7 +24,7 @@ jobs:
     #   run: docker-compose -f docker-compose.yml exec web python manage.py test
 
     - name: Run JavaScript Tests
-      run: docker-compose -f docker-compose.yml exec web npm run test
+      run: docker-compose -f docker-compose.yml exec -T web npm run test
 
     - name: Stop and remove containers
       run: docker-compose -f docker-compose.yml down
