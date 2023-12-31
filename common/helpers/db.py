@@ -7,7 +7,7 @@ def db_table_exists(table_name):
 
 # Check to see if democracylab's database tables have been initialized yet
 def db_is_initialized():
-    return db_table_exists('common_tag')
+    return db_table_exists("common_tag")
 
 
 def bulk_delete(Table, delete_results):
@@ -16,5 +16,8 @@ def bulk_delete(Table, delete_results):
 
 
 def unique_column_values(model, column, filter_func):
-    values = map(lambda obj_property: obj_property[column], model.objects.values(column).distinct())
+    values = map(
+        lambda obj_property: obj_property[column],
+        model.objects.filter(is_searchable=True).values(column).distinct(),
+    )
     return list(filter(filter_func, values))
