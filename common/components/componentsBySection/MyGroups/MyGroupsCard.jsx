@@ -93,6 +93,15 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
           Edit
         </Button>,
         <Button
+        className="MyProjectCard-button"
+        // change href to manage page
+        href={editUrl}
+        variant="secondary"
+        >
+          Projects
+        </Button>
+        ,
+        <Button
           className="MyProjectCard-button"
           variant="destructive"
           onClick={() => this.props.onGroupClickDelete(this.props.group)}
