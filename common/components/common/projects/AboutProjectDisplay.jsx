@@ -18,7 +18,6 @@ import VolunteerSection from "../volunteers/VolunteerSection.jsx";
 import IconLinkDisplay from "../../componentsBySection/AboutProject/IconLinkDisplay.jsx";
 import type { PositionInfo } from "../../forms/PositionInfo.jsx";
 import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
-import Headers from "../Headers.jsx";
 import Truncate from "../../utils/truncate.js";
 import Sort from "../../utils/sort.js";
 import { LinkTypes } from "../../constants/LinkConstants.js";
@@ -32,6 +31,7 @@ import Tabs from "react-bootstrap/Tabs";
 import Tab from "react-bootstrap/Tab";
 import Button from "react-bootstrap/Button";
 import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import { isWithinIframe } from "../../utils/iframe.js";
 
 type Props = {|
   project: ?ProjectDetailsAPIData,
@@ -108,9 +108,10 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   render(): React$Node {
     const project = this.state.project;
+    const widthModifier=isWithinIframe() ? ' override-breakpoint-max-width' : '';
     return (
-      <div className="container Profile-root">
-        {this._renderHeader(project)}
+      <div className={"container Profile-root" + widthModifier }>
+        {isWithinIframe() && <base target="_blank" />}
         <div className="row">
           <div className="Profile-top-section col-12">
             {this._renderTopSection(project)}
@@ -189,8 +190,9 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
 
   // tabbed primary section content
   _renderPrimarySection(project) {
+    const widthModifier=isWithinIframe() ? ' override-breakpoint-width' : '';
     return (
-      <div className="Profile-primary-container">
+      <div className={"Profile-primary-container" + widthModifier } >
         <Tabs defaultActiveKey="proj-details" id="AboutProject-tabs">
           <Tab
             eventKey="proj-details"
@@ -359,23 +361,6 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
           ) : null}
         </div>
       </div>
-    );
-  }
-
-  _renderHeader(project: ProjectDetailsAPIData): React$Node {
-    const title: string = project.project_name + " | DemocracyLab";
-    const description: string =
-      project.project_short_description ||
-      Truncate.stringT(project.project_description, 300);
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={
-          project.project_thumbnail && project.project_thumbnail.publicUrl
-        }
-      />
     );
   }
 

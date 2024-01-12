@@ -8,6 +8,9 @@ import SponsorFooter from "../chrome/SponsorFooter.jsx";
 import SiteFooter from "../chrome/SiteFooter.jsx";
 import url from "../../components/utils/url.js";
 import { loadHeap } from "../utils/heapApi.js";
+import IframeResizerInParent from "../common/IframeResizerInParent.jsx";
+import urlHelper from "../../components/utils/url.js";
+import Section from "../enums/Section.js";
 
 type State = {|
   headerHeight: number,
@@ -22,6 +25,12 @@ class MainController extends React.Component<{||}, State> {
       headerHeight: 0,
       currentSection: null,
     };
+    IframeResizerInParent.onInParent(()=>{
+      //if we are running within a resizable iframe, let the height go auto rather than being the height defined by the parent - since we will be resizing
+      const style = document.createElement("style");
+      style.textContent = ".Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row {height: auto!important;}";
+      document.head.appendChild(style);
+    })
   }
 
   componentWillMount(): void {
@@ -49,18 +58,21 @@ class MainController extends React.Component<{||}, State> {
   }
 
   render(): Array<React$Node> {
-    return [
-      <MainHeader
-        key="main_header"
-        onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}
-      />,
-      <SectionController
-        key="section_controller"
-        headerHeight={this.state.headerHeight}
-      />,
-      <SponsorFooter key="sponsor_footer" />,
-      <SiteFooter key="site_footer" />,
-    ];
+    const ShowHeadAndFoot=!(urlHelper.atSection(Section.IframeProject)||urlHelper.atSection(Section.IframeGroup));
+    return (
+      <IframeResizerInParent>
+        {ShowHeadAndFoot && <MainHeader
+          key="main_header"
+          onMainHeaderHeightChange={this._mainHeaderHeightChange.bind(this)}
+        />}
+        <SectionController
+          key="section_controller"
+          headerHeight={this.state.headerHeight}
+        />
+        {ShowHeadAndFoot && <SponsorFooter key="sponsor_footer" />}
+        {ShowHeadAndFoot && <SiteFooter key="site_footer" />}
+      </IframeResizerInParent>
+    )
   }
 }
 

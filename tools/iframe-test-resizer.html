@@ -1,0 +1,37 @@
+<!-- this file can be loaded directly from a browser and used to test embedding groups and projects within iframes
+see https://github.com/DemocracyLab/CivicTechExchange/issues/978 
+change groups/inframe to projects/inframe below to test embedding a project
+This if for testing with iframe resizer
+ -->
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>iframe test</title>
+  </head>
+  <body>
+    <div style="width: calc( 100vw - 4rem); margin-left: auto; margin-right: auto">
+        <h1>This is a landing page with Group projects:</h1>
+        <style>
+          iframe {
+            width: 1px;
+            min-width: 100%;
+          }
+        </style>
+        <script src="http://localhost:8000/static/iframeResizer.min.js"></script>
+        <iframe id="democracylab-groups"
+            src="http://localhost:8000/groups/inframe/1"
+        ></iframe>
+        <h1>This is below the group</h1>
+        <h1>This is a project</h1>
+        <iframe id="democracylab-project"
+            src="http://localhost:8000/projects/inframe/1"
+        ></iframe>
+        <h1>This is below the project. </h1>
+        <script>
+            iFrameResize({ log: true }, '#democracylab-groups,#democracylab-project')
+        </script>
+    </div>
+  </body>
+</html>

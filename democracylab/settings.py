@@ -63,6 +63,9 @@ INSTALLED_APPS = [
     "salesforce",
 ]
 
+# Apps that embed iframes are going to use the resizer
+STATICFILES_DIRS= ['node_modules/iframe-resizer/js']
+
 SITE_ID = 1
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -179,11 +182,12 @@ RQ_QUEUES = {
     },
 }
 
-# Caching number of tag counts only for now - change this if other things are db-cached
+#Caching number of tag counts only for now - change this if other things are db-cached
+#Don't cache in DEBUG so that browser pages get fresh pages when you make changes
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "default_db_cache",
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache' if (not DEBUG) else 'django.core.cache.backends.dummy.DummyCache',
+        'LOCATION': 'default_db_cache',
     }
 }
 
@@ -398,7 +402,7 @@ CSP_SCRIPT_SRC = (
     "*.doubleclick.net",
     "*.newrelic.com",
     "*.nr-data.net",
-    "*.hotjar.com",
+    "https://*.hotjar.com",
 )
 CSP_CONNECT_SRC = (
     "'self'",
@@ -408,7 +412,9 @@ CSP_CONNECT_SRC = (
     "*.google-analytics.com",
     "*.nr-data.net",
     "*.hereapi.com",
-    "*.hotjar.com",
+    "https://*.hotjar.com",
+    "https://*.hotjar.io",
+    "wss://*.hotjar.com",
 )
 CSP_FONT_SRC = (
     "'self'",

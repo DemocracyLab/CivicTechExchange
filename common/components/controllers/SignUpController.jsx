@@ -7,7 +7,6 @@ import FormValidation from "../forms/FormValidation.jsx";
 import metrics from "../utils/metrics.js";
 import moment from "moment";
 import _ from "lodash";
-import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
@@ -102,7 +101,6 @@ class SignUpController extends React.Component<Props, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers title="Sign Up | DemocracyLab" description="Sign up" />
         <div className="LogInController-root">
           <div className="LogInController-greeting">
             SIGN UP, IT'S EASY AND FREE

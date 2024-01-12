@@ -2,7 +2,6 @@
 
 import React from "react";
 import cdn, { Images } from "../utils/cdn.js";
-import Headers from "../common/Headers.jsx";
 
 class ThankYouController extends React.Component<{||}> {
   constructor(): void {
