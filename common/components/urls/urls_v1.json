@@ -18,6 +18,7 @@
   {"name": "EditProfile", "pattern": "index/\\?section=EditProfile"},
   {"name": "MyProjects", "pattern": "index/\\?section=MyProjects"},
   {"name": "MyGroups", "pattern": "index/\\?section=MyGroups"},
+  {"name": "GroupProjects", "pattern": "index/\\?section=GroupProjects"},
   {"name": "MyEvents", "pattern": "index/\\?section=MyEvents"},
   {"name": "Profile", "pattern": "index/\\?section=Profile"},
   {"name": "SignUp", "pattern": "index/\\?section=SignUp"},

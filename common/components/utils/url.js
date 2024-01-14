@@ -117,6 +117,8 @@ class urlHelper {
         ] || ""}`;
       case Section.AboutEventProject:
         return `/events/${args["event_id"]}/projects/${args["project_id"]}`;
+      case Section.GroupProjects:
+        return `/groups/manage/${args["group_id"]}`;
     }
   }
 
