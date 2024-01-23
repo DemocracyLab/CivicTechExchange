@@ -119,7 +119,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
         variant="primary"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
-        href={url.section(Section.CreateGroup, id)}
+        href={url.section(Section.GroupProjects, {group_id:id.id})}
       >
         Manage Projects
       </Button>

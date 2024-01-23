@@ -1,0 +1,32 @@
+.GroupProjectCard-root {
+    color: inherit;
+    background-color: $color-background-light;
+    border: solid 1px $color-grey-frame-border;
+    margin: 20px auto;
+    padding: 16px;
+  }
+  
+  .GroupProjectCard-header {
+    color: $color-text-dark;
+    font-style: italic;
+  }
+  
+  .GroupProjectCard-projectName {
+    font-weight: bold;
+  }
+  
+  .GroupProjectCard-button {
+    margin: 5px;
+  }
+  
+  .GroupProjectCard-table td {
+    display: inline-block;
+    width: 100%;
+   }
+  
+   @include media-breakpoint-up(sm) {
+    .GroupProjectCard-table td {
+      display: table-cell;
+      width: 250px;
+      }
+  }

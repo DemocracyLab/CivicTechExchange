@@ -35,7 +35,7 @@ from common.helpers.qiqo_chat import get_user_qiqo_iframe
 from democracylab.models import Contributor, get_request_contributor
 from common.models.tags import Tag
 from common.helpers.constants import FrontEndSection, TagCategory
-from democracylab.emails import send_to_project_owners, send_to_project_volunteer, HtmlEmailTemplate, send_volunteer_application_email, \
+from democracylab.emails import send_to_project_owners, send_to_project_volunteer,Html, HtmlEmailTemplate, send_volunteer_application_email, \
     send_volunteer_conclude_email, notify_project_owners_volunteer_renewed_email, notify_project_owners_volunteer_concluded_email, \
     notify_project_owners_project_approved, contact_democracylab_email, send_to_group_owners, send_group_project_invitation_email, \
     notify_group_owners_group_approved, notify_event_owners_event_approved, notify_rsvped_volunteer, notify_rsvp_cancellation, \
@@ -118,6 +118,35 @@ def group_delete(request, group_id):
         return HttpResponseForbidden()
     return HttpResponse(status=204)
 
+@api_view(['POST'])
+def group_project_remove(request, group_id,project_id):
+    user = request.user
+    message = request.data['message']
+    group = Group.objects.get(id=group_id)
+    project = Project.objects.get(id=project_id)
+    if not user.is_authenticated:
+        return HttpResponse(status=401)
+    # only creator or staff can remove the project
+    if not is_creator(user, group) and not user.is_staff:
+        return HttpResponse(status=403)
+    # # Remove project relationship
+    # project_relation = ProjectRelationship.objects.get(relationship_project=project_id)
+    # project_relation.delete()
+    # project.recache()
+    # group.recache()
+    # group.update_timestamp()
+    # set up mail
+    link_to_group = section_url(FrontEndSection.AboutGroup,{'id':group_id})
+    link_to_project = section_url(FrontEndSection.AboutProject,{'id': project_id})
+    email_subject = '{} has been removed from collaboration'.format(project.project_name)
+    email_template = HtmlEmailTemplate(use_signature=False)
+    email_template.header('{} has been removed from collaboration'.format(project.project_name))
+    email_template.paragraph(Html.a(href=link_to_group,text=group.group_name) + ' has removed '+Html.a(href=link_to_project,text=project.project_name)+' from their group. If you have any questions, please contact the group owner via link below.')
+    if(len(message)>0):
+        email_template.paragraph(message)
+    email_template.button(link_to_group,"CONTACT GROUP",text_color="#000000",text_decoration='none')
+    send_to_project_owners(project=project,sender=user,subject=email_subject,template=email_template,include_co_owners=False)
+    return HttpResponse(status=204)
 
 @api_view()
 def get_group(request, group_id):

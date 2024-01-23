@@ -12,6 +12,7 @@ import type {
   APIError,
 } from "./ProjectAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
+import htmlDocument from "./htmlDocument.js";
 
 export type GroupTileAPIData = {|
   group_id: string,
@@ -65,7 +66,9 @@ export default class GroupAPIUtils {
           })
       );
   }
+  static removeProjectFromGroup({group_id,project_id},callback:()=>void,errCallback:(APIError)=>void){
 
+  }
   static fetchAllTags(
     callback: ($ReadOnlyArray<TagDefinition>) => void,
     errCallback: APIError => void
