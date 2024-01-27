@@ -13,9 +13,10 @@ class FindProjectsController extends React.PureComponent {
   constructor(): void {
     super();
     this.state = { showSplash: true };
+    init();
   }
 
-  componentWillMount(): void {
+  init(): void {
     let searchDecoded = decodeURIComponent(document.location.search);
     let args: FindProjectsArgs = urls.arguments(searchDecoded);
     args = _.pick(args, [

@@ -44,9 +44,10 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       fromProjectId: fromProjectId,
       fromEventId: fromEventId,
     };
+    init();
   }
 
-  componentWillMount(): void {
+  init(): void {
     const args = url.arguments(window.location.href);
     if (
       "from" in args &&

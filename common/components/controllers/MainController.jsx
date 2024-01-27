@@ -30,10 +30,7 @@ class MainController extends React.Component<{||}, State> {
       const style = document.createElement("style");
       style.textContent = ".Profile-primary-container.frame-full .AboutGroup-card-container .row .ProjectCardContainer .row {height: auto!important;}";
       document.head.appendChild(style);
-    })
-  }
-
-  componentWillMount(): void {
+    });
     this.loadPage();
   }
 

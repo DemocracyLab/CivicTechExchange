@@ -10,9 +10,10 @@ import _ from "lodash";
 class FindEventsController extends React.PureComponent {
   constructor(): void {
     super();
+    init();
   }
 
-  componentWillMount(): void {
+  init(): void {
     let args = urls.arguments(document.location.search);
     args = _.pick(args, ["keyword", "page"]);
     UniversalDispatcher.dispatch({

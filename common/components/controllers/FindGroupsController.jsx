@@ -20,9 +20,10 @@ class FindGroupsController extends React.PureComponent {
   constructor(): void {
     super();
     this.state = { showSplash: true };
+    init();
   }
 
-  componentWillMount(): void {
+  init(): void {
     let args: FindGroupsArgs = urls.arguments(document.location.search);
     args = _.pick(args, [
       "showSplash",
