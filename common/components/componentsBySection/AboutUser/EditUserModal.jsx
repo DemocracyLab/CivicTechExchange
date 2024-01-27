@@ -47,7 +47,7 @@ class EditUserModal extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
 

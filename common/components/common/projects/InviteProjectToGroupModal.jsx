@@ -46,7 +46,7 @@ class InviteProjectToGroupModal extends React.PureComponent<Props, State> {
     this.receiveSendConfirmation = this.receiveSendConfirmation.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     let state: State = {
       showModal: nextProps.showModal,
       selectedGroup: nextProps.groups && nextProps.groups[0],

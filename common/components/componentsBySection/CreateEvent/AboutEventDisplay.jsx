@@ -97,7 +97,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     this.handleRSVPClose = this.handleRSVPClose.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.event !== this.props.event) {
       this.setState(
         {

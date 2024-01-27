@@ -96,7 +96,7 @@ class TeamSections extends React.PureComponent<Props, State> {
     this.handleClose = this.handleClose.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     let state: State = { showModal: nextProps.showModal };
     state = this.loadTeamDetails(state, nextProps.teamResponse);
     this.setState(state);

@@ -38,7 +38,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
     this.state = {};
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
 

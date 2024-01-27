@@ -76,7 +76,7 @@ class TagSelectWrapper extends React.PureComponent<Props, State> {
     return displayList.find(displayTag => displayTag.value === tag.tag_name);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!_.isEmpty(nextProps.tagOptions)) {
       this.populateOptionsList(nextProps);
     }

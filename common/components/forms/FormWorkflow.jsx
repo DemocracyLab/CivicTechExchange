@@ -83,7 +83,7 @@ class FormWorkflow<T> extends React.Component<Props<T>, State<T>> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.startStep && !this.state.currentStep) {
       const newStep: number = nextProps.startStep - 1;
       if (newStep !== this.state.currentStep) {

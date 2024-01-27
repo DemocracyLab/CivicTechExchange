@@ -50,7 +50,7 @@ class EditUserThumbnailModal extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!this.state.showModal && nextProps.showModal) {
       const user: UserAPIData = nextProps.user;
       const formFieldsValues: FormFields = {

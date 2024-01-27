@@ -108,7 +108,7 @@ class Selector<T> extends React.Component<SelectorProps<T>, State<T>> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: SelectorProps): void {
+  UNSAFE_componentWillReceiveProps(nextProps: SelectorProps): void {
     this.setState(Selector.updateOptions(nextProps, this.state), function() {
       this.forceUpdate();
     });
