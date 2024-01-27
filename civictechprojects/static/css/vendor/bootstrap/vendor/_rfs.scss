@@ -46,7 +46,7 @@ $rfs-base-font-size-unit: unit($rfs-base-font-size);
   $rfs-base-font-size: $rfs-base-font-size / ($rfs-base-font-size * 0 + 1);
 }
 @else if $rfs-base-font-size-unit == "rem" {
-  $rfs-base-font-size: $rfs-base-font-size / ($rfs-base-font-size * 0 + 1 / $rfs-rem-value);
+  $rfs-base-font-size: $rfs-base-font-size / ($rfs-base-font-size * 0 + (1 / $rfs-rem-value));
 }
 
 // Cache $rfs-breakpoint unit to prevent multiple calls
