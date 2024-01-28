@@ -1,8 +1,7 @@
-version: '3.7'
+version: "3.8" 
 
 services:
   db:
-    platform: linux/amd64    # added for Ben's M3 Macbook Pro
     image: postgis/postgis
     env_file:
       - ./.env
