@@ -3,7 +3,7 @@
 import React from "react";
 import CurrentUser, { UserContext, MyGroupData } from "../utils/CurrentUser.js";
 import ProjectAPIUtils,{ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
-import url from "../utils/url.js";
+import urlHelper from "../utils/url.js";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import metrics from "../utils/metrics.js";
 import LogInController from "./LogInController.jsx";
@@ -28,13 +28,14 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     // const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       projects: null,
-      groupId:url.argument("group_id"),
+      groupId:urlHelper.argument("group_id"),
       showConfirmRemoveModal: false,
       projectToRemove:null,
     };
     this.confirmRemoveProject = this.confirmRemoveProject.bind(this)
     this.clickRemoveProject = this.clickRemoveProject.bind(this)
     this.hideModal = this.hideModal.bind(this)
+    this.moveBackToGroup = this.moveBackToGroup.bind(this)
   }
   //fetch api data
   componentDidMount(){
@@ -44,6 +45,9 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
       // CurrentUser.isStaff())){
       //check if user is the member of the group
       ProjectAPIUtils.fetchProjectDetailsByGroupId(this.state.groupId,(data)=>{this.setState({projects:data.projects})})
+    }else{
+      const currentUrl = window.location.href;
+      window.location.href = urlHelper.logInThenReturn(currentUrl);
     }
   }
 
@@ -58,45 +62,28 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     this.setState({showConfirmRemoveModal:false,projectToRemove:null});
   }
 
-  successRemoved(){
-    this.hideModal();
-    //alert sucess
+  moveBackToGroup(){
+    const url = urlHelper.section(Section.AboutGroup,{id:this.state.groupId});
+    window.location.href = url;
   }
 
   async confirmRemoveProject(message: string): void {
-    const url =
-      `/api/groups/${this.state.groupId}/remove/${this.state.projectToRemove.project_id}/`;
-    ProjectAPIUtils.post(
-      url,
-      {message},
-      ()=>{        
-      this.setState({
-        showConfirmRemoveModal: false,
-      });
-        //alert removing project successful
-      },
-      (err)=>{
-        //alert removing project fail
-      }
-      // success callback
-      //TODO: handle errors
-    );
+    const {groupId,projectToRemove} = this.state;
+    await GroupAPIUtils.removeProjectFromGroup({groupId,projectId:projectToRemove.project_id,message},
+      this.hideModal,
+      ()=>{}
+    )
   }
 
   render(): React$Node {
-    if (!CurrentUser.isLoggedIn) {
-      return <LogInController prevPage={Section.GroupProjects} />;
-    }
     return (
       <React.Fragment>
         <div className="container GroupProjectController-root">
           <ConfirmRemoveGroupProjectModal
-            headerText="Remove Project from Group"
             showModal={this.state.showConfirmRemoveModal}
             onModalHide={this.hideModal}
             onCancel={this.hideModal}
             onConfirm={this.confirmRemoveProject}
-            onSuccess={()=>{}}
           />
 
           {!_.isEmpty(this.state.projects) &&
@@ -112,7 +99,10 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
   ): React$Node {
     return (
       <div>
+        <div className="GroupProjectController-header">
         <h3>{title}</h3>
+        <div className="GroupProjectController-return-group-button" onClick={this.moveBackToGroup}>Return to Group</div>
+        </div>
         {projects.map(project => {
           return (
             <GroupProjectsCard

@@ -143,7 +143,7 @@ def group_project_remove(request, group_id,project_id):
     email_template.header('{} has been removed from collaboration'.format(project.project_name))
     email_template.paragraph(Html.a(href=link_to_group,text=group.group_name) + ' has removed '+Html.a(href=link_to_project,text=project.project_name)+' from their group. If you have any questions, please contact the group owner via link below.')
     if(len(message)>0):
-        email_template.paragraph(message)
+        email_template.paragraph('"{}"'.format(message))
     email_template.button(link_to_group,"CONTACT GROUP",text_color="#000000",text_decoration='none')
     send_to_project_owners(project=project,sender=user,subject=email_subject,template=email_template,include_co_owners=False)
     return HttpResponse(status=204)
