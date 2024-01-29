@@ -54,7 +54,7 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
 
   fetchVolunteerRoles() {
     const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact: string = "/api/volunteer_roles";
+    const url_impact: string = "/api/impact/volunteer_roles";
 
     fetch(new Request(url_impact))
       .then(response => {

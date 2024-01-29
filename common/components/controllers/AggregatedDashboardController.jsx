@@ -31,7 +31,7 @@ class AggregatedDashboardController extends React.PureComponent {
 
   fetchVolunteerStats() {
     const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact: string = "/api/volunteers_history_stats";
+    const url_impact: string = "/api/impact/volunteers_history_stats";
 
     fetch(new Request(url_impact))
       .then(response => {

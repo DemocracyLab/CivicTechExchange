@@ -9,7 +9,6 @@ from collections import Counter
 from collections import defaultdict
 from datetime import datetime
 
-
 def volunteer_history_list(request):
     # Initialize the default dictionary with counts for approved, renewals, and total applications
     yearly_data = defaultdict(lambda: {'approved': 0, 'renewals': 0, 'applications': 0})
@@ -71,4 +70,3 @@ def volunteer_history_list(request):
 
     # Convert defaultdict to a regular dict for serialization
     return dict(yearly_data)
-

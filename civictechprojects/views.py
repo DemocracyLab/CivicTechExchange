@@ -40,6 +40,7 @@ from .caching.cache import ProjectSearchTagsCache, ImpactDashboardCache
 from .helpers.search.groups import groups_list
 from .helpers.search.projects import projects_list, recent_projects_list
 from .helpers.search.volunteers import volunteer_history_list
+from .helpers.impact.dashboard import impact_dashboard_data
 from common.caching.cache import Cache
 from common.helpers.collections import flatten, count_occurrences
 from common.helpers.dictionaries import keys_subset
@@ -1654,167 +1655,13 @@ def qiqo_webhook(request):
     existing_room.recache_linked()
     return HttpResponse(status=200)
 
-
 @api_view()
-def dollar_impact(request):
-    impact = DollarsSaved.objects.all()
-    history = []
-    total_impact_value = 0
-    total_expense = 0
-    roi = 0
-    for data in impact:
-        quarter_date = data.quarterly
-        if quarter_date is not None:
-            quarterly_impact = data.impact
-            expense = data.expense
-            history.append(
-                {
-                    "quarter_date": quarter_date,
-                    "quarterly_impact": quarterly_impact,
-                    "expense": expense,
-                }
-            )
-            total_impact_value += quarterly_impact
-            total_expense += expense
-
-    # Sort the history list by year
-    if len(history) > 0:
-        history = sorted(history, key=lambda x: x["quarter_date"])
-        roi = (total_impact_value - total_expense) / total_expense
-
-    res = {
-        "history": history,
-        "total_impact": total_impact_value,
-        "total_expense": total_expense,
-        "roi": roi,
-    }
-
-    return JsonResponse(res)
-
-
-@api_view()
-def volunteer_history(request):
-    cache_key = "volunteer_history_projected"
-    cached_data = ImpactDashboardCache.get(cache_key)
-
-    if cached_data:
-        # If data is in cache, return it
-        return JsonResponse(cached_data)
-
-    yearly_stats = volunteer_history_list(request)
-    total_applications = sum(
-        year_data["applications"] for year_data in yearly_stats.values()
-    )
-    total_approved = sum(year_data["approved"] for year_data in yearly_stats.values())
-    total_renewals = sum(year_data["renewals"] for year_data in yearly_stats.values())
-    if total_approved > 0:
-        cumulative_renewal_percentage = total_renewals / total_approved
-        volunteer_matching = total_approved / total_applications
-    else:
-        cumulative_renewal_percentage = 0
-        volunteer_matching = 0
-    sorted_yearly_stats = sorted(yearly_stats.items(), key=lambda x: x[0])
-    # Convert the dictionary to a list of JSON objects
-    stats_list = [{"year": year, **data} for year, data in sorted_yearly_stats]
-    data = {
-        "yearly_stats": stats_list,
-        "cumulative_renewal_percentage": cumulative_renewal_percentage,
-        "volunteer_matching": volunteer_matching,
-    }
-
-    # Store the result in the cache for 24 hours
-    ImpactDashboardCache.refresh(cache_key, data, 86400)
-
-    return JsonResponse(data)
-
-
-@api_view()
-def volunteer_roles(request):
-    cache_key = "volunteer_roles"
-    cached_data = ImpactDashboardCache.get(cache_key)
-
-    if cached_data:
-        # If data is in cache, return it
-        return JsonResponse(cached_data)
-
-    volunteers = VolunteerRelation.unfiltered_objects.filter(
-        is_approved=True
-    ).prefetch_related("role")
-
-    role_counts = Counter()
-    for volunteer in volunteers:
-        role = volunteer.get_role()
-        role_counts[role] += 1
-
-    role_counts_sorted = dict(sorted(role_counts.items(), key=lambda x: x[0]))
-
-    # Store the result in the cache for 24 hours
-    ImpactDashboardCache.refresh(cache_key, role_counts_sorted, 86400)
-
-    return JsonResponse(role_counts_sorted)
-
-
-@api_view()
-def project_area(request):
-    cache_key = "project_area"
-    cached_data = ImpactDashboardCache.get(cache_key)
-
-    if cached_data:
-        # If data is in cache, return it
-        return JsonResponse(cached_data)
-
-    projects = Project.objects.all()
-
-    area_counts = Counter()
-    for project in projects:
-        project_areas = project.get_project_issue_area()
-        # Check if there are no issue areas assigned
-        if len(project_areas) == 0:
-            area = "No Specific Issue"
-        else:
-            area = project_areas[0]["display_name"]
-
-        area_counts[area] += 1
-
-    # Sort area_counts by count number in descending order and then convert to dictionary
-    area_counts_sorted = dict(
-        sorted(area_counts.items(), key=lambda x: x[1], reverse=True)
-    )
-
-    # Store the result in the cache for 24 hours
-    ImpactDashboardCache.refresh(cache_key, area_counts_sorted, 86400)
-
-    return JsonResponse(area_counts_sorted)
-
-
-@api_view()
-def hackathon_stats(request):
-    hackathon_data = Hackathons.objects.all()
-
-    if hackathon_data:
-        return JsonResponse(
-            {
-                "total_hackathon_count": hackathon_data[0].total_hackathon_count,
-                "total_hackathon_participants": hackathon_data[
-                    0
-                ].total_hackathon_participants,
-            }
-        )
-    else:
-        return JsonResponse(
-            {"total_hackathon_count": 0, "total_hackathon_participants": 0}
-        )
-
-
-@api_view()
-def get_overall_stats(request):
-    active_volunteers = VolunteerRelation.objects.filter(is_approved=True)
-
-    stats = {
-        "projectCount": Project.objects.filter(
-            is_searchable=True, deleted=False
-        ).count(),
-        "activeVolunteerCount": active_volunteers.distinct("volunteer__id").count(),
-    }
-
-    return JsonResponse(stats)
+def impact_dashboard(request):
+   cache_key = "impact_dashboard_data"
+   cached_data = ImpactDashboardCache.get(cache_key)
+   if cached_data:
+       return JsonResponse(cached_data)
+   
+   data = impact_dashboard_data(request)
+   ImpactDashboardCache.refresh(cache_key, data, 86400)
+   return JsonResponse(data)

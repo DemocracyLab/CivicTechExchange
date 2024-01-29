@@ -27,7 +27,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const url_impact: string = "/api/impact_data";
+    const url_impact: string = "/api/impact/impact_data";
     fetch(new Request(url_impact))
       .then(response => response.json())
       .then(getResponse =>
@@ -36,7 +36,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
           estimatedImpact: getResponse.total_impact,
         })
       );
-    const url_stats: string = "/api/volunteers_stats";
+    const url_stats: string = "/api/impact/volunteers_stats";
     fetch(new Request(url_stats))
       .then(response => response.json())
       .then(getResponse =>

@@ -33,7 +33,7 @@ class ImpactAcrossSectors extends React.PureComponent<Props, State> {
 
   fetchProjectIssueAreas = () => {
     const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact = "/api/project_issue_areas";
+    const url_impact = "/api/impact/project_issue_areas";
 
     fetch(new Request(url_impact))
       .then(response => {

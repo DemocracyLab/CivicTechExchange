@@ -30,6 +30,7 @@ handler500 = handle500
 
 
 urlpatterns = [
+    re_path(r"^api/impact_dashboard", views.impact_dashboard, name="impact_dashboard"),
     re_path(
         r"^sitemap\.xml$",
         sitemap,
@@ -261,10 +262,10 @@ urlpatterns = [
     re_path(
         r"^api/v1/qiqo/webhooks/zoom_presences", views.qiqo_webhook, name="qiqo_webhook"
     ),
-    re_path(r"^api/volunteers_stats", views.get_overall_stats, name="active_volunteers"),
-    re_path(r"^api/impact_data", views.dollar_impact, name="impact_data"),
-    re_path(r"^api/volunteers_history_stats", views.volunteer_history, name="volunteer_history"),
-    re_path(r"^api/volunteer_roles", views.volunteer_roles, name="volunteer_roles"),
-    re_path(r"^api/project_issue_areas", views.project_area, name="project_issue_areas"),
-    re_path(r"^api/hackathon_stats", views.hackathon_stats, name="hackathon_stats")
+    # re_path(r"^api/impact/volunteers_stats", views.get_overall_stats, name="active_volunteers"),
+    # re_path(r"^api/impact/impact_data", views.dollar_impact, name="impact_data"),
+    # re_path(r"^api/impact/volunteers_history_stats", views.volunteer_history, name="volunteer_history"),
+    # re_path(r"^api/impact/volunteer_roles", views.volunteer_roles, name="volunteer_roles"),
+    # re_path(r"^api/impact/project_issue_areas", views.project_area, name="project_issue_areas"),
+    # re_path(r"^api/impact/hackathon_stats", views.hackathon_stats, name="hackathon_stats")
 ]

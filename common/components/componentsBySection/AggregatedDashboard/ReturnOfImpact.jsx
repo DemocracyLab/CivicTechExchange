@@ -57,7 +57,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
 
   fetchImpactData = async () => {
     const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact = "/api/impact_data";
+    const url_impact = "/api/impact/impact_data";
 
     try {
       const response = await fetch(url_impact);

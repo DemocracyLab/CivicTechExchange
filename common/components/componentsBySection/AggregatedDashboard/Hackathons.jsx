@@ -27,7 +27,7 @@ class Hackathons extends React.PureComponent<Props, State> {
 
   fetchHackathonStats = () => {
     const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact = "/api/hackathon_stats";
+    const url_impact = "/api/impact/hackathon_stats";
 
     fetch(new Request(url_impact))
       .then(response => {
