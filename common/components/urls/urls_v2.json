@@ -3,7 +3,7 @@
   {"name": "MyProjects", "pattern": "my/projects"},
   {"name": "MyGroups", "pattern": "my/groups"},
   {"name": "MyEvents", "pattern": "my/events"},
-  {"name": "GroupProjects", "pattern": "groups/manage/(?P<group_id>[\\w\\-]*)"},
+  {"name": "GroupProjects", "pattern": "groups/manage/(?P<id>[\\w\\-]*)"},
   {"name": "CreateEventProject", "pattern": "events/(?P<event_id>[\\w\\-]+)/projects/create/(?P<project_id>[\\w\\-]*)"},
   {"name": "AboutEventProject", "pattern": "events/(?P<event_id>[\\w\\-]+)/projects/(?P<project_id>[\\w\\-]+)"},
   {"name": "CreateProject", "pattern": "projects/create/(?P<id>[\\w\\-]*)"},

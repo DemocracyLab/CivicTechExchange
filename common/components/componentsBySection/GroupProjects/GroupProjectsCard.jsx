@@ -30,17 +30,17 @@ class GroupProjectsCard extends React.PureComponent<Props, State> {
   render(): React$Node {
     return (
       <div className="row GroupProjectCard-root">
-        <div className="col-sm-4">
+        <div className="col-sm-4 GroupProjectCard-item">
           <div className="GroupProjectCard-header">Project Name</div>
           <div className="GroupProjectCard-projectName text-break">
             {this.props.project.project_name}
           </div>
         </div>
-        <div className="col-sm-2">
+        <div className="col-sm-2 GroupProjectCard-item">
           <div className="GroupProjectCard-header">Project Lead</div>
           <div>{this.state.projectLead ? this.state.projectLead : "Loading"}</div>
         </div>
-        <div className="col-sm-3">{this._renderProjectStatus()}</div>
+        <div className="col-sm-3 GroupProjectCard-item">{this._renderProjectStatus()}</div>
         <div className="col-sm-3">{this._renderButtons()}</div>
       </div>
     );

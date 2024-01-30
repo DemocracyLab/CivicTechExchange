@@ -85,6 +85,7 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
         onClickCancel={this.confirm.bind(this, false)}
         onClickSubmit={this.confirm.bind(this, true)}
         onModalHide={this.onHide}
+        submitButtonVariant="outline-destructive"
       >
         {step==0? this.firstStep(): this.secondStep()}
       </ModalWrapper>

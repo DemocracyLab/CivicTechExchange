@@ -68,8 +68,7 @@ export default class GroupAPIUtils {
   }
   static async removeProjectFromGroup({groupId,projectId,message},callback:?(APIResponse)=>void,errCallback:?(APIError)=>void){
     const url =
-      `/api/groups/${groupId}/remove/${projectId}/`;
-    
+      `/api/groups/${groupId}/projects/remove/${projectId}/`;
     return this.post(
       url,
       {message},

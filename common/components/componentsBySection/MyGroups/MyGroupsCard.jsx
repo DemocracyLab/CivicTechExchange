@@ -37,7 +37,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
           <div>{this.state.isOwner ? "Group Owner" : "Volunteer"}</div>
         </div>
         <div className="col-sm-3">{this._renderGroupStatus()}</div>
-        <div className="col-sm-3">{this._renderButtons()}</div>
+        <div className="col-sm-3 MyProjectCard-groupButtons">{this._renderButtons()}</div>
       </div>
     );
   }

@@ -6,19 +6,21 @@ import ProjectAPIUtils,{ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js
 import urlHelper from "../utils/url.js";
 import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
 import metrics from "../utils/metrics.js";
-import LogInController from "./LogInController.jsx";
 import Section from "../enums/Section.js";
 import _ from "lodash";
 import UserAPIUtils from "../utils/UserAPIUtils.js";
 import GroupProjectsCard from "../componentsBySection/GroupProjects/GroupProjectsCard.jsx";
-import GroupAPIUtils from "../utils/GroupAPIUtils.js";
+import GroupAPIUtils,{GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import ConfirmRemoveGroupProjectModal from "../componentsBySection/GroupProjects/ConfirmRemoveGroupProjectModal.jsx";
+import Toast from "../common/notification/Toast.jsx";
 
 
 type State = {|
   projects: ?Array<ProjectDetailsAPIData>,
-  groupId: number,
+  groupId:string,
+  groupDetail: ?GroupDetailsAPIData,
   showConfirmRemoveModal: boolean,
+  showToast:boolean,
   projectToRemove: ?ProjectDetailsAPIData,
 |};
 
@@ -28,27 +30,34 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     // const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       projects: null,
-      groupId:urlHelper.argument("group_id"),
+      groupId:urlHelper.argument("id"),
+      groupDetail:null,
       showConfirmRemoveModal: false,
+      showToast:false,
       projectToRemove:null,
     };
     this.confirmRemoveProject = this.confirmRemoveProject.bind(this)
     this.clickRemoveProject = this.clickRemoveProject.bind(this)
     this.hideModal = this.hideModal.bind(this)
     this.moveBackToGroup = this.moveBackToGroup.bind(this)
+    this.successRemoved = this.successRemoved.bind(this)
+    this.isGroupOwner = this.isGroupOwner.bind(this)
   }
   //fetch api data
   componentDidMount(){
     if(CurrentUser.isLoggedIn()){
-      // &&(CurrentUser.userID() === this.props.group.group_creator ||
-      // CurrentUser.isCoOwner(this.props.group) ||
-      // CurrentUser.isStaff())){
-      //check if user is the member of the group
-      ProjectAPIUtils.fetchProjectDetailsByGroupId(this.state.groupId,(data)=>{this.setState({projects:data.projects})})
+      const {groupId} = this.state;
+      ProjectAPIUtils.fetchProjectsByGroupId(groupId,true,(data)=>{this.setState({projects:data.projects})})
+      GroupAPIUtils.fetchGroupDetails(groupId,(data)=>this.setState({groupDetail:data}))
     }else{
       const currentUrl = window.location.href;
       window.location.href = urlHelper.logInThenReturn(currentUrl);
     }
+  }
+
+  successRemoved(){
+    this.setState({showToast:true});
+    this.hideModal();
   }
 
   clickRemoveProject(project: ProjectDetailsAPIData): void {
@@ -59,7 +68,7 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
   }
 
   hideModal(){
-    this.setState({showConfirmRemoveModal:false,projectToRemove:null});
+    this.setState({showConfirmRemoveModal:false});
   }
 
   moveBackToGroup(){
@@ -67,15 +76,26 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     window.location.href = url;
   }
 
+  isGroupOwner(){
+    return CurrentUser.userID() === this.state.groupDetail.group_creator;
+  }
   async confirmRemoveProject(message: string): void {
     const {groupId,projectToRemove} = this.state;
     await GroupAPIUtils.removeProjectFromGroup({groupId,projectId:projectToRemove.project_id,message},
-      this.hideModal,
+      ()=>{this.successRemoved();},
       ()=>{}
     )
   }
 
   render(): React$Node {
+    const {projects,showToast,groupDetail,projectToRemove} = this.state;
+    if(!groupDetail){
+      return <div>Loading...</div>
+    }
+    //only group owner can access the page
+    if(!this.isGroupOwner()){
+      urlHelper.navigateToSection(Section.Home);
+    }
     return (
       <React.Fragment>
         <div className="container GroupProjectController-root">
@@ -85,9 +105,9 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
             onCancel={this.hideModal}
             onConfirm={this.confirmRemoveProject}
           />
-
+          <Toast timeoutMilliseconds={3000} header={`${projectToRemove?.project_name} was removed from ${groupDetail?.group_name}`} show={showToast} onClose={()=>this.setState({showToast:false})}/>
           {!_.isEmpty(this.state.projects) &&
-            this.renderProjectCollection("Participating Project", this.state.projects)}
+            this.renderProjectCollection("Participating Project", projects)}
         </div>
       </React.Fragment>
     );

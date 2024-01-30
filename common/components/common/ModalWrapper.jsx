@@ -26,6 +26,9 @@ type Props = {|
   hideButtons: ?boolean,
   size: ?string,
   reverseCancelConfirm: ?boolean,
+  cancelButtonVariant: ?string,
+  submitButtonVariant: ?string,
+  buttons: ?React$Node,
 |};
 type State = {||};
 
@@ -57,7 +60,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
             <Modal.Title>{this.props.headerText}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.props.children}</Modal.Body>
-          {!this.props.hideButtons && (
+          {!this.props.hideButtons && (this.props.buttons)? this.props.buttons : (
             <Modal.Footer>
               {this.props.reverseCancelConfirm ? (
                 <React.Fragment>
@@ -78,9 +81,10 @@ class ModalWrapper extends React.PureComponent<Props, State> {
   }
 
   _renderCancelButton(): React$Node {
+    const {cancelButtonVariant="outline-secondary"} = this.props;
     return (
       <Button
-        variant="outline-secondary"
+        variant={cancelButtonVariant}
         onClick={() => this.props.onClickCancel()}
         disabled={!this.props.cancelEnabled}
       >
@@ -90,6 +94,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
   }
 
   _renderSubmitButton(): React$Node {
+    const {submitButtonVariant="primary"} = this.props;
     // TODO: Figure out more visually pleasing spinner solution
     const buttonContent: React$Node = this.props.submitText ? (
       <React.Fragment>{this.props.submitText}</React.Fragment>
@@ -98,7 +103,7 @@ class ModalWrapper extends React.PureComponent<Props, State> {
     );
     return (
       <Button
-        variant="primary"
+        variant={submitButtonVariant}
         disabled={!this.props.submitEnabled}
         onClick={() => this.props.onClickSubmit()}
       >

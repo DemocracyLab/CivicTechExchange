@@ -248,12 +248,14 @@ class ProjectAPIUtils {
   }
 
   // fetch project by group id
-  static fetchProjectDetailsByGroupId(
+  static fetchProjectsByGroupId(
     group_id: number,
+    isOwner:boolean,
     callback: ProjectDetailsAPIData => void,
     errCallback: APIError => void
   ): void {
-    let url: string = "/api/projects?group_id=" + group_id;
+    //if user is owner of group, then also fetch the private project
+    let url: string = (isOwner)?`/api/groups/${group_id}/projects/`:"/api/projects?group_id=" + group_id;
     fetch(new Request(url, { credentials: "include" }))
       .then(response => {
         if (!response.ok) {
