@@ -25,11 +25,12 @@ export default function AggregatedDashboardController() {
         console.error('Impact Data Fetch Error:', error);
         setImpactData(null);
       });
+      console.log("impactData: ", impactData);
   }, []);
 
   return (
     <div className="Dashboard-summary">
-      <AggregatedDashboard impactData={impactData} />
+      {/* <AggregatedDashboard impactData={impactData} /> */}
     </div>
   );
 
