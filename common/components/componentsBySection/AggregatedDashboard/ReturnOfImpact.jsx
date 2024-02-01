@@ -3,34 +3,9 @@ import { Line } from "react-chartjs-2"; // References: https://react-chartjs-2.j
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-type HistoryItem = {
-  year: string,
-  public_value: number,
-  expense: number,
-};
-
-type Props = {|
-|};
-
-type State = {|
-  returnOfImpact: number,
-  historyData: Array<HistoryItem>,
-  totalImpact: number,
-  totalExpense: number,
-  dateList: Array<string>,
-  yearList: Array<string>,
-  quarterList: Array<string>,
-  impactList: Array<number>,
-  expenseList: Array<number>,
-  startYear: string,
-  endDay: string,
-  endMonth: string,
-  endYear: string,
-|};
-
 const monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-class ReturnOfImpact extends React.PureComponent<Props, State> {
+class ReturnOfImpact extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {
@@ -96,7 +71,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
     }
   }
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.quarterList,
       datasets: [
@@ -207,7 +182,7 @@ class ReturnOfImpact extends React.PureComponent<Props, State> {
             />
           </div>
         </div>
-        <div class="roi-chart-desc">
+        <div className="roi-chart-desc">
           <p>Total expenses calculated between 1 January {this.state.startYear} and {this.state.endDay} {this.state.endMonth} {this.state.endYear}.</p>
           <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses).</p>
           <p>Impact is estimated by summing the number of weekly active volunteers, multiplying by an assumed 2.5 hours/week, and multiplying by an assumed $50/hour.</p>

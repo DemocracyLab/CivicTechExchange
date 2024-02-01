@@ -17,6 +17,14 @@
   margin-right: auto;
 }
 
+#detailButton {
+  display: none;
+}
+
+#dashboardDisplay {
+  margin-top: 80px;
+}
+
 @include media-breakpoint-up(xs) {
   .Dashboard-detail {
     padding-top: 64px;

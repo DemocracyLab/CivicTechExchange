@@ -3,19 +3,7 @@ import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 
-
-type Props = {|
-|};
-
-type State = {|
-  returnOfImpact: number,
-  estimatedImpact: number,
-  activeVolunteerCount: number,
-  activeProjectCount: number,
-|};
-
-
-class AggregatedDashboard extends React.PureComponent<Props, State> {
+class AggregatedDashboard extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {
@@ -36,7 +24,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
           estimatedImpact: getResponse.total_impact,
         })
       );
-    const url_stats: string = "/api/impact/volunteers_stats";
+    const url_stats = "/api/impact/volunteers_stats";
     fetch(new Request(url_stats))
       .then(response => response.json())
       .then(getResponse =>
@@ -47,7 +35,7 @@ class AggregatedDashboard extends React.PureComponent<Props, State> {
       );
   }
 
-  render(): React$Node {
+  render() {
     return (
       <React.Fragment>
         <h2 className="text-center AggregatedDashboard-title">DemocracyLab's Impact</h2>

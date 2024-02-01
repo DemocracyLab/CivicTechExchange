@@ -3,18 +3,7 @@ import { Bar } from 'react-chartjs-2'; // References: https://react-chartjs-2.js
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-type Props = {|
-    data: any
-|};
-
-type State = {|
-  matchingRate: number,
-  approvedNumberList: Array<number>,
-  applicationNumberList: Array<number>,
-  yearList: Array<number>,
-|};
-
-class VolunteerMatching extends React.PureComponent<Props, State> {
+class VolunteerMatching extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,7 +24,7 @@ class VolunteerMatching extends React.PureComponent<Props, State> {
     })
   }
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.yearList,
       datasets: [

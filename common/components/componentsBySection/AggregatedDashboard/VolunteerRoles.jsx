@@ -1,27 +1,6 @@
 import React from "react";
 import { Doughnut } from 'react-chartjs-2'; // References: https://react-chartjs-2.js.org/
 
-// 570	Business
-// 1304	Data
-// 3156	Design
-// 23	Fundraising
-// 218	Marketing
-// 151	Operations
-// 500	Product
-// 2026	Software Development
-// 66	Subject Matter Expert
-// 241	Testing
-
-
-type Props = {|
-|};
-
-type State = {|
-  roleList: Array<string>,
-  roleCountList: Array<number>,
-  totalVolunteers: number,
-|};
-
 const backgroundColorList = [
   '#F79E02',
   '#C8BFAF',
@@ -35,7 +14,7 @@ const backgroundColorList = [
   '#C47002',
 ];
 
-class VolunteerRoles extends React.PureComponent<Props, State> {
+class VolunteerRoles extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {
@@ -84,7 +63,7 @@ class VolunteerRoles extends React.PureComponent<Props, State> {
   }
 
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.roleList,
       datasets: [

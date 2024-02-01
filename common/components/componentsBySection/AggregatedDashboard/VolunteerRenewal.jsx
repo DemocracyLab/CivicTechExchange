@@ -3,19 +3,7 @@ import { Line } from "react-chartjs-2"; // References: https://react-chartjs-2.j
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-type Props = {|
-    data: any
-|};
-
-type State = {|
-  renewalRate: number,
-  renewalNumberList: Array<number>,
-  joinedNumberList: Array<number>,
-  yearList: Array<string>,
-|};
-
-
-class VolunteerRenewal extends React.PureComponent<Props, State> {
+class VolunteerRenewal extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -42,7 +30,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
     })
   }
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.yearList,
       datasets: [
@@ -134,7 +122,7 @@ class VolunteerRenewal extends React.PureComponent<Props, State> {
             />
           </div>
         </div>
-        <div class="volunteer-renewal-chart-desc">
+        <div className="volunteer-renewal-chart-desc">
           <p> {this.state.yearList[this.state.yearList.length-1]} - Projected values based on year to date volunteer activity.</p>
         </div>
       </React.Fragment>

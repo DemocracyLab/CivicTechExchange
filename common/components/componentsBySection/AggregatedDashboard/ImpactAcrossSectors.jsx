@@ -3,18 +3,7 @@ import { Bar } from 'react-chartjs-2'; // References: https://react-chartjs-2.js
 import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
-
-
-type Props = {|
-|};
-
-type State = {|
-  areaList: Array<string>,
-  areaCountList: Array<number>,
-  totalAreas: number
-|};
-
-class ImpactAcrossSectors extends React.PureComponent<Props, State> {
+class ImpactAcrossSectors extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {

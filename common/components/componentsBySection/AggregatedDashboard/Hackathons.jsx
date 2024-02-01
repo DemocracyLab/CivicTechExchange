@@ -1,15 +1,6 @@
 import React from "react";
 
-
-type Props = {|
-|};
-
-type State = {|
-  hackathonCount: number,
-  hackathonParticipants: number
-|};
-
-class Hackathons extends React.PureComponent<Props, State> {
+class Hackathons extends React.PureComponent {
   constructor(props) {
     super();
     this.state = {
@@ -55,7 +46,7 @@ class Hackathons extends React.PureComponent<Props, State> {
   }
 
 
-  render(): React$Node {
+  render() {
     return (
       <React.Fragment>
         <h2 className="text-center AggregatedDashboard-title">Hackathons</h2>
