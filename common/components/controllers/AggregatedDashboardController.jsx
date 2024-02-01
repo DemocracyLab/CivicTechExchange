@@ -1,5 +1,4 @@
-// @flow
-
+import React from "react";
 import AggregatedDashboard from "../componentsBySection/Landing/AggregatedDashboard.jsx";
 import ReturnOfImpact from "../componentsBySection/AggregatedDashboard/ReturnOfImpact.jsx";
 import ImpactAcrossSectors from "../componentsBySection/AggregatedDashboard/ImpactAcrossSectors.jsx";
@@ -8,10 +7,6 @@ import VolunteerRenewal from "../componentsBySection/AggregatedDashboard/Volunte
 import VolunteerMatching from "../componentsBySection/AggregatedDashboard/VolunteerMatching.jsx";
 import Hackathons from "../componentsBySection/AggregatedDashboard/Hackathons.jsx";
 import SponsorFooter from "../chrome/SponsorFooter.jsx";
-
-import urls from "../utils/url.js";
-import React from "react";
-
 class AggregatedDashboardController extends React.PureComponent {
   constructor(): void {
     super();

@@ -37,7 +37,7 @@ class AggregatedDashboard extends React.PureComponent {
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <h2 className="text-center AggregatedDashboard-title">DemocracyLab's Impact</h2>
         <div className="Aggregated-dashboard" id="dashboardDisplay">
             <div className="card card1">
@@ -65,7 +65,7 @@ class AggregatedDashboard extends React.PureComponent {
           >
             View More
           </Button>
-      </React.Fragment>
+      </>
     );
   }
 }
