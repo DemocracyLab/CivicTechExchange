@@ -120,8 +120,7 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     title: string,
     projects: $ReadOnlyArray<ProjectDetailsAPIData>
   ): React$Node {
-    let components = _.isEmpty(this.state.projects)? 
-                    <p>There are no projects in this group</p> 
+    const components = _.isEmpty(this.state.projects)? <p>There are no projects in this group</p> 
                     : projects.map(project => {
                       return (
                         <GroupProjectsCard

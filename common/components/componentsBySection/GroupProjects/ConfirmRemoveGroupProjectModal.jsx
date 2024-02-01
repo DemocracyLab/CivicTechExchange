@@ -5,6 +5,8 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import ModalWrapper from "../../common/ModalWrapper.jsx";
 
+const WIDTH_FOR_MOBILE = 575;
+
 type Props = {|
   showModal: boolean,
   onConfirm: message => Promise<any>,
@@ -30,6 +32,7 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.firstStep = this.firstStep.bind(this);
     this.onHide = this.onHide.bind(this);
+    this.renderButtons = this.renderButtons.bind(this)
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.showModal){
@@ -71,6 +74,13 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
       <p>This action cannot be undone</p>
     </div>
   }
+  renderButtons():React$Node{
+    if(this.state.step===0||window.innerWidth>WIDTH_FOR_MOBILE) return null;
+    return <div className="ConfirmRemoveGroupProjectModal-buttons">
+      <Button variant={'outline-destructive'}>Yes, remove project</Button>
+      <Button variant={'outline-secondary'}>Back</Button>
+    </div>
+  }
   render(): React$Node {
     const {step,isProcessing} = this.state;
     const {showModal} = this.props;
@@ -86,6 +96,7 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
         onClickSubmit={this.confirm.bind(this, true)}
         onModalHide={this.onHide}
         submitButtonVariant="outline-destructive"
+        buttons={this.renderButtons()}
       >
         {step==0? this.firstStep(): this.secondStep()}
       </ModalWrapper>

@@ -60,9 +60,9 @@ class ModalWrapper extends React.PureComponent<Props, State> {
             <Modal.Title>{this.props.headerText}</Modal.Title>
           </Modal.Header>
           <Modal.Body>{this.props.children}</Modal.Body>
-          {!this.props.hideButtons && (this.props.buttons)? this.props.buttons : (
             <Modal.Footer>
-              {this.props.reverseCancelConfirm ? (
+            {!this.props.hideButtons && (this.props.buttons)? this.props.buttons : (
+              this.props.reverseCancelConfirm ? (
                 <React.Fragment>
                   {this._renderSubmitButton()}
                   {this.props.onClickCancel && this._renderCancelButton()}
@@ -72,9 +72,9 @@ class ModalWrapper extends React.PureComponent<Props, State> {
                   {this.props.onClickCancel && this._renderCancelButton()}
                   {this._renderSubmitButton()}
                 </React.Fragment>
+              )
               )}
             </Modal.Footer>
-          )}
         </Modal>
       </div>
     );
