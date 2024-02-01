@@ -56,7 +56,11 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
   }
 
   successRemoved(){
-    this.setState({showToast:true});
+    this.setState((prevState)=>{
+      //take the removed project out of the project list 
+      const projectsFiltered = prevState.projects.filter(({project_id})=>project_id!=prevState.projectToRemove.project_id)
+      return {showToast:true,projects:projectsFiltered}
+    });
     this.hideModal();
   }
 
@@ -89,8 +93,8 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
 
   render(): React$Node {
     const {projects,showToast,groupDetail,projectToRemove} = this.state;
-    if(!groupDetail){
-      return <div>Loading...</div>
+    if(!groupDetail || projects === null){
+      return <p>Loading...</p>
     }
     //only group owner can access the page
     if(!this.isGroupOwner()){
@@ -105,9 +109,8 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
             onCancel={this.hideModal}
             onConfirm={this.confirmRemoveProject}
           />
-          <Toast timeoutMilliseconds={3000} header={`${projectToRemove?.project_name} was removed from ${groupDetail?.group_name}`} show={showToast} onClose={()=>this.setState({showToast:false})}/>
-          {!_.isEmpty(this.state.projects) &&
-            this.renderProjectCollection("Participating Project", projects)}
+          <Toast animation timeoutMilliseconds={3000} header={`${projectToRemove?.project_name} was removed from ${groupDetail?.group_name}`} show={showToast} onClose={()=>this.setState({showToast:false})}/>
+          {this.renderProjectCollection(`Participating Project of ${groupDetail?.group_name}`, projects)}
         </div>
       </React.Fragment>
     );
@@ -117,21 +120,24 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
     title: string,
     projects: $ReadOnlyArray<ProjectDetailsAPIData>
   ): React$Node {
+    let components = _.isEmpty(this.state.projects)? 
+                    <p>There are no projects in this group</p> 
+                    : projects.map(project => {
+                      return (
+                        <GroupProjectsCard
+                          key={project.project_name}
+                          project={project}
+                          onGroupProjectClickRemove={this.clickRemoveProject}
+                        />
+                      );
+    })
     return (
       <div>
         <div className="GroupProjectController-header">
-        <h3>{title}</h3>
-        <div className="GroupProjectController-return-group-button" onClick={this.moveBackToGroup}>Return to Group</div>
+          <h3>{title}</h3>
+          <div className="GroupProjectController-return-group-button" onClick={this.moveBackToGroup}>Return to Group</div>
         </div>
-        {projects.map(project => {
-          return (
-            <GroupProjectsCard
-              key={project.project_name}
-              project={project}
-              onGroupProjectClickRemove={this.clickRemoveProject}
-            />
-          );
-        })}
+        {components}
       </div>
     );
   }
