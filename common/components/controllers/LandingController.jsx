@@ -379,7 +379,7 @@ class LandingController extends React.PureComponent<{||}, State> {
   _renderAggregatedDashboard(): React$Node {
     return (
       <div className="LandingController-aggregateddashboard col-12">
-        <AggregatedDashboard />
+        {/* <AggregatedDashboard /> */}
       </div>
     );
   }
