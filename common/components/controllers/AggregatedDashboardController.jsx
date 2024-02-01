@@ -30,7 +30,7 @@ export default function AggregatedDashboardController() {
 
   return (
     <div className="Dashboard-summary">
-      {/* <AggregatedDashboard impactData={impactData} /> */}
+      <AggregatedDashboard impactData={impactData} />
     </div>
   );
 

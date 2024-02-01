@@ -13,39 +13,38 @@ class FindProjectsController extends React.PureComponent {
   constructor(): void {
     super();
     this.state = { showSplash: true };
+    const init = () => {
+      let searchDecoded = decodeURIComponent(document.location.search);
+      let args: FindProjectsArgs = urls.arguments(searchDecoded);
+      args = _.pick(args, [
+        "showSplash",
+        "keyword",
+        "sortField",
+        "location",
+        "locationRadius",
+        "page",
+        "issues",
+        "tech",
+        "role",
+        "org",
+        "orgType",
+        "stage",
+        "favoritesOnly",
+      ]);
+      if (!args.sortField) {
+        args.sortField = "-project_date_modified";
+      }
+  
+      UniversalDispatcher.dispatch({
+        type: "INIT_SEARCH",
+        findProjectsArgs: !_.isEmpty(args) ? args : null,
+        searchSettings: {
+          updateUrl: true,
+          searchConfig: SearchFor.Projects,
+        },
+      });
+    };
     init();
-  }
-
-  init(): void {
-    let searchDecoded = decodeURIComponent(document.location.search);
-    let args: FindProjectsArgs = urls.arguments(searchDecoded);
-    args = _.pick(args, [
-      "showSplash",
-      "keyword",
-      "sortField",
-      "location",
-      "locationRadius",
-      "page",
-      "issues",
-      "tech",
-      "role",
-      "org",
-      "orgType",
-      "stage",
-      "favoritesOnly",
-    ]);
-    if (!args.sortField) {
-      args.sortField = "-project_date_modified";
-    }
-
-    UniversalDispatcher.dispatch({
-      type: "INIT_SEARCH",
-      findProjectsArgs: !_.isEmpty(args) ? args : null,
-      searchSettings: {
-        updateUrl: true,
-        searchConfig: SearchFor.Projects,
-      },
-    });
   }
 
   render(): React$Node {

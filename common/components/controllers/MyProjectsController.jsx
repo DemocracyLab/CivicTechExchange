@@ -44,18 +44,17 @@ class MyProjectsController extends React.PureComponent<{||}, State> {
       fromProjectId: fromProjectId,
       fromEventId: fromEventId,
     };
+    const init = () => {
+      const args = url.arguments(window.location.href);
+      if (
+        "from" in args &&
+        args.from === "renewal_notification_email" &&
+        CurrentUser.isLoggedIn()
+      ) {
+        metrics.logVolunteerClickReviewCommitmentsInEmail(CurrentUser.userID());
+      }
+    };
     init();
-  }
-
-  init(): void {
-    const args = url.arguments(window.location.href);
-    if (
-      "from" in args &&
-      args.from === "renewal_notification_email" &&
-      CurrentUser.isLoggedIn()
-    ) {
-      metrics.logVolunteerClickReviewCommitmentsInEmail(CurrentUser.userID());
-    }
   }
 
   clickDeleteProject(project: MyProjectData): void {
