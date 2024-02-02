@@ -30,27 +30,34 @@ class ReturnOfImpact extends React.PureComponent {
 
   calculateDollarImpactData() {
     const getResponse = this.state._impactData["dollar_impact"];
+    const returnOfImpact = Math.round(getResponse.roi*100);
+    const dateList = getResponse.history.map(item => item.quarter_date);
+    const yearList = getResponse.history.map(item => item.quarter_date.substring(0, 4));
+    const startYear = yearList[0];
+    const endDay = dateList[dateList.length-1].substring(8,10);
+    const endMonth = monthList[parseInt(dateList[dateList.length-1].substring(5,7))-1];
+    const endYear = yearList[yearList.length-1];
+    const quarterList = getResponse.history.map((item, index) => `Q${(index % 4) + 1} ${item.quarter_date.substring(0, 4)}`);
+    const impactList = getResponse.history.map(item => item.quarterly_impact);
+    const expenseList = getResponse.history.map(item => item.expense);
     this.setState({
-      returnOfImpact: Math.round(getResponse.roi*100),
+      returnOfImpact,
       historyData: getResponse.history,
       totalImpact: getResponse.total_impact,
       totalExpense: getResponse.total_expense,
-      dateList: getResponse.history.map(item => item.quarter_date),
-      yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
-      quarterList: getResponse.history.map((item, index) => `Q${(index % 4) + 1} ${item.quarter_date.substring(0, 4)}`),
-      impactList: getResponse.history.map(item => item.quarterly_impact),
-      expenseList: getResponse.history.map(item => item.expense),
-    });
-    // Additional setState for startYear, endDay, endMonth, endYear
-    this.setState({
-      startYear: this.state.yearList[0],
-      endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
-      endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
-      endYear: this.state.yearList[this.state.yearList.length-1],
+      dateList,
+      yearList,
+      quarterList,
+      impactList,
+      expenseList,
+      startYear,
+      endDay,
+      endMonth,
+      endYear
     });
   }
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.quarterList,
       datasets: [
