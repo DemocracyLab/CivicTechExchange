@@ -81,7 +81,7 @@ class VolunteerSection extends React.PureComponent<Props, State> {
     );
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.volunteers) {
       this.setState({ volunteers: _.cloneDeep(nextProps.volunteers) });
     }

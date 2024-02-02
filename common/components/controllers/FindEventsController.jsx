@@ -10,20 +10,21 @@ import _ from "lodash";
 class FindEventsController extends React.PureComponent {
   constructor(): void {
     super();
+    const init = () => {
+      let args = urls.arguments(document.location.search);
+      args = _.pick(args, ["keyword", "page"]);
+      UniversalDispatcher.dispatch({
+        type: "INIT_SEARCH",
+        findEventsArgs: !_.isEmpty(args) ? args : null,
+        searchSettings: {
+          updateUrl: true,
+          searchConfig: SearchFor.Events,
+        },
+      });
+    }  
+    init();
   }
 
-  componentWillMount(): void {
-    let args = urls.arguments(document.location.search);
-    args = _.pick(args, ["keyword", "page"]);
-    UniversalDispatcher.dispatch({
-      type: "INIT_SEARCH",
-      findEventsArgs: !_.isEmpty(args) ? args : null,
-      searchSettings: {
-        updateUrl: true,
-        searchConfig: SearchFor.Events,
-      },
-    });
-  }
 
   //TODO: When enabling EventfilterContainer, remove "justify-content-center" class from row div
   render(): React$Node {

@@ -1,37 +1,19 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { ghostApiRecent, GhostPost } from "../../utils/ghostApi.js";
 import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 import Moment from "react-moment";
 
-//props.interval is optional, default 6000ms
-//props.tag filters blog posts to show
-type Props = {|
-  tag: string,
-|};
+// this carousel is designed to pull from DemocracyLab's ghost blog
+export default function BlogCarousel(props) {
+  const [ghostPosts, setGhostPosts] = useState(null);
 
-type State = {|
-  ghostPosts: $ReadOnlyArray<GhostPost>,
-|};
+  useEffect(() => {
+    ghostApiRecent && ghostApiRecent.browse(setGhostPosts);
+  }, []);
 
-//this carousel is designed to pull from DemocracyLab's ghost blog
-class BlogCarousel extends React.PureComponent<Props, State> {
-  constructor(props) {
-    super();
-    this.state = { ghostPosts: null };
-  }
-
-  componentDidMount() {
-    ghostApiRecent && ghostApiRecent.browse(this.loadGhostPosts.bind(this));
-  }
-
-  loadGhostPosts(ghostPosts: $ReadOnlyArray<GhostPost>): void {
-    this.setState({ ghostPosts: ghostPosts });
-  }
-
-  render(): React$Node {
-    const ghostPosts: $ReadOnlyArray<GhostPost> = this.state.ghostPosts;
-    return ghostPosts ? (
-      <React.Fragment>
+  if (ghostPosts) {
+    return (
+      <>
         <h2 className="text-center LatestBlogPosts-title">Blog</h2>
         <div className="LatestBlogPosts-container">
           {ghostPosts.map(i => (
@@ -78,11 +60,8 @@ class BlogCarousel extends React.PureComponent<Props, State> {
             </div>
           ))}
         </div>
-      </React.Fragment>
-    ) : (
-      <LoadingFrame height="500px" />
+      </>
     );
   }
+  return <LoadingFrame height="500px" />;
 }
-
-export default BlogCarousel;

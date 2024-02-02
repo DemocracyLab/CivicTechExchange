@@ -4,6 +4,7 @@ const Section = {
   AboutGroup: "AboutGroup",
   IframeGroup: "IframeGroup",
   AboutUs: "AboutUs",
+  AggregatedDashboard: "AggregatedDashboard",
   CreateProject: "CreateProject",
   Home: "Home",
   FindProjects: "FindProjects",

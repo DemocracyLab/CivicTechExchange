@@ -29,7 +29,7 @@ class BioModal extends React.PureComponent<Props, State> {
     this.closeModal = this.closeModal.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ showModal: nextProps.showModal });
   }
 

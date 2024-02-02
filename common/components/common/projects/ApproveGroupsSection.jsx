@@ -29,7 +29,7 @@ class ApproveGroupsSection extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ pendingGroups: this.getPendingGroups(nextProps.project) });
   }
 

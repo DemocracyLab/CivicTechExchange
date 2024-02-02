@@ -57,7 +57,7 @@ class InviteProjectToGroupButton extends React.PureComponent<Props, State> {
     }
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ projectGroups: nextProps.project.project_groups });
   }
 

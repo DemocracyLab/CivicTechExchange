@@ -20,26 +20,26 @@ class FindGroupsController extends React.PureComponent {
   constructor(): void {
     super();
     this.state = { showSplash: true };
-  }
-
-  componentWillMount(): void {
-    let args: FindGroupsArgs = urls.arguments(document.location.search);
-    args = _.pick(args, [
-      "showSplash",
-      "keyword",
-      "sortField",
-      "locationRadius",
-      "page",
-      "issues",
-    ]);
-    UniversalDispatcher.dispatch({
-      type: "INIT_SEARCH",
-      findGroupsArgs: !_.isEmpty(args) ? args : null,
-      searchSettings: {
-        updateUrl: true,
-        searchConfig: SearchFor.Groups,
-      },
-    });
+    const init = () => {
+      let args: FindGroupsArgs = urls.arguments(document.location.search);
+      args = _.pick(args, [
+        "showSplash",
+        "keyword",
+        "sortField",
+        "locationRadius",
+        "page",
+        "issues",
+      ]);
+      UniversalDispatcher.dispatch({
+        type: "INIT_SEARCH",
+        findGroupsArgs: !_.isEmpty(args) ? args : null,
+        searchSettings: {
+          updateUrl: true,
+          searchConfig: SearchFor.Groups,
+        },
+      });
+    }
+    init();
   }
 
   // TODO: Splash

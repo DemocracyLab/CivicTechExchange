@@ -1,0 +1,157 @@
+.AggregatedDashboard-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // make titles two rows maximum
+    -webkit-box-orient: vertical;
+    font-size: 23px;
+    font-weight: medium;
+    overflow: hidden;
+    align-self: start; // stops character descenders from getting clipped, weird but works
+}
+// .AggregatedDashboard-title {
+//   margin: 1rem 0;
+//   text-align: center;
+// }
+
+.Aggregated-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin-top: 56px;
+}
+
+.Aggregated-dashboard .card {
+  height: auto;
+  border: 1px solid #828282;
+  border-radius: 4px;
+  padding-top: 49px; // Need further investigation to maintain 59px
+  padding-bottom: 59px;
+  text-align: center;
+  background-color: #fff;
+  align-items: center;
+  margin: 0 30px;
+}
+
+@include media-breakpoint-up(xs) {
+  .AggregatedDashboard-title {
+    font-size: 21px !important;
+  }
+  .AggregatedDashboard-title {
+    margin: 1rem 0 1.5rem 0;
+  }
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 100%;
+      min-width: 100%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  // .AggregatedDashboard-title {
+  //   margin: 1rem 0 1.5rem 0;
+  // }
+  .AggregatedDashboard-title {
+    font-size: 21px !important;
+  }
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 80%;
+      min-width: 80%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(md) {
+  // .AggregatedDashboard-title {
+  //   margin: 1rem 0 1.5rem 0;
+  // }
+  .AggregatedDashboard-title {
+    font-size: 21px !important;
+  }
+  .Aggregated-dashboard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    .card {
+      flex-basis: 60%;
+      min-width: 60%;
+      margin-bottom: 24px;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .AggregatedDashboard-title {
+    font-size: 23px !important;
+  }
+  .Aggregated-dashboard {
+    flex-wrap: nowrap;
+    .card {
+      flex-basis: 22%;
+      min-width: 22%;
+    }
+  }
+}
+
+.Aggregated-dashboard .card span {
+  color: #F79E02;
+  font-size: 48px;
+  font-family: Montserrat;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+.Aggregated-dashboard .card h4 {
+    color: #4E5154;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0;
+    padding: 0;
+}
+
+.AggregatedDashboard-button {
+    margin-top: 40px;
+    width: 118px;
+    height: 40px;
+    display: block;
+    padding-left: 0px;
+    padding-right: 0px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #fff;
+    color: #191919;
+    font-weight: normal;
+}

@@ -21,6 +21,13 @@
 .LandingController-recent {
   background-color: $color-background-light;
 }
+.LandingController-aggregateddashboard {
+  background-color: #F6F7F8;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
 .LandingController-tabs.nav-tabs {
   border: 1px solid $color-neutral-60;
   border-bottom: 1px solid $color-neutral-50;

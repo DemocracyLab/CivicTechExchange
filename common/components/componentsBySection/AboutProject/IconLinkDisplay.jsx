@@ -31,7 +31,7 @@ class IconLinkDisplay extends React.PureComponent<Props, State> {
     this.state = props.link ? this.initializeState(props) : {};
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.link) {
       this.setState(this.initializeState(nextProps));
     }
