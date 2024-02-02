@@ -3,13 +3,31 @@ import Button from "react-bootstrap/Button";
 import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 
-export default function AggregatedDashboard({impactData}) {
-  console.log("impactData prop", impactData);
+export default function AggregatedDashboard({ impactData }) {  
   const data = impactData;
+  console.log("impactData inside AggregatedDashboard", impactData);
+  if (!data) {
+    return null;
+  }
+
   const returnOfImpact = data["dollar_impact"].roi;
   const estimatedImpact = data["dollar_impact"].total_impact;
   const activeVolunteerCount = data["overall_stats"].activeVolunteerCount;
   const activeProjectCount = data["overall_stats"].projectCount;
+
+  const renderViewMoreButton = () => {
+    return <Button
+    className="text-center AggregatedDashboard-button"
+    variant="secondary"
+    id="detailButton"
+    href={url.section(Section.AggregatedDashboard)}
+    >
+      View More
+    </Button>;
+  };
+
+  const isSummaryImpactData = () => data["project_area"] == undefined;
+
   return (
     <>
       <h2 className="text-center AggregatedDashboard-title">DemocracyLab's Impact</h2>
@@ -31,14 +49,7 @@ export default function AggregatedDashboard({impactData}) {
               <h4>Active Projects</h4>
           </div>
       </div>
-      <Button
-          className="text-center AggregatedDashboard-button"
-          variant="secondary"
-          id="detailButton"
-          href={url.section(Section.AggregatedDashboard)}
-      >
-        View More
-      </Button>
+      {isSummaryImpactData() ? renderViewMoreButton() : null}
     </>
   );
 }

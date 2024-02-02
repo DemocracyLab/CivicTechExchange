@@ -1,5 +1,5 @@
 import React from "react";
-import { Doughnut } from 'react-chartjs-2'; // References: https://react-chartjs-2.js.org/
+import { Doughnut } from 'react-chartjs-2';
 
 const backgroundColorList = [
   '#F79E02',
@@ -15,15 +15,13 @@ const backgroundColorList = [
 ];
 
 class VolunteerRoles extends React.PureComponent {
-  constructor(props) {
+  constructor({ impactData }) {
     super();
     this.state = {
+      _impactData: impactData,
       roleList: [],
       roleCountList: [],
       totalVolunteers: 0,
-      retryCount: 0,
-      maxRetries: 3, // Maximum number of retries
-      retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
@@ -32,34 +30,12 @@ class VolunteerRoles extends React.PureComponent {
   }
 
   fetchVolunteerRoles() {
-    const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact: string = "/api/impact/volunteer_roles";
-
-    fetch(new Request(url_impact))
-      .then(response => {
-        if (!response.ok) {
-          if (retryCount < maxRetries) {
-            // Retry after a delay
-            setTimeout(() => {
-              this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
-              this.fetchVolunteerRoles();
-            }, retryDelay);
-          }
-          throw new Error('Max retries reached. ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(getResponse => {
-        this.setState({
-          roleList: Object.keys(getResponse),
-          roleCountList: Object.values(getResponse),
-          totalVolunteers: Object.values(getResponse).reduce((sum, curValue) => sum + curValue, 0),
-          retryCount: 0 // Reset retry count on successful fetch
-        });
-      })
-      .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
+    const volunteer_roles = this.state._impactData["volunteer_roles"];
+    this.setState({
+      roleList: Object.keys(volunteer_roles),
+      roleCountList: Object.values(volunteer_roles),
+      totalVolunteers: Object.values(volunteer_roles).reduce((sum, curValue) => sum + curValue, 0),
+    });
   }
 
 

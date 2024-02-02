@@ -6,9 +6,10 @@ Chart.register(...registerables);
 const monthList = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 class ReturnOfImpact extends React.PureComponent {
-  constructor(props) {
+  constructor({ impactData }) {
     super();
     this.state = {
+      _impactData: impactData,
       returnOfImpact: 0,
       historyData: [],
       dateList: [],
@@ -19,59 +20,37 @@ class ReturnOfImpact extends React.PureComponent {
       startYear: '',
       endDay: '',
       endMonth: '',
-      endYear: '',
-      retryCount: 0,
-      maxRetries: 3, // Maximum number of retries
-      retryDelay: 1000 // Delay between retries in milliseconds
+      endYear: ''
     };
   }
 
   async componentDidMount() {
-    this.fetchImpactData();
+    this.calculateDollarImpactData();
   }
 
-  fetchImpactData = async () => {
-    const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact = "/api/impact/impact_data";
-
-    try {
-      const response = await fetch(url_impact);
-      if (!response.ok) {
-        if (retryCount < maxRetries) {
-          setTimeout(() => {
-            this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
-            this.fetchImpactData();
-          }, retryDelay);
-        }
-        throw new Error('Max retries reached. ' + response.statusText);
-      } else {
-        const getResponse = await response.json();
-        this.setState({
-          returnOfImpact: Math.round(getResponse.roi*100),
-          historyData: getResponse.history,
-          totalImpact: getResponse.total_impact,
-          totalExpense: getResponse.total_expense,
-          dateList: getResponse.history.map(item => item.quarter_date),
-          yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
-          quarterList: getResponse.history.map((item, index) => `Q${(index % 4) + 1} ${item.quarter_date.substring(0, 4)}`),
-          impactList: getResponse.history.map(item => item.quarterly_impact),
-          expenseList: getResponse.history.map(item => item.expense),
-          retryCount: 0 // Reset retry count on successful fetch
-        });
-        // Additional setState for startYear, endDay, endMonth, endYear
-        this.setState({
-          startYear: this.state.yearList[0],
-          endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
-          endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
-          endYear: this.state.yearList[this.state.yearList.length-1],
-        });
-      }
-    } catch (error) {
-      console.error('There has been a problem with your fetch operation:', error);
-    }
+  calculateDollarImpactData() {
+    const getResponse = this.state._impactData["dollar_impact"];
+    this.setState({
+      returnOfImpact: Math.round(getResponse.roi*100),
+      historyData: getResponse.history,
+      totalImpact: getResponse.total_impact,
+      totalExpense: getResponse.total_expense,
+      dateList: getResponse.history.map(item => item.quarter_date),
+      yearList: getResponse.history.map(item => item.quarter_date.substring(0, 4)),
+      quarterList: getResponse.history.map((item, index) => `Q${(index % 4) + 1} ${item.quarter_date.substring(0, 4)}`),
+      impactList: getResponse.history.map(item => item.quarterly_impact),
+      expenseList: getResponse.history.map(item => item.expense),
+    });
+    // Additional setState for startYear, endDay, endMonth, endYear
+    this.setState({
+      startYear: this.state.yearList[0],
+      endDay: this.state.dateList[this.state.dateList.length-1].substring(8,10),
+      endMonth: monthList[parseInt(this.state.dateList[this.state.dateList.length-1].substring(5,7))-1],
+      endYear: this.state.yearList[this.state.yearList.length-1],
+    });
   }
 
-  render() {
+  render(): React$Node {
     const data = {
       labels: this.state.quarterList,
       datasets: [
@@ -150,7 +129,7 @@ class ReturnOfImpact extends React.PureComponent {
     returnOfImpactConverted = returnOfImpactConverted.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     return (
-      <React.Fragment>
+      <>
         <h2 className="text-center AggregatedDashboard-title">Return of Impact</h2>
         <div className="Return-impact-summary">
           <div className="card-number">
@@ -187,7 +166,7 @@ class ReturnOfImpact extends React.PureComponent {
           <p>ROI calculated by ((cumulative impact - cumulative expenses)/cumulative expenses).</p>
           <p>Impact is estimated by summing the number of weekly active volunteers, multiplying by an assumed 2.5 hours/week, and multiplying by an assumed $50/hour.</p>
         </div>
-      </React.Fragment>
+      </>
     );
   }
 }

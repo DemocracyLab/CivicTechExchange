@@ -1657,11 +1657,21 @@ def qiqo_webhook(request):
 
 @api_view()
 def impact_dashboard(request):
-   cache_key = "impact_dashboard_data"
-   cached_data = ImpactDashboardCache.get(cache_key)
-   if cached_data:
-       return JsonResponse(cached_data)
-   
-   data = impact_dashboard_data(request)
-   ImpactDashboardCache.refresh(cache_key, data, 86400)
-   return JsonResponse(data)
+    cache_key = "impact_dashboard_data"
+    cached_data = ImpactDashboardCache.get(cache_key)
+    if cached_data:
+        return JsonResponse(cached_data)
+
+    data = impact_dashboard_data(request)
+    ImpactDashboardCache.refresh(cache_key, data, 86400)
+
+    if request.GET.get("summary", False):
+        dollar_impact_truncated = {key: data["dollar_impact"][key]
+                                   for key in ["total_impact", "total_expense", "roi"]}
+        summary_data = {
+            "dollar_impact": dollar_impact_truncated,
+            "overall_stats": data["overall_stats"],
+        }
+        return JsonResponse(summary_data)
+    
+    return JsonResponse(data)

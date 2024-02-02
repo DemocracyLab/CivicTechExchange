@@ -10,9 +10,6 @@ class ImpactAcrossSectors extends React.PureComponent {
       areaList: [],
       areaCountList: [],
       totalAreas: 0,
-      retryCount: 0,
-      maxRetries: 3, // Maximum number of retries
-      retryDelay: 1000 // Delay between retries in milliseconds
     };
   }
 
@@ -20,37 +17,16 @@ class ImpactAcrossSectors extends React.PureComponent {
     this.fetchProjectIssueAreas();
   }
 
-  fetchProjectIssueAreas = () => {
-    const { retryCount, maxRetries, retryDelay } = this.state;
-    const url_impact = "/api/impact/project_issue_areas";
-
-    fetch(new Request(url_impact))
-      .then(response => {
-        if (!response.ok) {
-          if (retryCount < maxRetries) {
-            setTimeout(() => {
-              this.setState(prevState => ({ retryCount: prevState.retryCount + 1 }));
-              this.fetchProjectIssueAreas();
-            }, retryDelay);
-          }
-          throw new Error('Max retries reached. ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(getResponse => {
-        this.setState({
-          areaList: Object.keys(getResponse),
-          areaCountList: Object.values(getResponse),
-          totalAreas: Object.keys(getResponse).length,
-          retryCount: 0 // Reset retry count on successful fetch
-        });
-      })
-      .catch(error => {
-        console.error('There has been a problem with your fetch operation:', error);
-      });
+  fetchProjectIssueAreas() {
+    const stats = this.props.impactData["hackathon_stats"];
+    this.setState({
+      areaList: Object.keys(stats),
+      areaCountList: Object.values(stats),
+      totalAreas: Object.keys(stats).length,
+    });
   }
 
-  render(): React$Node {
+  render() {
     const data = {
       labels: this.state.areaList,
       datasets: [

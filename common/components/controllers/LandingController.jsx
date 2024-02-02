@@ -1,6 +1,7 @@
 // @flow
 
 import React from "react";
+import fetchImpactData from "../utils/impact.js";
 import RecentProjectsSection from "../componentsBySection/Landing/RecentProjectsSection.jsx";
 import LatestBlogPosts from "../componentsBySection/Landing/LatestBlogPosts.jsx";
 import AggregatedDashboard from "../componentsBySection/Landing/AggregatedDashboard.jsx";
@@ -59,6 +60,13 @@ class LandingController extends React.PureComponent<{||}, State> {
   onClickShowVideo(event: SyntheticMouseEvent): void {
     // event.preventDefault();
     this.setState({ showModal: true });
+  }
+
+  componentDidMount(): void {
+    console.log("landingcontroller componentDidMount")
+    fetchImpactData(true).then((data) => {
+      this.setState({impactData: data});
+    });
   }
 
   render(): React$Node {
@@ -379,7 +387,7 @@ class LandingController extends React.PureComponent<{||}, State> {
   _renderAggregatedDashboard(): React$Node {
     return (
       <div className="LandingController-aggregateddashboard col-12">
-        {/* <AggregatedDashboard /> */}
+        <AggregatedDashboard impactData={this.state.impactData} />
       </div>
     );
   }
