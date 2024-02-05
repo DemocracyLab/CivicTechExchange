@@ -43,7 +43,7 @@ class CustomErrorHandler(logging.Handler):
           if os.environ.get('DJANGO_DEBUG') == 'False':
               exception_msg = {
                   'exception_type': str(exctype),
-                  'message': str(traceback.format_tb(tb, 10)).replace('\\n', '').replace('\\', '')
+                  'message': str(traceback.format_tb(tb, 10))
               }
               error_msg = 'ERROR: {}'.format(str(exception_msg))
           else:
