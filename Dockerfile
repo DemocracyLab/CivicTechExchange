@@ -48,7 +48,7 @@ RUN npm rebuild node-sass
 COPY . /code/
 
 # Url prefix to generate links on the back-end
-ENV PROTOCOL_DOMAIN "http://127.0.0.1:8000"
+ENV PROTOCOL_DOMAIN "http://0.0.0.0:8000"
 
 #Contact Us email address, used for Contact Form
 ENV CONTACT_EMAIL "hello@democracylab.org"

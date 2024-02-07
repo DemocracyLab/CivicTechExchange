@@ -16,6 +16,10 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import simplejson as json
 
+from django.urls import reverse
+from allauth.exceptions import ImmediateHttpResponse
+from django.http import HttpResponseRedirect
+
 
 class MissingOAuthFieldError(ReportableError):
     """Exception raised when required fields are not returned from OAuth
@@ -26,25 +30,42 @@ class MissingOAuthFieldError(ReportableError):
     """
 
     def __init__(self, message, provider, missing_fields):
-        super().__init__(message, {'provider': provider, 'missing_fields': missing_fields})
+        super().__init__(
+            message, {"provider": provider, "missing_fields": missing_fields}
+        )
+
 
 class MyAccountAdapter(DefaultAccountAdapter):
     def get_login_redirect_url(self, request):
-        if 'prev_page' in request.session:
-            prev_page = request.session['prev_page']
-            prev_page_args = request.session['prev_page_args']
-            del request.session['prev_page']
-            del request.session['prev_page_args']
-            redirect_url = '/' if prev_page.strip('/') == '' else section_url(prev_page, prev_page_args)
+        if "prev_page" in request.session:
+            prev_page = request.session["prev_page"]
+            prev_page_args = request.session["prev_page_args"]
+            del request.session["prev_page"]
+            del request.session["prev_page_args"]
+            redirect_url = (
+                "/"
+                if prev_page.strip("/") == ""
+                else section_url(prev_page, prev_page_args)
+            )
         else:
             redirect_url = section_url(FrontEndSection.Home)
         return redirect_url
 
+
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
+    def authentication_error(
+        self, request, provider_id, error=None, exception=None, extra_context=None
+    ):
+        print("Reached error properly !!!")
+        raise ImmediateHttpResponse(HttpResponseRedirect(reverse("login_view")))
 
     def new_user(self, request, sociallogin):
-        email = sociallogin.account.get_provider().extract_common_fields(
-                                                   sociallogin.account.extra_data).get('email').lower()
+        email = (
+            sociallogin.account.get_provider()
+            .extract_common_fields(sociallogin.account.extra_data)
+            .get("email")
+            .lower()
+        )
         assert email
         # This account may actually belong to an existing user
         user = User.objects.filter(username=email).first()
@@ -66,20 +87,19 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         """
         # standardizing fields across different providers
         provider = sociallogin.account.get_provider()
-        data = provider.extract_common_fields(
-            sociallogin.account.extra_data)
+        data = provider.extract_common_fields(sociallogin.account.extra_data)
 
-        full_name = data.get('name')
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
+        full_name = data.get("name")
+        first_name = data.get("first_name")
+        last_name = data.get("last_name")
 
         if full_name or (first_name and last_name):
             sociallogin.user.first_name = first_name or full_name.split()[0]
-            sociallogin.user.last_name = last_name or ' '.join(full_name.split()[1:])
+            sociallogin.user.last_name = last_name or " ".join(full_name.split()[1:])
         # Set username to lowercase email
         sociallogin.user.username = sociallogin.user.email.lower()
 
-        password = sociallogin.account.extra_data.get('password')
+        password = sociallogin.account.extra_data.get("password")
         if password:
             sociallogin.user.password = password
 
@@ -94,7 +114,11 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
     def set_avatar_at_login(sender, sociallogin, **kwargs):
         owner = sociallogin.user.contributor
         user_avatar_url = sociallogin.account.get_provider().get_avatar_url(sociallogin)
-        
+
         if user_avatar_url:
-            file_json = copy_external_thumbnail_to_s3(user_avatar_url, sociallogin.account.provider, owner)
-            ProjectFile.replace_single_file(owner, FileCategory(file_json['file_category']), file_json)
+            file_json = copy_external_thumbnail_to_s3(
+                user_avatar_url, sociallogin.account.provider, owner
+            )
+            ProjectFile.replace_single_file(
+                owner, FileCategory(file_json["file_category"]), file_json
+            )
