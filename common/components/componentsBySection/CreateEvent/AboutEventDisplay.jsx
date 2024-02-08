@@ -213,7 +213,12 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
               <AllowMarkdown children={event.event_agenda} />
             </div>
           </div>
-          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
+          {event.event_project_count > 0 && (
+            <div>
+            <ProfileProjectSearch viewOnly={this.props.viewOnly} wide />
+            </div>
+          )}
+
         </div>
         <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
