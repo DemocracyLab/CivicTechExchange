@@ -122,8 +122,6 @@ def group_delete(request, group_id):
 def group_project_remove(request, group_id,project_id):
     user = request.user
     message = request.data.get('message',"")
-    print("This is an message")
-    print(message)
     group = Group.objects.get(id=group_id)
     project = Project.objects.get(id=project_id)
     if not user.is_authenticated:
