@@ -7,7 +7,7 @@ from django.test import Client, TestCase, tag
 from django.urls import reverse
 from django.utils.timezone import now
 
-from civictechprojects.models import Group, Project
+from civictechprojects.models import Group, Project, ProjectRelationship
 from democracylab.models import Contributor
 
 
@@ -210,6 +210,42 @@ class CivictechprojectsViewsTestCase(TestCase):
                 } for project in projects],
             )
 
+            expect_succeeded = 10 if is_authenticated else 5
+            self.assertEqual(num_succeeded, expect_succeeded)
+            self.assertEqual(num_throttled, 12-expect_succeeded)
+
+    def test_api_views_throttling__group_project_remove(self):
+        for is_authenticated in {True, False}:
+            client = Client()
+            if is_authenticated:
+                client.force_login(self.test_user)
+            group = Group.objects.create(
+                        group_creator=self.test_user,
+                        group_name='test-name',
+                        is_searchable=True,
+                    )
+            projects = Project.objects.bulk_create([
+                Project(
+                    project_creator=self.test_user,
+                    project_name=f'test-name-{i}',
+                    is_searchable=True,
+                ) for i in range(12)
+            ])
+            # add project to group
+            relationshipProjects = ProjectRelationship.objects.bulk_create([
+                ProjectRelationship(
+                    relationship_group=group,
+                    relationship_project=project,
+                    is_approved=True,                
+                ) for project in projects
+            ])
+            num_succeeded, num_throttled = self.make_many_requests(
+                client=client,
+                method='post',
+                params=[{
+                    'path': reverse('group_project_remove', kwargs={'project_id': project.id,'group_id':group.id}),
+                } for project in projects],
+            )
             expect_succeeded = 10 if is_authenticated else 5
             self.assertEqual(num_succeeded, expect_succeeded)
             self.assertEqual(num_throttled, 12-expect_succeeded)

@@ -121,7 +121,9 @@ def group_delete(request, group_id):
 @api_view(['POST'])
 def group_project_remove(request, group_id,project_id):
     user = request.user
-    message = request.data['message']
+    message = request.data.get('message',"")
+    print("This is an message")
+    print(message)
     group = Group.objects.get(id=group_id)
     project = Project.objects.get(id=project_id)
     if not user.is_authenticated:
@@ -129,7 +131,7 @@ def group_project_remove(request, group_id,project_id):
     # only creator or staff can remove the project
     if not is_creator(user, group) and not user.is_staff:
         return HttpResponse(status=403)
-    # # Remove project relationship
+    # Remove project relationship
     project_relation = ProjectRelationship.objects.get(relationship_project=project_id)
     project_relation.delete()
     project.recache()
