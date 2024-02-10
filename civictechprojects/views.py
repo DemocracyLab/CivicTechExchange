@@ -130,11 +130,11 @@ def group_project_remove(request, group_id,project_id):
     if not is_creator(user, group) and not user.is_staff:
         return HttpResponse(status=403)
     # # Remove project relationship
-    # project_relation = ProjectRelationship.objects.get(relationship_project=project_id)
-    # project_relation.delete()
-    # project.recache()
-    # group.recache()
-    # group.update_timestamp()
+    project_relation = ProjectRelationship.objects.get(relationship_project=project_id)
+    project_relation.delete()
+    project.recache()
+    group.recache()
+    group.update_timestamp()
     # set up mail
     link_to_group = section_url(FrontEndSection.AboutGroup,{'id':group_id})
     link_to_project = section_url(FrontEndSection.AboutProject,{'id': project_id})
@@ -147,17 +147,6 @@ def group_project_remove(request, group_id,project_id):
     email_template.button(link_to_group,"CONTACT GROUP",text_color="#000000",text_decoration='none')
     send_to_project_owners(project=project,sender=user,subject=email_subject,template=email_template,include_co_owners=False)
     return HttpResponse(status=204)
-
-@api_view(['GET'])
-def get_group_projects(request, group_id):
-    user = request.user
-    group = Group.objects.get(id=group_id)
-    all_group_projects =  group.get_group_projects()
-    # only group_owner or staff can get all the projects (including private project)
-    if not is_creator(user, group) and not user.is_staff:
-       all_group_projects = all_group_projects.filter(is_private=False)
-    projects = list(map(lambda project: project.hydrate_to_json(), all_group_projects))
-    return JsonResponse({'projects':projects})
 
 @api_view()
 def get_group(request, group_id):

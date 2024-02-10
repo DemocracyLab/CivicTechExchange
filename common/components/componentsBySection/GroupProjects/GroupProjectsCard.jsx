@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 import CurrentUser, { MyGroupData } from "../../utils/CurrentUser.js";
 import UserAPIUtils from "../../utils/UserAPIUtils.js";
 import {ProjectDetailsAPIData} from "../../utils/ProjectAPIUtils.js";
+import Moment from "react-moment"; 
 
 type Props = {|
   +project: ProjectDetailsAPIData,
@@ -40,27 +41,17 @@ class GroupProjectsCard extends React.PureComponent<Props, State> {
           <div className="GroupProjectCard-header">Project Lead</div>
           <div>{this.state.projectLead ? this.state.projectLead : "Loading"}</div>
         </div>
-        <div className="col-sm-3 GroupProjectCard-item">{this._renderProjectStatus()}</div>
-        <div className="col-sm-3">{this._renderButtons()}</div>
+        <div className="col-sm-3 GroupProjectCard-item">{this._renderProjectDate()}</div>
+        <div className="col-sm-3 GroupProjectCard-button-container">{this._renderButtons()}</div>
       </div>
     );
   }
 
-  _getProjectStatus(): string {
-    const {project} = this.props;
-    if (project.project_stage && project.project_stage.length!=0) {
-      return this.props.project.project_stage[0].display_name;
-    }
-    return "None";
-  }
-
-  _renderProjectStatus(): React$Node {
-    const status: string = this._getProjectStatus();
-
+  _renderProjectDate(): React$Node {
     return (
       <React.Fragment>
-        <div className="GroupProjectCard-header">Project Status</div>
-        <div>{status}</div>
+        <div className="GroupProjectCard-header">Date Last Edited</div>
+        <Moment format="YYYY-MM-DD">{this.props.project.project_date_modified}</Moment>
       </React.Fragment>
     );
   }
@@ -69,7 +60,7 @@ class GroupProjectsCard extends React.PureComponent<Props, State> {
     const id = { id: this.props.project.project_id };
     let buttons: ?Array<React$Node> = [
       <Button
-        className="GroupProjectCard-button"
+        className="GroupProjectCard-button GroupProjectCard-viewButton"
         href={url.section(Section.AboutProject, id)}
         variant="secondary"
       >

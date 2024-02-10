@@ -1,14 +1,11 @@
 // @flow
 
 import React from "react";
-import CurrentUser, { UserContext, MyGroupData } from "../utils/CurrentUser.js";
+import CurrentUser from "../utils/CurrentUser.js";
 import ProjectAPIUtils,{ProjectDetailsAPIData} from "../utils/ProjectAPIUtils.js";
 import urlHelper from "../utils/url.js";
-import ConfirmationModal from "../common/confirmation/ConfirmationModal.jsx";
-import metrics from "../utils/metrics.js";
 import Section from "../enums/Section.js";
 import _ from "lodash";
-import UserAPIUtils from "../utils/UserAPIUtils.js";
 import GroupProjectsCard from "../componentsBySection/GroupProjects/GroupProjectsCard.jsx";
 import GroupAPIUtils,{GroupDetailsAPIData} from "../utils/GroupAPIUtils.js";
 import ConfirmRemoveGroupProjectModal from "../componentsBySection/GroupProjects/ConfirmRemoveGroupProjectModal.jsx";
@@ -27,7 +24,6 @@ type State = {|
 class GroupProjectsController extends React.PureComponent<{||}, State> {
   constructor(): void {
     super();
-    // const userContext: UserContext = CurrentUser.userContext();
     this.state = {
       projects: null,
       groupId:urlHelper.argument("id"),
@@ -47,7 +43,7 @@ class GroupProjectsController extends React.PureComponent<{||}, State> {
   componentDidMount(){
     if(CurrentUser.isLoggedIn()){
       const {groupId} = this.state;
-      ProjectAPIUtils.fetchProjectsByGroupId(groupId,true,(data)=>{this.setState({projects:data.projects})})
+      ProjectAPIUtils.fetchProjectsByGroupId(groupId,(data)=>{this.setState({projects:data.projects})})
       GroupAPIUtils.fetchGroupDetails(groupId,(data)=>this.setState({groupDetail:data}))
     }else{
       const currentUrl = window.location.href;

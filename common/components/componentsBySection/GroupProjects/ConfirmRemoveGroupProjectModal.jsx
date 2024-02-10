@@ -32,7 +32,7 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
     this.handleTextChange = this.handleTextChange.bind(this);
     this.firstStep = this.firstStep.bind(this);
     this.onHide = this.onHide.bind(this);
-    this.renderButtons = this.renderButtons.bind(this)
+    this.confirm = this.confirm.bind(this);
   }
   componentWillReceiveProps(nextProps){
     if(!nextProps.showModal){
@@ -77,8 +77,8 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
   renderButtons():React$Node{
     if(this.state.step===0||window.innerWidth>WIDTH_FOR_MOBILE) return null;
     return <div className="ConfirmRemoveGroupProjectModal-buttons">
-      <Button variant={'outline-destructive'}>Yes, remove project</Button>
-      <Button variant={'outline-secondary'}>Back</Button>
+      <Button variant={'outline-destructive'} onClick={()=>this.confirm(true)}>Yes, remove project</Button>
+      <Button variant={'outline-secondary'} onClick={()=>this.confirm(false)}>Back</Button>
     </div>
   }
   render(): React$Node {
@@ -92,8 +92,8 @@ class ConfirmRemoveGroupProjectModal extends React.PureComponent<Props, State> {
         cancelEnabled={!isProcessing}
         submitText={(step===0)? "Remove" : "Yes, remove project"}
         submitEnabled={!isProcessing}
-        onClickCancel={this.confirm.bind(this, false)}
-        onClickSubmit={this.confirm.bind(this, true)}
+        onClickCancel={()=>this.confirm(false)}
+        onClickSubmit={()=>this.confirm(true)}
         onModalHide={this.onHide}
         submitButtonVariant="outline-destructive"
         buttons={this.renderButtons()}
