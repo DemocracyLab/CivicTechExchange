@@ -6,6 +6,7 @@ import { Container } from "flux/utils";
 import { List } from "immutable";
 import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import type { LocationRadius } from "../../common/location/LocationRadius.js";
+import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 import EventCardsListings from "./EventCardsListings.jsx";
 import type { EventTileAPIData } from "../../utils/EventAPIUtils.js";
 import _ from "lodash";
@@ -41,7 +42,9 @@ class EventCardsContainer extends React.Component<Props, State> {
   }
 
   render(): React$Node {
-    return (
+    return !this.state.events ? (
+      <LoadingFrame height="80vh" />
+    ) : (
       <div className="ProjectCardContainer col">
         {this.props.showSearchControls ? (
           <React.Fragment>

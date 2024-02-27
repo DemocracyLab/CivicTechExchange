@@ -9,7 +9,7 @@ import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import EntitySearchSort from "../../common/search/EntitySearchSort.jsx";
 import EntityTagContainer from "../../common/search/EntityTagContainer.jsx";
-import LoadingMessage from "../../chrome/LoadingMessage.jsx";
+import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 import type { LocationRadius } from "../../common/location/LocationRadius.js";
 import { Dictionary, createDictionary } from "../../types/Generics.jsx";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
@@ -95,7 +95,7 @@ class GroupCardsContainer extends React.Component<Props, State> {
 
   _renderCards(): React$Node {
     return !this.state.groups ? (
-      <LoadingMessage message="Loading groups..." />
+      <LoadingFrame height="80vh" />
     ) : this.state.groups.size === 0 ? (
       "No Groups match the provided criteria. Try a different set of filters or search term."
     ) : (
