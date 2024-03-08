@@ -1,6 +1,6 @@
 import requests
 from pprint import pprint
-from mimetypes import guess_extension, guess_all_extensions
+from mimetypes import guess_extension
 from boto3 import client
 from django.conf import settings
 from django.http import JsonResponse

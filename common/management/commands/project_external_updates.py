@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 try:
                     if project.is_searchable:
                         get_and_save_trello_actions(project, created_since_date)
-                except:
+                except Exception:
                     # Keep processing if we run into errors with a particular update
                     print('Error processing Project: {id}'.format(id=project.id))
                     print(traceback.format_exc())
@@ -43,7 +43,7 @@ class Command(BaseCommand):
             try:
                 if github_link.link_project.is_searchable:
                     handle_project_github_updates(github_link)
-            except:
+            except Exception:
                 # Keep processing if we run into errors with a particular update
                 print('Error processing Github Link: ' + github_link.link_url)
                 print(traceback.format_exc())
@@ -79,7 +79,7 @@ def get_and_save_trello_actions(project, created_since_date):
                 print('Retrieved {num_actions} action(s) for board {board_id}'.format(
                     board_id=board_id, num_actions=len(board_actions)))
                 project_actions += board_actions
-            except:
+            except Exception:
                 # Keep processing if we run into errors with a particular update
                 print('Error processing board: {id}'.format(id=board_id))
                 print(traceback.format_exc())

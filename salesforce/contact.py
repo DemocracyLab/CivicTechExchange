@@ -8,7 +8,7 @@ client = SalesforceClient()
 
 
 def run(request):
-    response = SalesforceClient().send(request)
+    SalesforceClient().send(request)
 
 
 def save(contributor: object):
