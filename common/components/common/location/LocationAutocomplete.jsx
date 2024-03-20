@@ -151,7 +151,22 @@ export class LocationAutocomplete extends React.Component<Props, State> {
         onSelection={this.onOptionSelect.bind(this)}
         onInputChange={this.onInputChange.bind(this)}
       />
-    ) : null;
+    ) : <Selector
+    id={this.props.id || "location-here"}
+    options={this.state.suggestions}
+    selected={this.state.selected}
+    placeholder="Address, city, or zip"
+    noOptionsMessage="Start typing location"
+    labelGenerator={this.getSuggestionOption}
+    valueStringGenerator={(suggestion: HereSuggestion | LocationInfo) =>
+      suggestion.locationId || suggestion.location_id
+    }
+    isMultiSelect={false}
+    isClearable={true}
+    isSearchable={true}
+    onSelection={this.onOptionSelect.bind(this)}
+    onInputChange={this.onInputChange.bind(this)}
+  />;
   }
 }
 
