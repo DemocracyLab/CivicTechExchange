@@ -26,7 +26,7 @@ class EventPreviewForm extends React.PureComponent<Props> {
       <React.Fragment>
         <DjangoCSRFToken />
         <input type="hidden" name="is_created" value="True" />
-        <AboutEventDisplay event={this.props.main_footer} viewOnly={false}/>
+        <AboutEventDisplay event={this.props.main_footer} viewOnly={true}/>
       </React.Fragment>
     );
   }
