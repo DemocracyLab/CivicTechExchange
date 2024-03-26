@@ -77,7 +77,7 @@ class AboutPositionEntry extends React.PureComponent<Props> {
           title="Sign in to Apply"
           href={url.logInThenReturn()}
         >
-          Sign in to Apply
+          Apply
         </Button>
       );
     }

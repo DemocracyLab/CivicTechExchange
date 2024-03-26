@@ -11,6 +11,7 @@ import type { FileInfo } from "../common/FileInfo.jsx";
 import type { EventTileAPIData } from "./EventAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
 import type { EventProjectAPIDetails } from "./EventProjectAPIUtils.js";
+import { VolunteerDetailsAPIData } from "./ProjectAPIUtils.js";
 
 export type MyProjectData = {|
   +project_id: number,
@@ -25,6 +26,7 @@ export type MyProjectData = {|
   +isCoOwner: ?boolean,
   +isUpForRenewal: ?boolean,
   +projectedEndDate: ?Date,
+  +slug: string,
 |};
 
 // TODO: Rename isApproved to is_searchable
@@ -38,6 +40,7 @@ export type MyGroupData = {|
   +relationship_is_approved: boolean,
   +isApproved: ?boolean,
   +isCreated: ?boolean,
+  +slug: ?string,
 |};
 
 export type MyEventData = {|
@@ -118,11 +121,24 @@ class CurrentUser {
     return this.userID() === project.project_creator;
   }
 
-  static isCoOwner(project: ProjectDetailsAPIData): boolean {
+  static isCoOwner(
+    entity: ProjectDetailsAPIData | EventProjectAPIDetails
+  ): boolean {
     // NOTE: Co-Owners are distinct from the project creator for authorization purposes.
-    if (CurrentUser.isOwner(project)) return false;
-    const thisVolunteer = CurrentUser._getVolunteerStatus(project);
-    return thisVolunteer && thisVolunteer.isCoOwner;
+    const thisVolunteer = CurrentUser._getVolunteerStatus(entity);
+    if (CurrentUser.isOwner(entity)) {
+      return false;
+    } else if (thisVolunteer) {
+      let isCoOwner: boolean = thisVolunteer.isCoOwner;
+      if (CurrentUser._isEventProject(entity)) {
+        isCoOwner = _.some(
+          entity.project_volunteers,
+          (volunteer: VolunteerDetailsAPIData) =>
+            volunteer.user.id === this.userID() && volunteer.isCoOwner
+        );
+      }
+      return thisVolunteer && isCoOwner;
+    }
   }
 
   static isOwnerOrVolunteering(project: ProjectDetailsAPIData): boolean {

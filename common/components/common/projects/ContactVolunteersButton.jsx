@@ -88,7 +88,8 @@ class ContactVolunteersButton extends React.PureComponent<Props, State> {
 
   render(): ?React$Node {
     if (
-      CurrentUser.isCoOwnerOrOwner(this.props.project) &&
+      (CurrentUser.isCoOwnerOrOwner(this.props.project) ||
+        CurrentUser.isStaff()) &&
       !_.isEmpty(this.props.project.project_volunteers)
     ) {
       return <div>{this.displayContactVolunteerButton()}</div>;

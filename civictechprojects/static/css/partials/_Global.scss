@@ -2,55 +2,117 @@ body {
   background-color: $color-background-default;
 }
 
-// footer buttons are difficult to theme in Bootstrap, so define manually
-//TODO: Sass variables
-.btn-footer {
+//DemocracyLab button styles (overwrite/extend Bootstrap button rules)
+// in general all buttons have a border, but some use the same color as the button to visually have none
+// padding instead of selecting a specific height is for vertical align, but this could stand a rework later
+// declares base classes first, then conditional active/hovers to manage .btn:not(disabled):not(.disabled) specificity
+
+button,
+.btn {
+  font-weight: 500;
+}
+
+// "focus ring" outline. by default Bootstrap uses customizable box shadow, and we may want to investigate that further, date TBD -- May 25, 2022
+button:focus,
+.btn:focus {
+  outline: 3px solid $color-blue-50;
+  outline-offset: 1px;
+}
+// default button display rules, overriding the $theme-colors generated bases as needed
+.btn-primary {
+  color: $color-neutral-100;
+  border-color: $color-brand-70;
+}
+.btn.btn-secondary {
+  color: $color-neutral-90;
+  border-color: $color-neutral-75;
+  background-color: $color-neutral-10;
+}
+.btn-destructive {
+  color: $color-red-80;
+  border-color: $color-red-80;
   background-color: $color-background-light;
-  color: $color-text-dark;
 }
-.btn-footer a,
-.btn-footer a[type="button"] {
-  color: $color-text-dark;
-  text-decoration: none;
-}
-.btn-footer:hover,
-.btn-footer:active {
-  background-color: $color-orange-light;
-  color: $color-text-dark;
-  border-color: $color-orange-dark;
-}
-a.btn-footer:hover,
-a.btn-footer:active,
-a[type="button"].btn-footer:hover,
-a[type="button"].btn-footer:active {
-  text-decoration: none;
+.btn-outline-destructive {
+  color: $color-red-80;
+  background-color: transparent;
 }
 
-//Sets button states to be our specific values instead of default computed by Bootstrap
-//TODO: Update these with design system button variables at some point (e.g. $button-success-bg ... or whatever)
-button, .btn {
-  padding: 0.4375rem 1rem; // will give 40px total button height
+.btn-ghost,
+.btn-outline-ghost {
+  color: $color-neutral-75;
+}
+.btn-outline-ghost {
+  border-color: transparent;
+  background-color: transparent;
 }
 
-.btn-success:active,
-.btn-success:hover {
-  background-color: $color-green-100;
+//hover, active state rules must also meet the conditional of "not disabled," either psuedoselector or class
+.btn:not(:disabled):not(.disabled) {
+  &.btn-primary:active,
+  &.btn-primary:hover {
+    border-color: $color-brand-60;
+    color: $color-neutral-100;
+  }
+  &.btn-primary:hover {
+    background-color: $color-brand-60;
+  }
+  &.btn-primary:active {
+    background-color: $color-brand-45;
+  }
+  &.btn-secondary:active,
+  &.btn-secondary:hover,
+  &.btn-outline-secondary:active,
+  &.btn-outline-secondary:hover {
+    background-color: $color-neutral-20;
+    color: $color-neutral-90;
+  }
+  &.btn-success:active,
+  &.btn-success:hover {
+    background-color: $color-green-100;
+  }
+  &.btn-destructive:active,
+  &.btn-destructive:hover,
+  &.btn-outline-destructive:hover,
+  &.btn-outline-destructive:active {
+    background-color: $color-red-10;
+  }
+  &.btn-destructive:hover,
+  &.btn-outline-destructive:hover {
+    color: $color-red-80;
+  }
+  &.btn-destructive:active,
+  &.btn-ouline-destructive:active {
+    color: $color-red-100;
+    border-color: $color-red-100;
+  }
+
+  &.btn-ghost:active,
+  &.btn-ghost:hover,
+  &.btn-outline-ghost:hover,
+  &.btn-outline-ghost:active {
+    border-color: $color-neutral-20;
+    background-color: $color-neutral-20;
+  }
+  &.btn-ghost:active,
+  &.btn-outline-ghost:active {
+    color: $color-neutral-100;
+  }
 }
-.btn-danger:active,
-.btn-danger:hover {
-  background-color: #b20000;
-}
-.btn-info:active,
-.btn-info:hover {
-  background-color: #025d87;
+// unlike default bootstrap, we want all disabled buttons to look the same regardless of variant
+button:disabled,
+.btn:disabled {
+  background-color: $color-neutral-25 !important;
+  border-color: $color-neutral-35 !important;
+  color: $color-text-disabled !important;
 }
 
 //Global override of disabled state input elements
 input[type="submit"]:disabled {
-  background: $color-grey-disabled;
-  border: $color-disabled-border;
+  background-color: $color-neutral-25 !important;
+  border-color: $color-neutral-35 !important;
+  color: $color-text-disabled !important;
 }
-
 
 //class-based toggle of background color
 .background-light {
@@ -88,7 +150,7 @@ input[type="submit"]:disabled {
   }
 }
 
-// header text decorator
+// header text decorator, horizontal lines to either side of text
 .side-lines:before,
 .side-lines:after {
   background-color: $color-text-dark;
@@ -106,6 +168,14 @@ input[type="submit"]:disabled {
 .side-lines:after {
   left: 0.5em;
   margin-right: -21%;
+}
+
+// for both sponsor and site footers, we use some divider lines
+.Footer-dividerline {
+  border-top: 1px solid $color-border-weak;
+  height: 1px;
+  width: 100%;
+  margin: 1rem 0;
 }
 
 // ======================== design system rules ========================
@@ -161,11 +231,6 @@ h4,
   font-size: 13px;
 }
 
-// .btn {
-// font-size: 15px;
-// font-weight: 600; // semibold
-// }
-
 //desktop declarations
 @include media-breakpoint-up(lg) {
   html,
@@ -204,26 +269,35 @@ h4,
   .overline {
     font-size: 13px;
   }
-
-  // .btn {
-  // font-size: 16px;
-  // font-weight: 600;
-  // }
 }
 
 // design system link colors are in _vars.scss and _bootstrapoverride, but we have some psuedoselectors here
 //for on-page actions we want to appear as links (e.g. js onclick events)
 // use pseudo-link as sparingly as possible - links should be links, doubly so since these won't respect :visited, etc
 .pseudo-link {
-  @extend a
+  @extend a;
 }
-a:active, .psuedo-link:active {
+a:active,
+.psuedo-link:active {
   color: $color-link-active;
   text-decoration: underline;
 }
 a:visited {
   color: $color-link-visited;
 }
-a.btn:visited, .btn:visited, button:visited {
+a.btn:visited,
+.btn:visited,
+button:visited {
   color: inherit; // buttons acting as links should not take visited color -- we'll have to revisit this when buttons are implemented from DS
+}
+
+//rotate utility classes
+.rotate-45 {
+  transform: rotate(45deg);
+}
+.rotate-90 {
+  transform: rotate(90deg);
+}
+.rotate-180 {
+  transform: rotate(180deg);
 }

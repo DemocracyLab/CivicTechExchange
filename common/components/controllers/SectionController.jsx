@@ -30,6 +30,7 @@ import MyGroupsController from "./MyGroupsController.jsx";
 import LiveEventController from "./LiveEventController.jsx";
 import AboutEventController from "./AboutEventController.jsx";
 import AboutGroupController from "./AboutGroupController.jsx";
+import IframeGroupController from "./IframeGroupController.jsx";
 import ErrorController from "./ErrorController.jsx";
 import FindGroupsController from "./FindGroupsController.jsx";
 import FindEventsController from "./FindEventsController.jsx";
@@ -39,6 +40,8 @@ import AddSignUpDetails from "./AddSignUpDetails.jsx";
 import VideoController from "./VideoController.jsx";
 import AboutEventProjectController from "./AboutEventProjectController.jsx";
 import CreateEventProjectController from "./CreateEventProjectController.jsx";
+import PrivacyController from "./PrivacyController.jsx";
+import TermsController from "./TermsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -69,6 +72,8 @@ class SectionController extends React.Component<{||}, State> {
 
   _getController(): React$Node {
     switch (this.state.section) {
+      case Section.IframeProject:
+        return <AboutProjectController />
       case Section.AboutProject:
         return <AboutProjectController />;
       case Section.AboutUs:
@@ -112,6 +117,8 @@ class SectionController extends React.Component<{||}, State> {
         return <CreateEventController />;
       case Section.AboutGroup:
         return <AboutGroupController />;
+      case Section.IframeGroup:
+        return <IframeGroupController />;
       case Section.MyGroups:
         return <MyGroupsController />;
       case Section.MyEvents:
@@ -132,6 +139,10 @@ class SectionController extends React.Component<{||}, State> {
         return <AboutEventProjectController />;
       case Section.CreateEventProject:
         return <CreateEventProjectController />;
+      case Section.Privacy:
+        return <PrivacyController />;
+      case Section.Terms:
+        return <TermsController />;
       default:
         return <div>Section not yet implemented: {this.state.section}</div>;
     }

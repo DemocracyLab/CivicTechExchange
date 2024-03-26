@@ -55,26 +55,6 @@ button.AboutEvent-rsvp-btn {
 .AboutEvent-root .LocationSearchContainer-content {
   margin: 0 0 0 1rem;
 }
-
-// for Join _ Video buttons with live usercounts, used on Event and ProjectEvent pages
-.AboutEvent-livebutton {
-  width: 100%;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-// for the usercount specifically
-.AboutEvent-usercount {
-  background: $color-background-light;
-  color: $color-text-dark;
-  border-radius: 50%;
-  font-weight: bold;
-  min-height: 22px; // min-h and min-w so it has slightly better 3-digit usercount support
-  min-width: 22px;
-  align-self: flex-start; // vertical alignment
-}
-
 @include media-breakpoint-up(lg) {
   .AboutEvent-info {
     order: 1;
@@ -89,8 +69,5 @@ button.AboutEvent-rsvp-btn {
   }
   .AboutEvent-root .LocationSearchContainer-content {
     margin: 0 2rem 0 3rem;
-  }
-  .AboutEvent-details div {
-    padding: 0px 160px;
   }
 }

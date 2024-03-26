@@ -19,6 +19,7 @@ class FrontEndSection(Enum):
     ResetPassword = 'ResetPassword'
     ChangePassword = 'ChangePassword'
     AboutProject = 'AboutProject'
+    IframeProject = 'IframeProject'
     SignedUp = 'SignedUp'
     AboutUs = 'AboutUs'
     FindProjects = 'FindProjects'
@@ -34,6 +35,7 @@ class FrontEndSection(Enum):
     EmailVerified = 'EmailVerified'
     Error = 'Error'
     AboutGroup = 'AboutGroup'
+    IframeGroup = 'IframeGroup'
     FindGroups = 'FindGroups'
     FindEvents = 'FindEvents'
     CreateEvent = 'CreateEvent'
@@ -46,6 +48,8 @@ class FrontEndSection(Enum):
     VideoOverview = 'VideoOverview'
     AboutEventProject = 'AboutEventProject'
     CreateEventProject = 'CreateEventProject'
+    Privacy = 'Privacy'
+    Terms = 'Terms'
 
     # deprecated
     CorporateHackathon = 'CorporateHackathon'

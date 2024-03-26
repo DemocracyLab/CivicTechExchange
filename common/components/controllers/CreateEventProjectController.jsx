@@ -59,7 +59,8 @@ class CreateEventProjectController extends React.Component<{||}, State> {
           formComponent: CreateEventProjectSelect,
         },
         {
-          header: "Let others know what your hackathon project is about",
+          header:
+            "Thank you for submitting your project for the hackathon! Now, let others know what you plan to work on at the event:",
           subHeader:
             "Share your internal resources to help volunteers understand your goals and processes. " +
             "Any changes below will not impact the details of your long-term project profile.",

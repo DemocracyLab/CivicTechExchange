@@ -59,19 +59,21 @@ class MyProjectCard extends React.PureComponent<Props, State> {
       <div className="row MyProjectCard-root">
         <div className="col-sm-4">
           <div className="MyProjectCard-header">Project Name</div>
-          <div className="MyProjectCard-projectName text-break">{this.props.project.project_name}</div>
+          <div className="MyProjectCard-projectName text-break">
+            {this.props.project.project_name}
+          </div>
         </div>
         <div className="col-sm-2">
           <div className="MyProjectCard-header">Your Role</div>
           <div>{this.state.isOwner ? "Project Lead" : "Volunteer"}</div>
         </div>
         <div className="col-sm-3">
-          <div className="MyProjectCard-header">{this.state.isOwner ? "Project Status" : "Volunteer Status"}</div>
+          <div className="MyProjectCard-header">
+            {this.state.isOwner ? "Project Status" : "Volunteer Status"}
+          </div>
           <div>{this._getStatus()}</div>
         </div>
-        <div className="col-sm-3">
-          {this._renderButtons()}
-        </div>
+        <div className="col-sm-3">{this._renderButtons()}</div>
       </div>
     );
   }
@@ -81,14 +83,18 @@ class MyProjectCard extends React.PureComponent<Props, State> {
   }
 
   _renderButtons(): ?Array<React$Node> {
-    const id = { id: this.props.project.project_id };
+    const id = {
+      id: this.props.project.project_id,
+    };
     // TODO: Reorder buttons according to re-engagement spec
     let buttons: ?Array<React$Node> = [
       <Button
         key={"view" + id}
         className="MyProjectCard-button"
-        href={url.section(Section.AboutProject, id)}
-        variant="info"
+        href={url.section(Section.AboutProject, {
+          id: this.props.project.slug || this.props.project.project_id,
+        })}
+        variant="secondary"
       >
         View
       </Button>,
@@ -100,14 +106,14 @@ class MyProjectCard extends React.PureComponent<Props, State> {
           key={"edit" + id}
           className="MyProjectCard-button"
           href={url.section(Section.CreateProject, id)}
-          variant="info"
+          variant="secondary"
         >
           Edit
         </Button>,
         <Button
           key={"delete" + id}
           className="MyProjectCard-button"
-          variant="danger"
+          variant="destructive"
           onClick={() => this.props.onProjectClickDelete(this.props.project)}
         >
           Delete
@@ -120,7 +126,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <Button
           key={"renew" + id}
           className="MyProjectCard-button"
-          variant="warning"
+          variant="secondary"
           onClick={() => this.props.onProjectClickRenew(this.props.project)}
         >
           Renew
@@ -128,7 +134,7 @@ class MyProjectCard extends React.PureComponent<Props, State> {
         <Button
           key={"conclude" + id}
           className="MyProjectCard-button"
-          variant="danger"
+          variant="destructive"
           onClick={() => this.props.onProjectClickConclude(this.props.project)}
         >
           Conclude

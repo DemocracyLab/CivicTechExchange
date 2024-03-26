@@ -1,11 +1,9 @@
 // @flow
 
 import React from "react";
-import Helmet from "react-helmet";
 import ProjectAPIUtils from "../utils/ProjectAPIUtils.js";
 import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
 import metrics from "../utils/metrics.js";
-import Headers from "../common/Headers.jsx";
 import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
 import { APIError } from "../utils/api.js";
@@ -59,22 +57,8 @@ class AboutEventController extends React.PureComponent<{||}, State> {
   _renderDetails(): React$Node {
     return (
       <React.Fragment>
-        {this._renderEventHeader(this.state.event)}
         <AboutEventDisplay event={this.state.event} viewOnly={false} />
       </React.Fragment>
-    );
-  }
-
-  _renderEventHeader(event: EventData): React$Node {
-    const title: string = event.event_name + " | DemocracyLab";
-    const description: string = event.event_short_description;
-
-    return (
-      <Headers
-        title={title}
-        description={description}
-        thumbnailUrl={event.event_thumbnail && event.event_thumbnail.publicUrl}
-      />
     );
   }
 

@@ -1,0 +1,10 @@
+// markdown rendering (fix some issues with lists and white-space: pre-wrap, which we need to keep)
+.markdown-container ul,
+.markdown-container ol {
+  white-space: initial;
+  margin-top: -0.98rem; // may not be neccesary to undershoot 1rem, but certainly no more than 1rem here
+}
+
+.markdown-container ol:first-child, .markdown-container ul:first-child {
+  padding-top: 1rem;
+}

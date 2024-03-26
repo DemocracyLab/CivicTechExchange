@@ -35,7 +35,7 @@ class ResetPasswordController extends React.Component<{||}, State> {
             />
           </div>
           <Button
-          variant="login"
+          variant="success"
             className="LogInController-signInButton"
             disabled={!this.state.email}
             type="submit"

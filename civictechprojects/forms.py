@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from .models import Project, ProjectLink, ProjectFile, ProjectPosition, FileCategory, Event, Group, NameRecord, \
-    EventProject, EventConferenceRoom
+    EventProject, EventConferenceRoom, EventLocationTimeZone
 from .sitemaps import SitemapPages
 from democracylab.emails import send_project_creation_notification, send_group_creation_notification, \
     send_event_creation_notification, notify_project_owners_event_rsvp
@@ -72,6 +72,8 @@ class ProjectCreationForm(ModelForm):
         fields_changed |= read_form_field_string(project, form, 'project_name')
         fields_changed |= read_form_field_string(project, form, 'project_url')
 
+        fields_changed |= read_form_field_boolean(project, form, 'is_private')
+
         read_form_fields_point(project, form, 'project_location_coords', 'project_latitude', 'project_longitude')
 
         tags_changed = False
@@ -81,6 +83,23 @@ class ProjectCreationForm(ModelForm):
         tags_changed |= read_form_field_tags(project, form, 'project_organization_type')
         legacy_org_changed = read_form_field_tags(project, form, 'project_organization')
         tags_changed |= legacy_org_changed
+
+        slug = form.data.get('project_slug')
+        if slug is not None:
+            slug = slug.lower()
+            slug_project = Project.get_by_id_or_slug(slug)
+            if slug_project and slug_project.id != project.id:
+                print('Could not change project {project} slug to {slug} because another project already has that slug: {existing_project}'.format(
+                    project=project.__str__(),
+                    slug=slug,
+                    existing_project=slug_project.__str__()
+                ))
+            else:
+                slug_changed = read_form_field_string(project, form, 'project_slug', lambda str: str.lower())
+                if slug_changed:
+                    fields_changed = True
+                    name_record = NameRecord.objects.create(project=project, name=slug)
+                    name_record.save()
 
         if not request.user.is_staff:
             project.project_date_modified = timezone.now()
@@ -258,8 +277,26 @@ class GroupCreationForm(ModelForm):
         fields_changed |= read_form_field_string(group, form, 'group_city')
         fields_changed |= read_form_field_string(group, form, 'group_url')
         project_fields_changed |= read_form_field_string(group, form, 'group_name')
+        project_fields_changed |= read_form_field_boolean(group, form, 'is_private')
 
         read_form_fields_point(group, form, 'group_location_coords', 'group_latitude', 'group_longitude')
+
+        slug = form.data.get('group_slug')
+        if slug is not None:
+            slug = slug.lower()
+            slug_group = Group.get_by_id_or_slug(slug)
+            if slug_group and slug_group.id != group.id:
+                print('Could not change group {group} slug to {slug} because another group already has that slug: {existing_group}'.format(
+                    group=group.__str__(),
+                    slug=slug,
+                    existing_group=slug_group.__str__()
+                ))
+            else:
+                slug_changed = read_form_field_string(group, form, 'group_slug', lambda str: str.lower())
+                if slug_changed:
+                    fields_changed = True
+                    name_record = NameRecord.objects.create(group=group, name=slug)
+                    name_record.save()
 
         if is_creator(request.user, group):
             group.group_date_modified = timezone.now()
@@ -322,6 +359,14 @@ class EventProjectCreationForm(ModelForm):
             fields_changed = True
             recache_linked = True
 
+        event_time_zone_value = read_form_field(form, 'event_time_zone')
+        if event_time_zone_value:
+            new_event_time_zone_id = int(event_time_zone_value)
+            if not event_project.event_time_zone or (new_event_time_zone_id != event_project.event_time_zone.id):
+                event_project.event_time_zone = EventLocationTimeZone.objects.get(id=new_event_time_zone_id)
+                fields_changed = True
+
+        fields_changed |= read_form_field_boolean(event_project, form, 'is_remote')
         fields_changed |= read_form_field_string(event_project, form, 'goal')
         fields_changed |= read_form_field_string(event_project, form, 'scope')
         fields_changed |= read_form_field_string(event_project, form, 'schedule')

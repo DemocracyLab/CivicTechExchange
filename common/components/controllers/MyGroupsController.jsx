@@ -43,7 +43,7 @@ class MyGroupsController extends React.PureComponent<{||}, State> {
     this.forceUpdate();
   }
 
-  confirmDeleteProject(confirmedDelete: boolean): void {
+  async confirmDeleteProject(confirmedDelete: boolean): void {
     if (confirmedDelete) {
       const url =
         "/api/groups/delete/" + this.state.groupToDelete.group_id + "/";

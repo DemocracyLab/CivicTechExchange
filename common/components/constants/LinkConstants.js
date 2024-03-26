@@ -12,49 +12,56 @@ export type LinkSourceDisplayConfig = {|
   +iconClass: string,
 |};
 
+const httpsWwwPrefix = "^https?://\\w*\\.?";
+
 export const LinkDisplayConfigurationByUrl: $ReadOnlyArray<LinkSourceDisplayConfig> = [
   {
-    sourceUrlPattern: new RegExp("github.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "github.com", "i"),
     sourceDisplayName: "GitHub",
     iconClass: GlyphStyles.Github,
   },
   {
-    sourceUrlPattern: new RegExp("meetup.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "meetup.com", "i"),
     sourceDisplayName: "Meetup",
     iconClass: GlyphStyles.Meetup,
   },
   {
-    sourceUrlPattern: new RegExp("slack.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "slack.com", "i"),
     sourceDisplayName: "Slack",
     iconClass: GlyphStyles.Slack,
   },
   {
-    sourceUrlPattern: new RegExp("trello.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "figma.com", "i"),
+    sourceDisplayName: "Figma",
+    iconClass: GlyphStyles.Figma,
+  },
+  {
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "trello.com", "i"),
     sourceDisplayName: "Trello",
     iconClass: GlyphStyles.Trello,
   },
   {
-    sourceUrlPattern: new RegExp("drive.google.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "drive.google.com", "i"),
     sourceDisplayName: "Google Drive",
     iconClass: GlyphStyles.GoogleDrive,
   },
   {
-    sourceUrlPattern: new RegExp("facebook.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "facebook.com", "i"),
     sourceDisplayName: "Facebook",
     iconClass: GlyphStyles.FacebookSquare,
   },
   {
-    sourceUrlPattern: new RegExp("twitter.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "twitter.com", "i"),
     sourceDisplayName: "Twitter",
     iconClass: GlyphStyles.TwitterSquare,
   },
   {
-    sourceUrlPattern: new RegExp("linkedin.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "linkedin.com", "i"),
     sourceDisplayName: "LinkedIn",
     iconClass: GlyphStyles.LinkedIn,
   },
   {
-    sourceUrlPattern: new RegExp("youtube.com", "i"),
+    sourceUrlPattern: new RegExp(httpsWwwPrefix + "youtube.com", "i"),
     sourceDisplayName: "YouTube",
     iconClass: GlyphStyles.YouTube,
   },

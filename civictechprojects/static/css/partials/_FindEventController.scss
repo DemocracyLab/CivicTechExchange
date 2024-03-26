@@ -28,7 +28,7 @@
   border-top: none;
 }
 
-.EventCard-root h2 {
+.EventCard-root h2, .EventCard-root h3 {
   margin: 22px 0 12px 0;
 }
 .EventCard-root h4 {
@@ -113,6 +113,7 @@
   .EventCard-info {
     grid-column: 2;
     grid-row: 1;
+    margin-right: 0.5rem;
   }
   .EventCard-info ul {
     margin-top: auto;

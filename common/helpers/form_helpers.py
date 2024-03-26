@@ -6,6 +6,8 @@ from distutils.util import strtobool
 from django.contrib.gis.geos import Point
 from django.forms import ModelForm
 
+from democracylab.models import Contributor
+
 
 def is_json_string(string):
     return string.startswith(('[', '{'))
@@ -142,9 +144,15 @@ def is_creator(user, entity):
         return False
 
 
-def is_co_owner(user, project):
-    from civictechprojects.models import VolunteerRelation
-    volunteer_relations = VolunteerRelation.objects.filter(project_id=project.id, volunteer_id=user.id)
+def is_co_owner(user, entity):
+    from civictechprojects.models import Project, EventProject, VolunteerRelation
+    if type(entity) is Project:
+        project_id = entity.id
+    elif type(entity) is EventProject:
+        project_id = entity.project.id
+    else:
+        return False
+    volunteer_relations = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=user.id)
     co_owner_relationship = find_first(volunteer_relations, lambda volunteer_relation: volunteer_relation.is_co_owner)
     return co_owner_relationship is not None
 
@@ -158,5 +166,8 @@ def is_co_owner_or_staff(user, project):
         return is_creator(user, project) or is_co_owner(user, project) or user.is_staff
 
 
-def is_creator_or_staff(user, entity):
+def is_creator_or_staff(user: Contributor | None, entity):
+    if not user:
+        return False
+
     return is_creator(user, entity) or user.is_staff

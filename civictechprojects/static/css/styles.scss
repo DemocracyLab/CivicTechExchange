@@ -1,11 +1,8 @@
 //import our variables first
 @import "vars";
-//import our fonts from Google Fonts
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap");
 
 //import third-party CSS, so we can use it and override it.
-
-// IMPORTANT: Load our bootstrap overrides first, per Bootstrap's documentation.
+    // IMPORTANT: Load our bootstrap overrides first, per Bootstrap's documentation.
 @import "bootstrapoverride";
 //import required Bootstrap (foundation elements)
 @import "vendor/bootstrap/functions";
@@ -48,7 +45,7 @@
 @import "partials/EmailVerifiedController";
 @import "partials/LandingController";
 @import "partials/MainHeader";
-@import "partials/MainFooter";
+@import "partials/SponsorFooter";
 @import "partials/MyProjectCard";
 @import "partials/MyProjectsController";
 @import "partials/ProjectCard";
@@ -74,7 +71,7 @@
 @import "partials/DonateController";
 @import "partials/ThankYouController";
 @import "partials/Press";
-@import "partials/SocialFooter";
+@import "partials/SiteFooter";
 @import "partials/Newsletter";
 @import "partials/Fonts";
 @import "partials/LoadingMessage";
@@ -103,3 +100,9 @@
 @import "partials/Forms";
 @import "partials/AboutProjectEventDisplay";
 @import "partials/Toasts";
+@import "partials/JoinConference";
+@import "partials/Terms";
+@import "partials/Privacy";
+@import "partials/_LatestBlogPosts";
+@import "partials/AllowMarkdown";
+@import "partials/RecentProjects";

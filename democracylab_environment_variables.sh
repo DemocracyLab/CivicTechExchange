@@ -8,9 +8,6 @@ exit 1
 #export AWS_SECRET_ACCESS_KEY=ASK
 #export S3_BUCKET=ASK
 
-# Password for account used to send email
-export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
-
 # Url prefix to generate links on the back-end
 export PROTOCOL_DOMAIN=http://127.0.0.1:8000
 
@@ -33,8 +30,7 @@ export DJANGO_DEBUG=True
 export HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
 # Sponsor information
-export SPONSORS_METADATA='[{"displayName":"Microsoft","url":"https://www.microsoft.com/en-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/microsoft_300_transparent.png","description":"We’re on a mission to empower every person and every organization on the planet to achieve more.","category":"Sustaining"},{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_300_transparent.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world.","category":"Sustaining"},{"displayName":"WA Department of Commerce","url":"https://www.commerce.wa.gov/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/WA%20DOC_270_transparent.png","description":"The Washington State Department of Commerce works with local governments, tribes, businesses and civic leaders throughout the state to strengthen communities so all residents may thrive and prosper.","category":"Supporting"},{"displayName":"WGU","url":"https://www.wgu.edu/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/WGU_200_transparent.png","description":"WGU exists to change lives. By bridging the gap between talent and opportunity, WGU makes it possible for today’s worker to also be today’s learner—and tomorrow’s success story.","category":"Supporting"},{"displayName":"Google","url":"https://www.google.com/nonprofits/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/google_200_transparent.png", "category":"In-kind Support"},{"displayName":"Salesforce","url":"https://www.salesforce.org/power-of-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/Salesforce_200_transparent.png","category":"In-kind Support"},{"displayName":"User Testing","url":"https://www.usertesting.com/about-us/usertesting-oneworld","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/User_Testing_200_transparent.png","category":"In-kind Support"},{"displayName":"Heap","url":"https://heap.io/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/heap_200_transparent.png","category":"In-kind Support"}]'
-
+export SPONSORS_METADATA='[{"displayName":"Microsoft","url":"https://www.microsoft.com/en-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/microsoft_300_transparent.png","description":"We’re on a mission to empower every person and every organization on the planet to achieve more.","category":"In-kind Support"},{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_300_transparent.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world.","category":"Sustaining"},{"displayName":"Google","url":"https://www.google.com/nonprofits/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/google_200_transparent.png", "category":"In-kind Support"},{"displayName":"Salesforce","url":"https://www.salesforce.org/power-of-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/Salesforce_200_transparent.png","category":"In-kind Support"},{"displayName":"User Testing","url":"https://www.usertesting.com/about-us/usertesting-oneworld","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/User_Testing_200_transparent.png","category":"In-kind Support"},{"displayName":"Slack","url":"https://slack.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/slack_200_transparent.png","category":"In-kind Support"}, {"displayName":"Avast","url":"https://www.avast.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/Avast_300_transparent.png","description":"Avast believes that wherever you live, whatever you love, wherever you’re going, and whatever you do, you have the right to live freely and safely online.","category":"Sustaining"}]'
 # Configure project description example link
 export PROJECT_DESCRIPTION_EXAMPLE_URL='https://www.democracylab.org/projects/1'
 
@@ -70,7 +66,6 @@ export VOLUNTEER_RENEW_REMINDER_PERIODS='[7,7,-1]'
 # export MAILCHIMP_SUBSCRIBE_LIST_ID=SECRET
 
 export S3_BUCKET=democracylab-marlok
-export EMAIL_HOST_PASSWORD=betterDemocracyViaTechnology
 
 # ONLY FOR USE IN PRODUCTION
 #export HOTJAR_APPLICATION_ID=1097784
@@ -116,8 +111,6 @@ export BOARD_OF_DIRECTORS='[{"first_name":"Mark","last_name":"Frischmuth","title
 export FAVICON_PATH=https://d1agxr2dqkgkuy.cloudfront.net/img/favicon.png
 
 export BLOG_URL='https://blog.democracylab.org'
-
-export PRIVACY_POLICY_URL='https://d1agxr2dqkgkuy.cloudfront.net/documents/2020.06%20DemocracyLab%20Privacy%20Policy.pdf'
 
 # if we have a hackathon or similar event we want displayed in the nav for the duration, put it here
 export EVENT_URL='https://democracylab.org/events/1'

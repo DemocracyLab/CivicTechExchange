@@ -90,7 +90,7 @@ class MainHeader extends React.Component<{||}, State> {
           </Button>
         )}
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
-        <Navbar.Collapse id="nav-pagenav-container" className="flex-column">
+        <Navbar.Collapse id="nav-pagenav-container" className="MainHeader-nav-flex">
           <Nav className="MainHeader-usernav ml-auto">
             {CurrentUser.isLoggedIn()
               ? this._renderUserSection()
@@ -331,10 +331,13 @@ class MainHeader extends React.Component<{||}, State> {
   }
 
   _handleHeightChange(height: number) {
-    UniversalDispatcher.dispatch({
-      type: "SET_HEADER_HEIGHT",
-      headerHeight: height,
-    });
+    // Use setTimeout with a delay of 0 ms to break the dispatch chain
+    setTimeout(() => {
+      UniversalDispatcher.dispatch({
+        type: "SET_HEADER_HEIGHT",
+        headerHeight: height,
+      });
+    }, 0);
     this.props.onMainHeaderHeightChange(height);
   }
 

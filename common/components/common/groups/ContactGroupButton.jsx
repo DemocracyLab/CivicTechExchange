@@ -101,8 +101,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
     const id = { id: this.props.group.group_id };
     return (
       <Button
-        className="AboutGroup-button btn btn-theme clear-button-appearance"
-        type="button"
+        variant="primary"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
         href={url.section(Section.CreateGroup, id)}
@@ -115,8 +114,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
   _renderContactGroupButton(): React$Node {
     return (
       <Button
-        className="AboutGroup-button btn btn-theme"
-        type="button"
+        variant="primary"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
         onClick={this.handleShow}
@@ -129,13 +127,12 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
   _renderLinkToSignInButton(): React$Node {
     return (
       <Button
-        className="AboutGroup-button btn btn-theme clear-button-appearance"
-        type="button"
+        variant="primary"
         disabled={this.state.buttonDisabled}
         title={this.state.buttonTitle}
         href={url.logInThenReturn()}
       >
-        Sign in to Contact Group
+        Contact Group
       </Button>
     );
   }

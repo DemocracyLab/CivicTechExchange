@@ -1,7 +1,6 @@
 // @flow
 
 import React from "react";
-import ReactMarkdown from "react-markdown";
 import type Moment from "moment";
 import _ from "lodash";
 import Button from "react-bootstrap/Button";
@@ -17,7 +16,7 @@ import urlHelper from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
 import ProfileProjectSearch from "../../common/projects/ProfileProjectSearch.jsx";
-import MainFooter from "../../chrome/MainFooter.jsx";
+import SponsorFooter from "../../chrome/SponsorFooter.jsx";
 import PromptNavigationModal from "../../common/PromptNavigationModal.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
 import NotificationModal from "../../common/notification/NotificationModal.jsx";
@@ -31,6 +30,9 @@ import type {
   ProjectData,
 } from "../../utils/ProjectAPIUtils.js";
 import JoinConferenceButton from "../../common/event_projects/JoinConferenceButton.jsx";
+import { SearchFor } from "../../stores/EntitySearchStore.js";
+import AllowMarkdown from "../../common/richtext/AllowMarkdown.jsx";
+import EventProjectRSVPModal from "../../common/event_projects/EventProjectRSVPModal.jsx";
 
 type Props = {|
   event: ?EventData,
@@ -44,6 +46,7 @@ type State = {|
   isProjectOwnerRSVPed: boolean,
   isVolunteerRSVPed: boolean,
   isVolunteerRSVPedForEventOnly: boolean,
+  showRSVPLocationModal: boolean,
   showPromptCreateProjectModal: boolean,
   showPostRSVPModal: boolean,
   showCancelRSVPConfirmModal: boolean,
@@ -77,6 +80,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       isProjectOwnerRSVPed: isProjectOwnerRSVPed,
       isVolunteerRSVPed: !_.isEmpty(volunteering_projects),
       isVolunteerRSVPedForEventOnly: isVolunteerRSVPedForEventOnly,
+      showRSVPLocationModal: false,
       showPromptCreateProjectModal: false,
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
@@ -90,6 +94,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     if (this.state.event) {
       this.initProjectSearch();
     }
+    this.handleRSVPClose = this.handleRSVPClose.bind(this);
   }
 
   componentWillReceiveProps(nextProps: Props): void {
@@ -103,6 +108,13 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     }
   }
 
+  handleRSVPClose(submitted: boolean) {
+    this.setState({
+      showRSVPLocationModal: false,
+      showPostRSVPModal: submitted,
+    });
+  }
+
   render(): ?$React$Node {
     const event: EventData = this.state.event;
     const startDate: Moment = this.state.startDate;
@@ -114,7 +126,6 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     );
     return !event ? null : (
       <React.Fragment>
-        {/*TODO: Verify we want these toasts*/}
         <Toast
           show={this.state.showPostRSVPToast}
           onClose={() => this.setState({ showPostRSVPToast: false })}
@@ -175,16 +186,16 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   !this.state.isVolunteerRSVPed &&
+                  this._renderRSVPAsProjectOwnerButton()}
+                {!this.props.viewOnly &&
+                  !this.state.isPastEvent &&
+                  !this.state.isVolunteerRSVPed &&
                   !this.state.isProjectOwnerRSVPed &&
                   this._renderRSVPAsVolunteerButton()}
                 {!this.props.viewOnly &&
                   !this.state.isPastEvent &&
                   this.state.isVolunteerRSVPedForEventOnly &&
                   this._renderCancelVolunteerRSVPButton()}
-                {!this.props.viewOnly &&
-                  !this.state.isPastEvent &&
-                  !this.state.isVolunteerRSVPed &&
-                  this._renderRSVPAsProjectOwnerButton()}
               </div>
             </div>
             <div className="col-xs-12 col-lg-8 AboutEvent-splash">
@@ -194,19 +205,17 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
             </div>
           </div>
 
-          <div className="AboutEvent-details row">
-            <div className="col-12">
+          <div className="AboutEvent-details row justify-content-center">
+            <div className="col-12 col-lg-9">
               <h3>Details</h3>
-              <ReactMarkdown children={event.event_description} />
+              <AllowMarkdown children={event.event_description} />
               <h3>What We Will Do</h3>
-              <ReactMarkdown children={event.event_agenda} />
+              <AllowMarkdown children={event.event_agenda} />
             </div>
           </div>
-          {!_.isEmpty(event.event_legacy_organization) && (
-            <ProfileProjectSearch viewOnly={this.props.viewOnly} />
-          )}
+          <ProfileProjectSearch viewOnly={this.props.viewOnly} />
         </div>
-        <MainFooter key="main_footer" forceShow={event.show_headers} />
+        <SponsorFooter key="main_footer" forceShow={event.show_headers} />
       </React.Fragment>
     );
   }
@@ -277,17 +286,29 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
     // TODO: Add spinner while RSVP call is in progress
     let buttonConfig: Dictionary<any> = {};
     if (CurrentUser.isLoggedIn()) {
+      const onClick: () => void = !_.isEmpty(
+        this.state?.event?.event_time_zones
+      )
+        ? () => {
+            // If there are multiple locations, show RSVP location modal
+            this.setState({ showRSVPLocationModal: true });
+          }
+        : () => {
+            // If single location, RSVP then show post-RSVP modal
+            EventProjectAPIUtils.rsvpForEvent(
+              this.props.event.event_id,
+              false,
+              null,
+              response => {
+                this.setState({
+                  showPostRSVPModal: true,
+                });
+              }
+            );
+          };
+
       buttonConfig = {
-        onClick: () => {
-          EventProjectAPIUtils.rsvpForEvent(
-            this.props.event.event_id,
-            response => {
-              this.setState({
-                showPostRSVPModal: true,
-              });
-            }
-          );
-        },
+        onClick: onClick,
       };
     } else {
       // If not logged in, go to login page
@@ -312,13 +333,23 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           }
         />
 
+        <EventProjectRSVPModal
+          event={this.state.event}
+          showModal={this.state.showRSVPLocationModal}
+          handleClose={submitted => this.handleRSVPClose(submitted)}
+          conferenceUrl={
+            this.state?.event?.event_conference_admin_url ||
+            this.state?.event?.event_conference_url
+          }
+        />
+
         <Button
           variant="primary"
           className="AboutEvent-rsvp-btn"
           type="button"
           {...buttonConfig}
         >
-          RSVP as Project Volunteer
+          RSVP | As a Volunteer
         </Button>
       </React.Fragment>
     );
@@ -429,7 +460,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           type="button"
           {...buttonConfig}
         >
-          RSVP as Project Leader
+          RSVP | As a Project Leader
         </Button>
       </React.Fragment>
     );
@@ -447,7 +478,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
         this.props.event.event_conference_url;
       buttonConfig.target = "_blank";
     } else {
-      text = "Log In to Join Event";
+      text = "Join Event";
       buttonConfig.href = urlHelper.logInThenReturn();
     }
 
@@ -455,7 +486,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <JoinConferenceButton
         buttonConfig={buttonConfig}
         participant_count={this.props.event.event_conference_participants}
-        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
+        className="AboutEvent-rsvp-btn JoinConference-livebutton"
       >
         {text}
       </JoinConferenceButton>
@@ -463,7 +494,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       <Button
         variant="primary"
         type="button"
-        className="AboutEvent-rsvp-btn AboutEvent-livebutton"
+        className="AboutEvent-rsvp-btn JoinConference-livebutton"
         title={text}
         {...buttonConfig}
       >
@@ -492,14 +523,14 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
           url: project.conferenceUrl,
           target: "_blank",
           count: project.conferenceCt,
-          buttonVariant: "success"
+          buttonVariant: "success",
         };
       } else {
         return {
           name: "Review Project Details",
           url: project.cardUrl,
           count: project.conferenceCt,
-          buttonVariant: "outline-secondary"
+          buttonVariant: "outline-secondary",
         };
       }
     } else {
@@ -520,17 +551,18 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
 
   initProjectSearch() {
     const event: EventData = this.state.event;
-    if (event && !_.isEmpty(event.event_legacy_organization)) {
+    if (event?.event_id) {
       UniversalDispatcher.dispatch({
-        type: "INIT_PROJECT_SEARCH",
+        type: "INIT_SEARCH",
         findProjectsArgs: {
           event_id: event.event_id,
           sortField: "project_name",
         },
         searchSettings: {
           updateUrl: false,
-          defaultSort: "project_name",
-          cardOperationGenerator: this._cardOperationGenerator.bind(this),
+          searchConfig: SearchFor.Projects,
+          cardOperationGenerator:
+            !this.state.isPastEvent && this._cardOperationGenerator.bind(this),
         },
       });
     }

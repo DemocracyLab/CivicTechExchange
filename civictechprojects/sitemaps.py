@@ -17,7 +17,9 @@ class SectionSitemap(Sitemap):
         str(FrontEndSection.FindProjects.value),
         str(FrontEndSection.Donate.value),
         str(FrontEndSection.ContactUs.value),
-        str(FrontEndSection.Companies.value)
+        str(FrontEndSection.Companies.value),
+        str(FrontEndSection.Privacy.value),
+        str(FrontEndSection.Terms.value)
     ]
 
     def items(self):
@@ -33,10 +35,11 @@ class ProjectSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Project.objects.filter(is_searchable=True).order_by('id')
+        return Project.objects.filter(is_searchable=True, is_private=False).order_by('id')
 
     def location(self, project):
-        return section_path(FrontEndSection.AboutProject.value, {'id': project.id})
+        project_id = project.project_slug or project.id
+        return section_path(FrontEndSection.AboutProject.value, {'id': project_id})
 
     def lastmod(self, project):
         return project.project_date_modified
@@ -48,10 +51,11 @@ class GroupSitemap(Sitemap):
     priority = 0.5
 
     def items(self):
-        return Group.objects.filter(is_searchable=True).order_by('id')
+        return Group.objects.filter(is_searchable=True, is_private=False).order_by('id')
 
     def location(self, group):
-        return section_path(FrontEndSection.AboutGroup.value, {'id': group.id})
+        group_id = group.group_slug or group.id
+        return section_path(FrontEndSection.AboutGroup.value, {'id': group_id})
 
     def lastmod(self, group):
         return group.group_date_modified

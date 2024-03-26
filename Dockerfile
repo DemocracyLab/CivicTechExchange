@@ -1,5 +1,17 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
-FROM nikolaik/python-nodejs:python3.8-nodejs12
+FROM nikolaik/python-nodejs:python3.10-nodejs16
+
+# This to get GDAL thanks to https://stackoverflow.com/questions/62546706/how-do-i-install-gdal-in-a-python-docker-environment
+RUN apt-get update && apt-get install
+
+RUN apt-get install -y libmariadb-dev-compat libmariadb-dev
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends gcc \
+    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update &&\
+    apt-get install -y binutils libproj-dev gdal-bin
+RUN export CPLUS_INCLUDE_PATH=/usr/include/gdal
+RUN export C_INCLUDE_PATH=/usr/include/gdal
 
 # Replace shell with bash so we can source files
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -9,6 +21,7 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN apt-get update && apt-get install -y libgdal-dev
 
 # Install and set up nvm
@@ -47,7 +60,7 @@ ENV DJANGO_DEBUG True
 ENV HEADER_ALERT="<p>You are invited to our upcoming event, St. Hat-trick's day!  Come with a team or join a new one on Saturday, March 16.  Be sure to RSVP on <a href='https://www.eventbrite.com/e/st-hack-tricks-day-tickets-54897293282'>Eventbrite</a>!</p>"
 
 # Sponsor information
-ENV SPONSORS_METADATA='[{"displayName":"Textio","url":"https://medium.com/democracylab-org/textio-engages-employees-to-accelerate-civic-innovation-5984609a95ce","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/textio_logo_315_trans.png","description":"Textio is the inventor of augmented writing. Textio transforms your rough ideas into powerful language by hitting Tab."},{"displayName":"HERE Technologies","url":"https://www.here.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/here_technologies.png","description":"By building a digital representation of reality entirely built upon location data, we are radically transforming the way the world lives, moves and interacts"},{"displayName":"Amazon","url":"https://www.aboutamazon.com/our-communities/amazon-in-the-community","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/amazon_logo.png","description":"At Amazon, we focus on building long-term and innovative programs that will have a lasting, positive impact in communities around the world."}]'
+ENV SPONSORS_METADATA='[{"displayName":"Microsoft","url":"https://www.microsoft.com/en-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/microsoft_300_transparent.png","description":"We’re on a mission to empower every person and every organization on the planet to achieve more.","category":"In-kind Support"},{"displayName":"Google","url":"https://www.google.com/nonprofits/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/google_200_transparent.png", "category":"In-kind Support"},{"displayName":"Salesforce","url":"https://www.salesforce.org/power-of-us/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/Salesforce_200_transparent.png","category":"In-kind Support"},{"displayName":"User Testing","url":"https://www.usertesting.com/about-us/usertesting-oneworld","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/User_Testing_200_transparent.png","category":"In-kind Support"},{"displayName":"Slack","url":"https://slack.com/","thumbnailUrl":"https://d1agxr2dqkgkuy.cloudfront.net/img/slack_200_transparent.png","category":"In-kind Support"}]'
 
 # Configure project description example link
 ENV PROJECT_DESCRIPTION_EXAMPLE_URL "https://www.democracylab.org/projects/1"

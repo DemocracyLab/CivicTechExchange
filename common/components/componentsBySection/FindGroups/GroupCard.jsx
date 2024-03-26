@@ -31,7 +31,7 @@ class GroupCard extends React.PureComponent<Props> {
       <div className="ProjectCard-root">
         <a
           href={url.section(Section.AboutGroup, {
-            id: this.props.group.group_id,
+            id: this.props.group.group_slug || this.props.group.group_id,
           })}
           rel="noopener noreferrer"
         >
@@ -84,9 +84,7 @@ class GroupCard extends React.PureComponent<Props> {
   }
   _renderIssueAreas(): React$Node {
     return (
-      <div className="ProjectCard-skills">
-        {this._generateIssueList()}
-      </div>
+      <div className="ProjectCard-skills">{this._generateIssueList()}</div>
     );
   }
   _generateIssueList(): React$Node {
@@ -96,7 +94,6 @@ class GroupCard extends React.PureComponent<Props> {
     );
 
     if (!_.isEmpty(issueNames)) {
-
       issueNames = issueNames.map(
         (issueName: string) => this.props.tagDictionary[issueName].display_name
       );
@@ -112,8 +109,7 @@ class GroupCard extends React.PureComponent<Props> {
           </ul>
         </React.Fragment>
       );
-    }
-    else {
+    } else {
       return null;
     }
   }

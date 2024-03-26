@@ -240,11 +240,7 @@
       max-width: 100%;
     }
   }
-  .corporate-sponsor-item:first-of-type {
-    width: 200px;
-    max-width: 200px;
-  }
-}
+ }
 
 .corporate-sponsorship-how-flex {
   display: flex;
@@ -287,7 +283,7 @@
 .corporate-hackathon-howitworks,
 .corporate-contact,
 .corporate-hackathon-saying,
-.carousel-testimonial-root,
+.corporate-hackathon-carousel,
 .corporate-sponsorship-how,
 .corporate-sponsorship-saying {
   padding-top: 24px;
@@ -334,6 +330,13 @@
   }
 }
 
+// applies light background inside frame
+.corporate-root{
+  .carousel-item, .carousel-item-content{
+    background: $color-background-light;
+  }
+}
+ 
 @include media-breakpoint-up(lg) {
   .corporate-block-button {
     display: flex;
@@ -371,10 +374,12 @@
       background: $color-background-light;
       padding: 24px 40px 40px 40px;
     }
-    .carousel-testimonial-root {
-      background: $color-background-light;
+    // makes background gray outside of frame
+    .carousel-item{
+      background: inherit;
     }
   }
+
   .corporate-top-flex {
     display: flex;
     flex: row nowrap;
@@ -447,7 +452,7 @@
   .corporate-hackathon-howitworks,
   .corporate-contact,
   .corporate-hackathon-saying,
-  .carousel-testimonial-root,
+  .corporate-hackathon-carousel,
   .corporate-sponsorship-how,
   .corporate-sponsorship-saying {
     padding-top: 40px;

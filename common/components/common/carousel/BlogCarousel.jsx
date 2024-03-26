@@ -6,7 +6,6 @@ import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 //props.interval is optional, default 6000ms
 //props.tag filters blog posts to show
 type Props = {|
-  interval: number,
   tag: string,
 |};
 
@@ -33,7 +32,7 @@ class BlogCarousel extends React.PureComponent<Props, State> {
   render(): React$Node {
     const ghostPosts: $ReadOnlyArray<GhostPost> = this.state.ghostPosts;
     return ghostPosts ? (
-      <Carousel interval={this.props.interval ? this.props.interval : 6000}>
+<Carousel interval={null}>
         {ghostPosts.map(i => (
           <Carousel.Item className="carousel-item" key={i.slug}>
             <div className="carousel-item-content">

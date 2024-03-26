@@ -13,7 +13,7 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import type { EventProjectAPIDetails } from "../../utils/EventProjectAPIUtils.js";
 import ProjectOwnersSection from "../owners/ProjectOwnersSection.jsx";
-import datetime, { DateFormat } from "../../utils/datetime.js";
+import datetime from "../../utils/datetime.js";
 import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 import urlHelper from "../../utils/url.js";
 import CurrentUser, {
@@ -34,6 +34,8 @@ import ConfirmationModal from "../confirmation/ConfirmationModal.jsx";
 import ProjectAPIUtils, { APIResponse } from "../../utils/ProjectAPIUtils.js";
 import promiseHelper from "../../utils/promise.js";
 import JoinConferenceButton from "./JoinConferenceButton.jsx";
+import AllowMarkdown from "../richtext/AllowMarkdown.jsx";
+import ContactEventVolunteersButton from "./ContactEventVolunteersButton.jsx";
 
 type Props = {|
   eventProject: ?EventProjectAPIDetails,
@@ -53,6 +55,7 @@ type State = {|
   videoLink: ?LinkInfo,
   isRSVPedForThisEventProject: boolean,
   isProjectOwner: boolean,
+  isPastEvent: boolean,
 |};
 
 class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
@@ -60,7 +63,10 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
     super();
     const userContext: UserContext = CurrentUser?.userContext();
     const rsvp_events: Dictionary<MyRSVPData> = userContext?.rsvp_events || {};
-    const isProjectOwner: boolean = CurrentUser.isOwner(props.eventProject);
+    const isProjectOwner: boolean = CurrentUser.isCoOwnerOrOwner(
+      props.eventProject
+    );
+    const endDate: Moment = datetime.parse(props.eventProject.event_date_end);
     const isRSVPedForThisEventProject: boolean = _.some(
       rsvp_events,
       (rsvp: MyRSVPData) =>
@@ -86,6 +92,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
       videoLink: videoLink,
       isRSVPedForThisEventProject: isRSVPedForThisEventProject,
       isProjectOwner: isProjectOwner,
+      isPastEvent: endDate < datetime.now(),
     };
     this.cancelRSVP = this.cancelRSVP.bind(this, props.eventProject);
     this.handleShowVolunteerModal = this.handleShowVolunteerModal.bind(this);
@@ -106,8 +113,8 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   }
 
   confirmJoinProject(
-    eventProject: EventProjectAPIDetails,
-    confirmJoin: boolean
+    confirmJoin: boolean,
+    eventProject: EventProjectAPIDetails
   ) {
     let state: State = { showJoinModal: false };
     if (confirmJoin) {
@@ -143,12 +150,12 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
   _renderTopSection(eventProject: EventProjectAPIDetails): React$Node {
     const showVideo: boolean = !_.isEmpty(this.state.videoLink);
     const showEdit: boolean =
-      CurrentUser.isOwner(eventProject) || CurrentUser.isStaff();
+      CurrentUser.isCoOwnerOrOwner(eventProject) || CurrentUser.isStaff();
     const editUrl: string =
       urlHelper.section(Section.CreateEventProject, {
         event_id: eventProject.event_id,
         project_id: eventProject.project_id,
-      }) + "?step=2";
+      });
 
     return (
       <div className="AboutProjectEvent-top-content">
@@ -226,9 +233,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
                 Edit
               </Button>
             )}
-            {this._renderJoinButton(eventProject)}
+            {!this.state.isPastEvent && this._renderJoinButton(eventProject)}
             {this._renderLeaveButton(eventProject)}
-            {this._renderCancelRSVPButton(eventProject)}
+            {!this.state.isPastEvent &&
+              this._renderCancelRSVPButton(eventProject)}
+            {this.state.isProjectOwner &&
+              !_.isEmpty(this.props.eventProject.event_project_volunteers) && (
+                <ContactEventVolunteersButton
+                  eventProject={this.props.eventProject}
+                />
+              )}
           </div>
         </div>
       </div>
@@ -291,7 +305,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <JoinConferenceButton
               buttonConfig={buttonConfig}
               participant_count={eventProject.event_conference_participants}
-              className="AboutEvent-livebutton"
+              className="JoinConference-livebutton"
             >
               {label}
             </JoinConferenceButton>
@@ -299,7 +313,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
             <Button
               variant="primary"
               type="button"
-              className="AboutEvent-livebutton"
+              className="JoinConference-livebutton"
               {...buttonConfig}
             >
               {label}
@@ -399,9 +413,7 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
   // primary section content
   _renderPrimarySection(eventProject: EventProjectAPIDetails): React$Node {
-    const comingSoonMsg: React$Node = (
-      <React.Fragment>Coming soon!</React.Fragment>
-    );
+    const comingSoonMsg: React$Node = <p>Coming soon!</p>;
 
     return (
       <div className="Profile-primary-container">
@@ -410,25 +422,27 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           <p>{eventProject?.project_short_description}</p>
 
           <h3>Problem</h3>
-          <p>{eventProject?.project_description}</p>
+          <AllowMarkdown>{eventProject?.project_description}</AllowMarkdown>
 
           {eventProject?.project_description_solution && (
             <React.Fragment>
               <h3>Solution</h3>
-              <p>{eventProject.project_description_solution}</p>
+              <AllowMarkdown>
+                {eventProject.project_description_solution}
+              </AllowMarkdown>
             </React.Fragment>
           )}
 
           <h3>Hackathon Goal</h3>
           {eventProject?.event_project_goal ? (
-            <p>{eventProject.event_project_goal}</p>
+            <AllowMarkdown>{eventProject.event_project_goal}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Planned Scope</h3>
           {eventProject?.event_project_scope ? (
-            <p>{eventProject.event_project_scope}</p>
+            <AllowMarkdown>{eventProject.event_project_scope}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
@@ -436,14 +450,16 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
           {/*TODO: Show newlines*/}
           <h3>Schedule</h3>
           {eventProject?.event_project_agenda ? (
-            <p>{eventProject.event_project_agenda}</p>
+            <AllowMarkdown>{eventProject.event_project_agenda}</AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
 
           <h3>Additional Notes</h3>
           {eventProject?.event_project_onboarding_notes ? (
-            <p>{eventProject.event_project_onboarding_notes}</p>
+            <AllowMarkdown>
+              {eventProject.event_project_onboarding_notes}
+            </AllowMarkdown>
           ) : (
             comingSoonMsg
           )}
@@ -567,6 +583,14 @@ class AboutProjectEventDisplay extends React.PureComponent<Props, State> {
 
     return (
       <React.Fragment>
+        {eventProject.event_time_zone && (
+          <div className="AboutProject-icon-row">
+            <i className={Glyph(GlyphStyles.Clock, GlyphSizes.LG)} />
+            <p className="AboutProject-icon-text">
+              {eventProject.event_time_zone.time_zone + " Time Zone"}
+            </p>
+          </div>
+        )}
         <div className="AboutProject-icon-row">
           <i className={Glyph(GlyphStyles.LaptopCode, GlyphSizes.LG)} />
           <p className="AboutProject-icon-text">

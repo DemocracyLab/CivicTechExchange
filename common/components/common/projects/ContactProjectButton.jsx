@@ -144,7 +144,7 @@ class ContactProjectButton extends React.PureComponent<Props, State> {
         title={this.state.buttonTitle}
         href={url.logInThenReturn()}
       >
-        Sign in to Contact Project
+	Contact Project
       </Button>
     );
   }

@@ -28,18 +28,16 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
       <div className="row MyProjectCard-root">
         <div className="col-sm-4">
           <div className="MyProjectCard-header">Group Name</div>
-          <div className="MyProjectCard-projectName text-break">{this.props.group.group_name}</div>
+          <div className="MyProjectCard-projectName text-break">
+            {this.props.group.group_name}
+          </div>
         </div>
         <div className="col-sm-2">
           <div className="MyProjectCard-header">Your Role</div>
           <div>{this.state.isOwner ? "Group Owner" : "Volunteer"}</div>
         </div>
-        <div className="col-sm-3">
-          {this._renderGroupStatus()}
-        </div>
-        <div className="col-sm-3">
-          {this._renderButtons()}
-        </div>
+        <div className="col-sm-3">{this._renderGroupStatus()}</div>
+        <div className="col-sm-3">{this._renderButtons()}</div>
       </div>
     );
   }
@@ -75,8 +73,10 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     let buttons: ?Array<React$Node> = [
       <Button
         className="MyProjectCard-button"
-        href={url.section(Section.AboutGroup, id)}
-        variant="info"
+        href={url.section(Section.AboutGroup, {
+          id: this.props.group.slug || this.props.group.group_id,
+        })}
+        variant="secondary"
       >
         View
       </Button>,
@@ -85,12 +85,16 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
     if (this.state.isOwner) {
       const editUrl: string = url.section(Section.CreateGroup, id);
       buttons = buttons.concat([
-        <Button className="MyProjectCard-button" href={editUrl} variant="info">
+        <Button
+          className="MyProjectCard-button"
+          href={editUrl}
+          variant="secondary"
+        >
           Edit
         </Button>,
         <Button
           className="MyProjectCard-button"
-          variant="danger"
+          variant="destructive"
           onClick={() => this.props.onGroupClickDelete(this.props.group)}
         >
           Delete

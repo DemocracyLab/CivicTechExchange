@@ -2,15 +2,15 @@
 
 import React from "react";
 import type { ReduceStore } from "flux/utils";
-import GroupSearchSort from "./GroupSearchSort.jsx";
-import GroupTagContainer from "./GroupTagContainer.jsx";
 import { Container } from "flux/utils";
 import { List } from "immutable";
 import GroupCard from "./GroupCard.jsx";
-import GroupSearchStore from "../../stores/GroupSearchStore.js";
-import GroupSearchDispatcher from "../../stores/GroupSearchDispatcher.js";
+import EntitySearchStore from "../../stores/EntitySearchStore.js";
+import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
+import EntitySearchSort from "../../common/search/EntitySearchSort.jsx";
+import EntityTagContainer from "../../common/search/EntityTagContainer.jsx";
 import LoadingMessage from "../../chrome/LoadingMessage.jsx";
-import type { LocationRadius } from "../../stores/ProjectSearchStore.js";
+import type { LocationRadius } from "../../common/location/LocationRadius.js";
 import { Dictionary, createDictionary } from "../../types/Generics.jsx";
 import type { TagDefinition } from "../../utils/ProjectAPIUtils.js";
 import type { GroupTileAPIData } from "../../utils/GroupAPIUtils.js";
@@ -33,20 +33,20 @@ type State = {|
 
 class GroupCardsContainer extends React.Component<Props, State> {
   static getStores(): $ReadOnlyArray<ReduceStore> {
-    return [GroupSearchStore];
+    return [EntitySearchStore];
   }
 
   static calculateState(prevState: State): State {
     return {
-      groups: GroupSearchStore.getGroups(),
-      group_pages: GroupSearchStore.getGroupPages(),
-      group_count: GroupSearchStore.getNumberOfGroups(),
-      current_page: GroupSearchStore.getCurrentPage(),
-      groups_loading: GroupSearchStore.getGroupsLoading(),
-      keyword: GroupSearchStore.getKeyword() || "",
-      tags: GroupSearchStore.getSelectedTags() || [],
-      location: GroupSearchStore.getLocation() || "",
-      tagDictionary: GroupSearchStore.getAllTags() || [],
+      groups: EntitySearchStore.getEntities(),
+      group_pages: EntitySearchStore.getEntityPages(),
+      group_count: EntitySearchStore.getNumberOfEntities(),
+      current_page: EntitySearchStore.getCurrentPage(),
+      groups_loading: EntitySearchStore.isLoading(),
+      keyword: EntitySearchStore.getKeyword() || "",
+      tags: EntitySearchStore.getTags() || [],
+      location: EntitySearchStore.getLocation() || "",
+      tagDictionary: EntitySearchStore.getAllTags() || [],
     };
   }
 
@@ -55,8 +55,8 @@ class GroupCardsContainer extends React.Component<Props, State> {
       <div className="ProjectCardContainer col">
         {this.props.showSearchControls ? (
           <React.Fragment>
-            <GroupSearchSort />
-            <GroupTagContainer />
+            <EntitySearchSort />
+            <EntityTagContainer />
           </React.Fragment>
         ) : null}
         <div className="row">
@@ -122,7 +122,7 @@ class GroupCardsContainer extends React.Component<Props, State> {
         : this.state.current_page;
 
     this.setState({ current_page: nextPage }, function() {
-      GroupSearchDispatcher.dispatch({
+      UniversalDispatcher.dispatch({
         type: "SET_PAGE",
         page: this.state.current_page,
       });

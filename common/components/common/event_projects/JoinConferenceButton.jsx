@@ -33,7 +33,7 @@ class JoinConferenceButton extends React.PureComponent<Props> {
           <i className={Glyph(GlyphStyles.Video, GlyphSizes.LG) + " mr-3"} />
           {this.props.children}
           <i className={Glyph(GlyphStyles.Users, GlyphSizes.LG) + " ml-3"} />
-          <span className="AboutEvent-usercount overline ml-1">
+          <span className="JoinConference-usercount overline ml-1">
             {this.props.participant_count || "0"}
           </span>
         </Button>

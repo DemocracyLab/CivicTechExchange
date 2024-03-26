@@ -99,6 +99,7 @@ class EmailMessage:
     def __init__(self, **kwargs):
         self.to = kwargs.get('to')
         self.cc = kwargs.get('cc')
+        self.bcc = kwargs.get('bcc')
         self.reply_to = kwargs.get('reply_to')
         self.subject = kwargs.get('subject')
         self.from_email = kwargs.get('from_email')
@@ -107,7 +108,7 @@ class EmailMessage:
     def send(self, email_acct: EmailAccount):
         from django.core.mail import EmailMessage as _EmailMessage
         email_msg = _EmailMessage()
-        for key in ['to', 'cc', 'reply_to', 'subject', 'from_email', 'body', 'content_subtype']:
+        for key in ['to', 'cc', 'bcc', 'reply_to', 'subject', 'from_email', 'body', 'content_subtype']:
             attr = getattr(self, key, None)
             if attr is not None:
                 setattr(email_msg, key, attr)
@@ -231,14 +232,28 @@ def send_to_project_volunteer(volunteer_relation, subject, template, cc_owners=T
     project_volunteers = VolunteerRelation.objects.filter(project=volunteer_relation.project.id)
     cc = []
     co_owner_emails = list(map(lambda co: co.volunteer.email, list(filter(lambda v: v.is_co_owner, project_volunteers)))) or []
+    cc = co_owner_emails + [volunteer_relation.project.project_creator.email]
+    email_args = {
+        'subject': subject,
+        'from_email': _get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
+        'to': [volunteer_relation.volunteer.email],
+        'reply_to': [volunteer_relation.project.project_creator.email] + co_owner_emails,
+    }
     if cc_owners:
-        cc = co_owner_emails + [volunteer_relation.project.project_creator.email]
+        email_args['cc'] = cc
+    else:
+        email_args['bcc'] = cc    
+    email_msg = EmailMessage(**email_args)
+    email_msg = template.render(email_msg)
+    send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
+
+
+def send_to_event_project_volunteer(project, volunteer_rsvp, subject, template):
     email_msg = EmailMessage(
         subject=subject,
         from_email=_get_account_from_email(EmailAccount.EMAIL_VOLUNTEER_ACCT),
-        to=[volunteer_relation.volunteer.email],
-        cc=cc,
-        reply_to=[volunteer_relation.project.project_creator.email] + co_owner_emails,
+        to=[volunteer_rsvp.volunteer.email],
+        reply_to=[project.project_creator.email],
     )
     email_msg = template.render(email_msg)
     send_email(email_msg, EmailAccount.EMAIL_VOLUNTEER_ACCT)
@@ -564,17 +579,19 @@ def _send_email(email_msg, email_acct=None):
         email_msg.connection = EmailAccount.get_connection(_email_acct)['connection']
     else:
         test_email_subject = 'TEST EMAIL: ' + email_msg.subject
-        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\n-->\n{body}'.format(
+        test_email_body = '<!--\n Environment:{environment}\nTO: {to_line}\nREPLY-TO: {reply_to}\nCC: {cc}\nBCC: {bcc}\n-->\n{body}'.format(
             environment=settings.PROTOCOL_DOMAIN,
             to_line=email_msg.to,
             reply_to=email_msg.reply_to,
             body=email_msg.body,
-            cc=email_msg.cc
+            cc=email_msg.cc,
+            bcc=email_msg.bcc
         )
         email_msg.subject = test_email_subject
         email_msg.body = test_email_body
         email_msg.to = [settings.ADMIN_EMAIL]
         email_msg.cc = []
+        email_msg.bcc = []
         if settings.EMAIL_SUPPORT_ACCT:
             email_msg.connection = settings.EMAIL_SUPPORT_ACCT['connection']
     email_msg.send(_email_acct)

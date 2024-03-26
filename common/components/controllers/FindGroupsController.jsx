@@ -1,14 +1,20 @@
 // @flow
 
-import GroupSearchDispatcher from "../stores/GroupSearchDispatcher.js";
-import TagDispatcher from "../stores/TagDispatcher.js";
+import UniversalDispatcher from "../stores/UniversalDispatcher.js";
+import { SearchFor } from "../stores/EntitySearchStore.js";
 import GroupCardsContainer from "../componentsBySection/FindGroups/GroupCardsContainer.jsx";
 import GroupFilterContainer from "../componentsBySection/FindGroups/FIlters/GroupFilterContainer.jsx";
-import { FindGroupsArgs } from "../stores/GroupSearchStore.js";
-import Headers from "../common/Headers.jsx";
 import urls from "../utils/url.js";
 import React from "react";
 import _ from "lodash";
+
+type FindGroupsArgs = {|
+  keyword: string,
+  sortField: string,
+  locationRadius: string,
+  page: number,
+  issues: string,
+|};
 
 class FindGroupsController extends React.PureComponent {
   constructor(): void {
@@ -26,24 +32,20 @@ class FindGroupsController extends React.PureComponent {
       "page",
       "issues",
     ]);
-    GroupSearchDispatcher.dispatch({
-      type: "INIT",
+    UniversalDispatcher.dispatch({
+      type: "INIT_SEARCH",
       findGroupsArgs: !_.isEmpty(args) ? args : null,
       searchSettings: {
         updateUrl: true,
+        searchConfig: SearchFor.Groups,
       },
     });
-    TagDispatcher.dispatch({ type: "INIT" });
   }
 
   // TODO: Splash
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers
-          title="DemocracyLab"
-          description="Optimizing the connection between skilled volunteers and tech-for-good groups"
-        />
         <div className="FindProjectsController-root container">
           <div className="row">
             <GroupFilterContainer />

@@ -123,7 +123,7 @@ class ProjectSearchTagsCacheManager:
         elif group is not None:
             projects = group.get_group_projects(approved_only=True)
         else:
-            projects = Project.objects.filter(is_searchable=True)
+            projects = Project.objects.filter(is_searchable=True, is_private=False)
         issues, technologies, stage, organization, organization_type, positions = [], [], [], [], [], []
         if projects:
             for project in projects:
@@ -134,6 +134,8 @@ class ProjectSearchTagsCacheManager:
                 organization_type += project.project_organization_type.slugs()
 
                 project_positions = project.get_project_positions()
+                # exclude roles which are hidden
+                project_positions = project.get_project_positions().filter(is_hidden=False)                
                 positions += map(lambda position: position.position_role.slugs()[0], project_positions)
 
             return merge_dicts(Counter(issues), Counter(technologies), Counter(stage), Counter(organization), Counter(organization_type), Counter(positions))

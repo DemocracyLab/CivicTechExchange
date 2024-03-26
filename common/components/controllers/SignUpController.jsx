@@ -7,11 +7,12 @@ import FormValidation from "../forms/FormValidation.jsx";
 import metrics from "../utils/metrics.js";
 import moment from "moment";
 import _ from "lodash";
-import Headers from "../common/Headers.jsx";
 import PseudoLink from "../chrome/PseudoLink.jsx";
 import SocialMediaSignupSection from "../common/integrations/SocialMediaSignupSection.jsx";
 import TermsModal, { TermsTypes } from "../common/confirmation/TermsModal.jsx";
 import Button from "react-bootstrap/Button";
+import url from "../utils/url.js";
+import Section from "../enums/Section.js";
 
 type Props = {|
   +errors: { +[key: string]: $ReadOnlyArray<string> },
@@ -100,7 +101,6 @@ class SignUpController extends React.Component<Props, State> {
   render(): React$Node {
     return (
       <React.Fragment>
-        <Headers title="Sign Up | DemocracyLab" description="Sign up" />
         <div className="LogInController-root">
           <div className="LogInController-greeting">
             SIGN UP, IT'S EASY AND FREE
@@ -178,7 +178,9 @@ class SignUpController extends React.Component<Props, State> {
                   onClick={e => this.setState({ termsOpen: true })}
                 />
                 {" and "}
-                <a href={window.PRIVACY_POLICY_URL}>Privacy Policy</a>
+                <a href={url.section(Section.Privacy)} target="_blank">
+                  Privacy Policy
+                </a>
               </span>
             </div>
 
@@ -205,7 +207,7 @@ class SignUpController extends React.Component<Props, State> {
             />
 
             <Button
-            variant="login"
+              variant="success"
               className="LogInController-signInButton"
               disabled={!this.state.isValid}
               type="submit"

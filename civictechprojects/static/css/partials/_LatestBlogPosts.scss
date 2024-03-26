@@ -1,0 +1,70 @@
+.LatestBlogPosts-container,
+.LatestBlogPosts-authorblock,
+.LatestBlogPosts-postinfo,
+.LatestBlogPosts-bottomrow {
+  display: flex;
+}
+.LatestBlogPosts-container {
+  --blog-grid-rows: 250px 32px 58px 1fr auto auto; // set this in the parent so all children inherit the same value for 1fr, 58px h3 is computed line-height *2
+  flex-wrap: wrap;
+  padding: 24px 0 0 0;
+}
+.LatestBlogPosts-post {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: var(--blog-grid-rows);
+}
+.LatestBlogPosts-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; // make titles two rows maximum
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  align-self: start; // stops character descenders from getting clipped, weird but works
+}
+.LatestBlogPosts-post:last-of-type {
+  display: none;
+}
+.LatestBlogPosts-featureimage {
+  max-width: 100%;
+  max-height: 250px;
+  margin: auto; // center image if it doesn't span full width/height
+}
+.LatestBlogPosts-author-avatar {
+  width: 36px;
+  margin: 0 0 auto 0;
+}
+.LatestBlogPosts-postinfo {
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+.LatestBlogPosts-primarytag, .LatestBlogPosts-author {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+.LatestBlogPosts-primarytag {
+    color: $color-blue-80;
+}
+.LatestBlogPosts-excerpt {
+    margin-top: 0.5rem;
+}
+.LatestBlogPosts-excerpt a { 
+    text-decoration: underline;
+}
+.LatestBlogPosts-bottomrow {
+    justify-content: space-between;
+}
+.LatestBlogPosts-link a {
+    padding: 0.75rem; // bigger clicktarget
+}
+@include media-breakpoint-up(lg) {
+  .LatestBlogPosts-container {
+    gap: 40px;
+    padding: 40px;
+  }
+  .LatestBlogPosts-post {
+    flex-basis: calc(50% - 40px);
+  }
+  .LatestBlogPosts-post:last-of-type {
+    display: grid;
+  }
+}

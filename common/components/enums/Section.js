@@ -1,6 +1,8 @@
 const Section = {
+  IframeProject: "IframeProject",
   AboutProject: "AboutProject",
   AboutGroup: "AboutGroup",
+  IframeGroup: "IframeGroup",
   AboutUs: "AboutUs",
   CreateProject: "CreateProject",
   Home: "Home",
@@ -31,6 +33,8 @@ const Section = {
   VideoOverview: "VideoOverview",
   AboutEventProject: "AboutEventProject",
   CreateEventProject: "CreateEventProject",
+  Privacy: "Privacy",
+  Terms: "Terms",
 };
 
 export type SectionType = $Keys<typeof Section>;

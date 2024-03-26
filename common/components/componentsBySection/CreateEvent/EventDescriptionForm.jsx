@@ -17,6 +17,7 @@ import TextFormField, {
   TextFormFieldType,
 } from "../../forms/fields/TextFormField.jsx";
 import type { Dictionary } from "../../types/Generics.jsx";
+import stringHelper from "../../utils/string.js";
 
 type FormFields = {|
   event_description: ?string,
@@ -44,7 +45,6 @@ type State = {|
 class ProjectDescriptionForm extends React.PureComponent<Props, State> {
   constructor(props: Props): void {
     super(props);
-    this.nonAlphanumericSlugPattern = new RegExp("[^A-Za-z0-9-]");
     const event: EventData = props.project;
     const formFields: Dictionary<any> = {
       event_description: event ? event.event_description : "",
@@ -72,9 +72,9 @@ class ProjectDescriptionForm extends React.PureComponent<Props, State> {
       {
         fieldName: "event_slug",
         checkFunc: (formFields: FormFields) =>
-          !this.nonAlphanumericSlugPattern.test(formFields["event_slug"]),
+          stringHelper.isValidSlug(formFields["event_slug"]),
         errorMessage:
-          "Event slug can only contain alphanumeric characters and dashes",
+          "Valid Event slug should only consist of alphanumeric characters and dashes('-')",
       },
     ];
 

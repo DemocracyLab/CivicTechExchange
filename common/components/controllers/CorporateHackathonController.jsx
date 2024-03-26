@@ -33,6 +33,11 @@ const tabOptions: Dictionary<string> = {
   sponsorship: "tab-sponsorship",
 };
 
+// for now we are trying to test this with a one file change. In the future we should handle this when and where the GOOGLE PROPERTY ID is set
+// safeGtag needs to return true because event handlers need to return true for the event to keep propogating
+//
+const safeGtag=(...args)=>(window.gtag && gtag(...args),true)
+
 class CorporateHackathonController extends React.PureComponent<{||}, State> {
   constructor(props) {
     super(props);
@@ -112,7 +117,8 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <React.Fragment>
         <div className="corporate-tab-section">
-          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs">
+          <Tabs defaultActiveKey={this.state.defaultTab} id="corporate-tabs" 
+                onSelect={tab_option=>safeGtag('event',tab_option)}>
             <Tab
               eventKey={tabOptions.hackathon}
               title="Host a Tech-for-Good Hackathon"
@@ -194,6 +200,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-hackathon"
                 className="corporate-block-button"
+                onClick={e=>safeGtag('event','contact-hackathon')}
               >
                 Get Started
               </Button>
@@ -253,24 +260,25 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           </h3>
         </div>
 
-        {this._renderContactHackathon()}
+        
 
-        <div className="corporate-hackathon-saying corporate-bg-light col-12">
+        <div className="corporate-hackathon-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>
             Feedback from our partners about their custom hackathon events.
           </h2>
-          <div className="carousel-testimonial-root">
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="partner-highlights"
-              interval={600000}
             />
           </div>
           <p className="h3">
-            Read about previous events in our <a href={window.BLOG_URL}>blog</a>
-            .
+            Learn more in our <a href="https://blog.democracylab.org/how-amazon-hacked-for-good/">blog</a>.
           </p>
         </div>
+
+        {this._renderContactHackathon()}
+
       </React.Fragment>
     );
   }
@@ -332,6 +340,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
                 variant="primary"
                 href="#contact-sponsor"
                 className="corporate-block-button"
+                onClick={e=>safeGtag('event','contact-sponsor')}
               >
                 Get Started
               </Button>
@@ -389,26 +398,24 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
           <div className="corporate-sponsorship-current">
             <h4>Current DemocracyLab sponsors include:</h4>
             <div className="corporate-sponsors-container">
+              {this._renderCurrentSponsors()}
               <div className="corporate-sponsor-item">
                 <img
                   src="https://d1agxr2dqkgkuy.cloudfront.net/img/bill-melinda-gates-foundation.png"
                   alt="Bill and Melinda Gates Foundation logo"
                 ></img>
               </div>
-              {this._renderCurrentSponsors()}
             </div>
           </div>
         </div>
-        {this._renderContactSponsor()}
 
-        <div className="corporate-sponsorship-saying corporate-bg-light col-12">
+        <div className="corporate-sponsorship-saying col-12">
           <h1>What our partners are saying.</h1>
           <h2>Feedback from partnering organizations.</h2>
 
-          <div className="carousel-testimonial-root">
+          <div className="corporate-hackathon-carousel carousel-testimonial-root">
             <TestimonialCarousel
               category="hackathon-highlights"
-              interval={600000}
             />
           </div>
           <p className="headline2">
@@ -417,13 +424,16 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
             up <a href="/events">here</a>.
           </p>
         </div>
+
+        {this._renderContactSponsor()}
+        
       </React.Fragment>
     );
   }
   _renderContactHackathon(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-contact col-12">
+        <div className="corporate-contact col-12 corporate-bg-light">
           <JumpAnchor id="contact-hackathon" />
           <h1>Interested in hosting your own hackathon?</h1>
           <h2>Get in touch to discuss your next tech-for-good event.</h2>
@@ -439,8 +449,9 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
     return (
       <a
         href={cdn.document(
-          "2021+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
+          "2023+DemocracyLab+Corporate+Hackathon+Prospectus.pdf"
         )}
+        onClick={e=>safeGtag('event','HackathonProspectus')}
       >
         Corporate Tech-for-Good Hackathons PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
@@ -449,7 +460,12 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   }
   _renderSponsorProspectus(): React$Node {
     return (
-      <a href={cdn.document("2021+DemocracyLab+Sponsorship+Prospectus.pdf")}>
+      <a 
+        href={cdn.document(
+          "2023+DemocracyLab+Sponsorship+Prospectus.pdf"
+        )}
+        onClick={e=>safeGtag('event','SponsorProspectus')}
+      >
         Sponsor Prospectus PDF{" "}
         <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X1)}></i>
       </a>
@@ -459,7 +475,7 @@ class CorporateHackathonController extends React.PureComponent<{||}, State> {
   _renderContactSponsor(): React$Node {
     return (
       <React.Fragment>
-        <div className="corporate-contact col-12">
+        <div className="corporate-contact col-12 corporate-bg-light">
           <JumpAnchor id="contact-sponsor" />
           <h1>Interested in becoming a sponsor?</h1>
           <h2>Get in touch to make an impact in the tech-for-good movement.</h2>
