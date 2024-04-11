@@ -239,8 +239,8 @@ class AboutUsController extends React.PureComponent<{||}, State> {
             <h3>Annual Report</h3>
             <p>
               Please review our{" "}
-              <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2022%20Annual%20Report.pdf">
-                2022 Annual Report
+              <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2023%20Annual%20Report.pdf">
+                2023 Annual Report
               </a>{" "}
               to learn about the impact of our programs and platform last year.
             </p>
