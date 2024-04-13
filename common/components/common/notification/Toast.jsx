@@ -10,6 +10,7 @@ import { Glyph, GlyphStyles, GlyphSizes } from "../../utils/glyphs.js";
 type Props = {|
   timeoutMilliseconds: number,
   header: ?string,
+  animation:?boolean,
   show: boolean,
   onClose: () => void,
 |};
@@ -40,6 +41,7 @@ class Toast extends React.Component<Props, State> {
   }
 
   render(): React$Node {
+    const {animation=false,show,timeoutMilliseconds,header,onClose} = this.props;
     const offsetVal = this.state.headerHeight + 20;
     // TODO: Add styling for success message according to designs
     // TODO: pass autohide via prop rather than forcing it to always-on here
@@ -49,19 +51,19 @@ class Toast extends React.Component<Props, State> {
       right: 0,
     };
     return (
-      this.props.show && (
         <ReactToast
-          onClose={() => this.props.onClose()}
-          show={this.props.show}
-          delay={this.props.timeoutMilliseconds || 5000}
+          className={(animation)? "Toast-animation":null}
+          onClose={() => onClose()}
+          show={show}
           style={style}
+          delay={timeoutMilliseconds || 5000}
           autohide
+          animation={animation}
         >
-          {this.props.header
+          {header
             ? this._renderMessageWithHeaderBody()
             : this._renderSingleMessageBody()}
         </ReactToast>
-      )
     );
   }
 
