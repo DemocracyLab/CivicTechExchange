@@ -42,7 +42,7 @@ export class CountrySelector extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!_.isEqual(nextProps, this.props)) {
       const countryCodeFormat: string =
         nextProps.countryCodeFormat || this.state.countryCodeFormat;

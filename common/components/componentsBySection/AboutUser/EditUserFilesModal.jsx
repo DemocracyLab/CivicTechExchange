@@ -37,7 +37,7 @@ class EditUserFilesModal extends React.PureComponent<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!this.state.showModal && nextProps.showModal) {
       const user: UserAPIData = nextProps.user;
       const formFieldsValues: FormFields = {

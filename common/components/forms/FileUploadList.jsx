@@ -51,7 +51,7 @@ class FileUploadList extends React.Component<Props, State> {
     return state;
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (nextProps.files) {
       this.setState({
         files: FileUploadList.getFiles(nextProps),

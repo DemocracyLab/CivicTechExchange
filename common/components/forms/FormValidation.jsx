@@ -29,7 +29,7 @@ class FormValidation<T> extends React.PureComponent<Props<T>, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props<T>): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props<T>): void {
     if (nextProps.formState && nextProps.validations) {
       let errorMessages: Array<string> = this.props.errorMessages || [];
       let validationSuccess = _.isEmpty(errorMessages);

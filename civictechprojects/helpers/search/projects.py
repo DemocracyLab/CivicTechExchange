@@ -207,3 +207,5 @@ def get_tag_counts(category=None, event=None, group=None):
             activetagdict[slug] if slug in activetagdict else 0
         )
     return list(resultdict.values())
+
+

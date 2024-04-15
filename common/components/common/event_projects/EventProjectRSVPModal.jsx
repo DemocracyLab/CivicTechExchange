@@ -66,7 +66,7 @@ class EventProjectRSVPModal extends React.PureComponent<Props, State> {
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.initStateFromProps(nextProps));
     this.forceUpdate();
   }

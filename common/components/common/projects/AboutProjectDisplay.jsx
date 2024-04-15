@@ -69,7 +69,7 @@ class AboutProjectDisplay extends React.PureComponent<Props, State> {
     this.handleShowMoreActivity = this.handleShowMoreActivity.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       project: nextProps.project,
       viewOnly: nextProps.viewOnly || url.argument("embedded"),

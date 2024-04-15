@@ -1,7 +1,4 @@
-// @flow
-
-import React from "react";
-import { List } from "immutable";
+import React, {useState, useEffect} from "react";
 import ProjectCard from "../FindProjects/ProjectCard.jsx";
 import { Glyph, GlyphSizes, GlyphStyles } from "../../utils/glyphs.js";
 import ProjectAPIUtils, { ProjectData } from "../../utils/ProjectAPIUtils.js";
@@ -10,89 +7,54 @@ import url from "../../utils/url.js";
 import Section from "../../enums/Section.js";
 import Carousel from "react-bootstrap/Carousel";
 
-type State = {|
-  projects: List<ProjectData>,
-  windowWidth: number,
-  cardStart: number,
-  cardCapacity: number,
-|};
+export default function RecentProjectsSection() {
+  const [projects, setProjects] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [cardCapacity, setCardCapacity] = useState(3);
+  const [cardStart, setCardStart] = useState(0);
 
-class RecentProjectsSection extends React.Component<{||}, State> {
-  constructor(): void {
-    super();
-    this.state = {
-      projects: null,
-      windowWidth: 0,
-      cardStart: 0,
-      cardCapacity: 3,
-    };
-    this._updateWindowDimensions = this._updateWindowDimensions.bind(this);
-  }
-
-  componentDidMount() {
-    const url: string = "/api/projects/recent/?count=6";
+  useEffect(() => {
+    const url = "/api/projects/recent/?count=6";
     fetch(new Request(url))
       .then(response => response.json())
-      .then(getProjectsResponse =>
-        this.setState({
-          projects: getProjectsResponse.projects.map(
-            ProjectAPIUtils.projectFromAPIData
-          ),
-        })
+      .then(response =>
+        setProjects(
+          response.projects.map(ProjectAPIUtils.projectFromAPIData)
+        )
       );
-    this._updateWindowDimensions();
-    window.addEventListener("resize", this._updateWindowDimensions);
-  }
+  }, []);
 
-  componentWillUnmount(): void {
-    window.removeEventListener("resize", this._updateWindowDimensions);
-  }
+  const updateWindowDimensions = () => {
+    setWindowWidth(window.innerWidth);
+    updateCardCapacity();
+  };
 
-  _updateWindowDimensions(): void {
-    this.setState({ windowWidth: window.innerWidth }, () =>
-      this._setCardCapacity()
-    );
-  }
-
-  render(): React$Node {
-    return (
-      <div className="RecentProjects">
-        <h2 className="RecentProjects-title">Active Projects</h2>
-        <div className="RecentProjects-cards">{this._renderCards()}</div>
-        <div className="RecentProjects-button">
-          <Button
-            className="RecentProjects-all"
-            variant="secondary"
-            href={url.section(Section.FindProjects)}
-          >
-            See All Projects
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  _setCardCapacity(): void {
+  const updateCardCapacity = () => {
     //sets how many cards are shown at one time
-    const width = this.state.windowWidth;
-    if (width < 992 && width >= 768) {
-      this.setState({ cardCapacity: 4, cardStart: 0 });
-    } else {
-      this.setState({ cardCapacity: 3 });
-    }
-  }
+    const capacity = (windowWidth < 992 && windowWidth >= 768) ? 4 : 3;
+    setCardCapacity(capacity);
+  };
 
-  _renderCards(): $ReadOnlyArray<React$Node> {
-    if (!this.state.projects) {
+  useEffect(() => {
+    updateWindowDimensions();
+    window.addEventListener("resize", updateWindowDimensions);
+    // cleanup event listener
+    // 
+    // return () => window.removeEventListener("resize", updateWindowDimensions);
+  });
+
+
+  const _renderCards = () => {
+    if (!projects) {
       return (
         <i className={Glyph(GlyphStyles.LoadingSpinner, GlyphSizes.X2)}></i>
       );
     }
-    if (this.state.windowWidth < 992) {
-      return this.state.projects
+    if (windowWidth < 992) {
+      return projects
         .slice(
-          this.state.cardStart,
-          this.state.cardStart + this.state.cardCapacity
+          cardStart,
+          cardStart + cardCapacity
         )
         .map((project, index) => (
           <ProjectCard
@@ -110,16 +72,16 @@ class RecentProjectsSection extends React.Component<{||}, State> {
           indicators={false}
           interval={null}
           onSlid={(eventKey, direction) =>
-            this._carouselSlidHandler(eventKey, direction)
+            _carouselSlidHandler(eventKey, direction)
           }
         >
-          {this._renderCardsForCarousel()}
+          {_renderCardsForCarousel()}
         </Carousel>
       );
     }
-  }
+  };
 
-  _carouselSlidHandler(eventKey, direction): void {
+  const _carouselSlidHandler = (eventKey, direction) => {
     const carouselChildren = document.querySelectorAll(
       ".RecentProjects-carousel"
     )[0].children;
@@ -134,13 +96,13 @@ class RecentProjectsSection extends React.Component<{||}, State> {
           : el.setAttribute("style", "display:flex");
       }
     }
-  }
+  };
 
-  _renderCardsForCarousel(): $ReadOnlyArray<ReactNode> {
+  const _renderCardsForCarousel = () => {
     const carouselItem0 = (
       <Carousel.Item key="0">
         <div className="d-flex justify-content-center">
-          {this.state.projects.slice(0, 3).map((project, index) => (
+          {projects.slice(0, 3).map((project, index) => (
             <ProjectCard
               className="RecentProjects-card"
               project={project}
@@ -155,7 +117,7 @@ class RecentProjectsSection extends React.Component<{||}, State> {
     const carouselItem1 = (
       <Carousel.Item key="1">
         <div className="d-flex justify-content-center">
-          {this.state.projects.slice(3, 6).map((project, index) => (
+          {projects.slice(3, 6).map((project, index) => (
             <ProjectCard
               className="RecentProjects-card"
               project={project}
@@ -168,7 +130,21 @@ class RecentProjectsSection extends React.Component<{||}, State> {
       </Carousel.Item>
     );
     return [carouselItem0, carouselItem1];
-  }
-}
+  };
 
-export default RecentProjectsSection;
+  return (
+    <div className="RecentProjects">
+      <h2 className="RecentProjects-title">Active Projects</h2>
+      <div className="RecentProjects-cards">{_renderCards()}</div>
+      <div className="RecentProjects-button">
+        <Button
+          className="RecentProjects-all"
+          variant="secondary"
+          href={url.section(Section.FindProjects)}
+        >
+          See All Projects
+        </Button>
+      </div>
+    </div>
+  );
+}

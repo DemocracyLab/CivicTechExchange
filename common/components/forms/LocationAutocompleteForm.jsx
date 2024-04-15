@@ -52,7 +52,7 @@ export class LocationAutocompleteForm extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!_.isEqual(nextProps.location, this.state.location)) {
       this.setState({ location: nextProps.location });
     }

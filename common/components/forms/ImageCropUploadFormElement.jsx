@@ -33,7 +33,7 @@ class ImageCropUploadFormElement extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     if (!this.state.initialized && nextProps.currentImage) {
       this.updateFormFields(nextProps.currentImage);
       this.setState({ initialized: true });

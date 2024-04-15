@@ -68,7 +68,7 @@ class ProjectVolunteerModal extends React.PureComponent<Props, State> {
     this._fieldsFilled = this._fieldsFilled.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     const noPositionOption: SelectOption = { value: "", label: "---" };
     const positionOptions: $ReadOnlyArray<SelectOption> = [
       noPositionOption,
