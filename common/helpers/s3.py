@@ -8,13 +8,17 @@ from urllib import parse
 from civictechprojects.models import FileCategory
 from .random import generate_uuid
 from .request_helpers import ResourceNotFound
+from cryptography.fernet import Fernet
 
+# define a encryption with a global key
+key = b'yLyb7itt7-e0Z9eiPiX-lVnppwbK0v3TjQsk3J4ZgbY='
+cipher_suite = Fernet(key)
 
 class S3Key:
     def __init__(self, raw_key):
         key_parts = raw_key.split('/')
         self.file_category = key_parts[0]
-        self.username = key_parts[1]
+        self.username = cipher_suite.decrypt(key_parts[1]).decode()
         self.file_name = key_parts[2]
 
 
