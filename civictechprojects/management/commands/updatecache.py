@@ -1,7 +1,7 @@
 # Scheduled tasks for Heroku Scheduler (or similar)
 # currently, regenerates the views.py cache_page for tags(request)
 from django.core.cache import cache
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.conf import settings
 import requests #requires pip install requests
 class Command(BaseCommand):
@@ -19,6 +19,6 @@ class Command(BaseCommand):
         url2 = '&getCounts=true'
         #HTTP GET to trigger caching in views.py (aka regenerate cached API endpoints)
         for category in endpoints:
-            res = requests.get(domain + url1 + category + url2)
+            requests.get(domain + url1 + category + url2)
             self.stdout.write(self.style.SUCCESS('Successfully returned API endpoint: ' + category))
         self.stdout.write(self.style.SUCCESS('For domain: ' + domain))

@@ -8,7 +8,7 @@ def retry(func, retry_count, retry_seconds, job_name=None):
         try:
             result = func()
             break
-        except:
+        except Exception:
             if retries == retry_count:
                 raise
             retries = retries + 1

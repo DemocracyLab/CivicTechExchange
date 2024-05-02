@@ -116,7 +116,7 @@ def activate_zoom_rooms(qiqo_event_id: str, room_ids: List[int]):
     response = requests.get(url)
     try:
         return response.json()
-    except:
+    except ValueError:
         print('Invalid json: ' + url)
         return None
 
@@ -136,6 +136,6 @@ def get_zoom_room_info(qiqo_event_id: str, room_number: int):
     response = requests.get(url)
     try:
         return response.json()
-    except:
+    except ValueError:
         print('Invalid json: ' + url)
         return None
