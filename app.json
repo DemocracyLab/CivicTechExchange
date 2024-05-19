@@ -34,7 +34,9 @@
       "quantity": 1
     }
   },
-  "addons": ["heroku-postgresql"],
+  "addons": [
+    "heroku-postgresql"
+  ],
   "buildpacks": [
     {
       "url": "heroku/python"
