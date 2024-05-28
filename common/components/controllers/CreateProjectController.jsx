@@ -191,7 +191,13 @@ class CreateProjectController extends React.PureComponent<{||}, State> {
         fromEventId: project.event_created_from,
       });
     }
-    window.location.href = url.section(Section.MyProjects, urlArgs);
+    if(!project.project_approved){
+      window.location.href = url.section(Section.MyProjects, urlArgs);
+    } else {
+      window.location.href = url.section(Section.MyProjects, null);
+
+    }
+   
   }
 
   render(): React$Node {
