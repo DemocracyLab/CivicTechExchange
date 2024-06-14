@@ -248,9 +248,10 @@ def rsvp_for_event(request, event_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
+    body = json.loads(request.body)
     event = Event.get_by_id_or_slug(event_id)
-    is_remote = request.data.get('isRemote')
-    location_time_zone = request.data.get('locationTimeZone')
+    is_remote = body['isRemote'] if 'isRemote' in body else None
+    location_time_zone = body['locationTimeZone'] if 'locationTimeZone' in body else None
     RSVPVolunteerRelation.create(event, user, is_remote, location_time_zone)
 
     notify_rsvped_volunteer(event, user)
@@ -292,11 +293,12 @@ def rsvp_for_event_project(request, event_id, project_id):
     rsvp = RSVPVolunteerRelation.get_for_event_project(event_project, user)
     if rsvp is None:
         # TODO: Test RSVP-ing for project after event
-        rsvp = RSVPVolunteerRelation.create(event, user, request.data['isRemote'], request.data['locationTimeZone'])
+        body = json.loads(request.body)
+        rsvp = RSVPVolunteerRelation.create(event, user, body['isRemote'], body['locationTimeZone'])
         rsvp.event_project = event_project
-        rsvp.application_text = request.data['applicationText']
+        rsvp.application_text = body['applicationText']
         rsvp.save()
-        rsvp.role.add(request.data['roleTag'])
+        rsvp.role.add(body['roleTag'])
 
         notify_rsvp_for_project_owner(rsvp)
         user.purge_cache()
@@ -563,8 +565,9 @@ def get_site_stats(request):
 
 @api_view(['POST'])
 def add_alert(request):
+    body = json.loads(request.body)
     UserAlert.create_or_update(
-        email=request.data['email'], filters=request.data['filters'], country=request.data['country'], postal_code=request.data['postal_code'])
+        email=body['email'], filters=body['filters'], country=body['country'], postal_code=body['postal_code'])
     return HttpResponse(status=200)
 
 
@@ -663,7 +666,7 @@ def volunteer_operation_is_authorized(request, volunteer_relation):
     return request.user.username in authorized_usernames
 
 
-@api_view(['POST', 'DELETE'])
+@api_view(['GET', 'POST'])
 def delete_uploaded_file(request, s3_key):
     uploader = request.user.username
     has_permisson = user_has_permission_for_s3_file(uploader, s3_key)
@@ -701,7 +704,8 @@ def contact_project_owner(request, project_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
-    message = request.data['message']
+    body = json.loads(request.body)
+    message = body['message']
 
     project = Project.objects.get(id=project_id)
     email_subject = '{firstname} {lastname} sent a message to {project}'.format(
@@ -726,8 +730,10 @@ def contact_project_volunteers(request, project_id):
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
-    subject = request.data['subject']
-    message = request.data['message']
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
 
     project = Project.objects.get(id=project_id)
     if not user.email_verified or not is_co_owner_or_staff(user, project):
@@ -765,8 +771,10 @@ def contact_event_project_volunteers(request, event_id, project_id):
         return HttpResponse(status=401)
 
     user = get_request_contributor(request)
-    subject = request.data['subject']
-    message = request.data['message']
+
+    body = json.loads(request.body)
+    subject = body['subject']
+    message = body['message']
 
     event_project = EventProject.get(event_id, project_id)
     if not user.email_verified or not is_co_owner_or_staff(user, event_project):
@@ -803,8 +811,10 @@ def contact_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     project = volunteer_relation.project
 
-    subject = request.data['subject']
-    message = request.data['message']
+    #body = json.loads(request.body)
+    body = request.data
+    subject = body['subject']
+    message = body['message']
 
     # TODO: Condense common code between this and contact_project_volunteers
     if not user.email_verified or not is_co_owner_or_staff(user, project):
@@ -813,13 +823,16 @@ def contact_project_volunteer(request, application_id):
     email_subject = '{project}: {subject}'.format(
         project=project.project_name,
         subject=subject)
+
+    # Convert newlines in the message to HTML line breaks
+    formatted_message = message.replace('\n', '<br>')
+
     email_template = HtmlEmailTemplate(use_signature=False) \
-        .header('You have a new message from {projectname}'.format(projectname=project.project_name)) \
-        .paragraph('\"{message}\" - {firstname} {lastname}'.format(
-        message=message,
-        firstname=user.first_name,
-        lastname=user.last_name)) \
+        .header(f'You have a new message from {project.project_name}') \
+        .paragraph(f'{formatted_message} - {user.first_name} {user.last_name}') \
         .paragraph('To respond, you can reply to this email.')
+
+
     send_to_project_volunteer(volunteer_relation, email_subject, email_template)
     return HttpResponse(status=200)
 
@@ -834,9 +847,10 @@ def volunteer_with_project(request, project_id):
         return HttpResponse(status=403)
 
     project = Project.objects.get(id=project_id)
-    projected_end_date = request.data['projectedEndDate']
-    message = request.data['message']
-    role = request.data['roleTag']
+    body = json.loads(request.body)
+    projected_end_date = body['projectedEndDate']
+    message = body['message']
+    role = body['roleTag']
     volunteer_relation = VolunteerRelation.create(
         project=project,
         volunteer=user,
@@ -860,14 +874,15 @@ def renew_volunteering_with_project(request, application_id):
     if not user.id == volunteer_relation.volunteer.id:
         return HttpResponse(status=403)
 
-    volunteer_relation.projected_end_date = request.data['projectedEndDate']
+    body = json.loads(request.body)
+    volunteer_relation.projected_end_date = body['projectedEndDate']
     volunteer_relation.re_enrolled_last_date = timezone.now()
     volunteer_relation.re_enroll_reminder_count = 0
     volunteer_relation.re_enroll_last_reminder_date = None
     volunteer_relation.save()
     volunteer_relation.volunteer.purge_cache()
 
-    notify_project_owners_volunteer_renewed_email(volunteer_relation, request.data['message'])
+    notify_project_owners_volunteer_renewed_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 
@@ -884,13 +899,14 @@ def conclude_volunteering_with_project(request, application_id):
 
     send_volunteer_conclude_email(user, volunteer_relation.project.project_name)
 
+    body = json.loads(request.body)
     project = Project.objects.get(id=volunteer_relation.project.id)
     user = volunteer_relation.volunteer
     volunteer_relation.delete()
     project.recache()
     user.purge_cache()
 
-    notify_project_owners_volunteer_concluded_email(volunteer_relation, request.data['message'])
+    notify_project_owners_volunteer_concluded_email(volunteer_relation, body['message'])
     return HttpResponse(status=200)
 
 
@@ -943,7 +959,8 @@ def reject_project_volunteer(request, application_id):
     find_projects_page_url = section_url(FrontEndSection.FindProjects)
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
-        message = request.data['rejection_message']
+        body = json.loads(request.body)
+        message = body['rejection_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('Hi {first_name},'.format(first_name=volunteer_relation.volunteer.first_name))\
         .paragraph('Thank you for your interest in volunteering with {project_name}.'.format(project_name=volunteer_relation.project.project_name))\
@@ -972,7 +989,8 @@ def reject_project_volunteer(request, application_id):
 def dismiss_project_volunteer(request, application_id):
     volunteer_relation = VolunteerRelation.objects.get(id=application_id)
     if volunteer_operation_is_authorized(request, volunteer_relation):
-        message = request.data['dismissal_message']
+        body = json.loads(request.body)
+        message = body['dismissal_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('Thank you for contributing to {project_name}. Your volunteer work for the project has ended. \"{message}\"'\
                    .format(project_name=volunteer_relation.project.project_name, message=message))
@@ -1000,7 +1018,8 @@ def demote_project_volunteer(request, application_id):
         volunteer_relation.is_co_owner = False
         volunteer_relation.save()
         update_project_timestamp(request, volunteer_relation.project)
-        message = request.data['demotion_message']
+        body = json.loads(request.body)
+        message = body['demotion_message']
         email_template = HtmlEmailTemplate()\
         .paragraph('The owner of {project_name} has removed you as a co-owner of the project for the following reason:'.format(
             project_name=volunteer_relation.project.project_name))\
@@ -1021,7 +1040,8 @@ def demote_project_volunteer(request, application_id):
 def leave_project(request, project_id):
     volunteer_relation = VolunteerRelation.objects.filter(project_id=project_id, volunteer_id=request.user.id).first()
     if request.user.id == volunteer_relation.volunteer.id:
-        message = request.data['departure_message']
+        body = json.loads(request.body)
+        message = body['departure_message']
         if len(message) > 0:
             email_template = HtmlEmailTemplate()\
             .paragraph('{volunteer_name} is leaving {project_name} because:'.format(
@@ -1065,7 +1085,8 @@ def contact_group_owner(request, group_id):
     if not user.email_verified:
         return HttpResponse(status=403)
 
-    message = request.data['message']
+    body = json.loads(request.body)
+    message = body['message']
 
     group = Group.objects.get(id=group_id)
     email_subject = '{firstname} {lastname} would like to connect with {group}'.format(
@@ -1097,8 +1118,9 @@ def invite_project_to_group(request, group_id):
     if not is_creator(user, group):
         return HttpResponse(status=403)
 
-    project = Project.objects.get(id=request.data['projectId'])
-    message = request.data['message']
+    body = json.loads(request.body)
+    project = Project.objects.get(id=body['projectId'])
+    message = body['message']
     is_approved = is_co_owner_or_owner(user, project)
     project_relation = ProjectRelationship.create(group, project, is_approved, message)
     project_relation.save()
@@ -1206,23 +1228,24 @@ def project_unfavorite(request, project_id):
 @api_view(['GET', 'POST'])
 def contact_democracylab(request):
     #first prepare all the data from the request body
+    body = json.loads(request.body)
     # submit validation request to recaptcha
     r = requests.post(
       'https://www.google.com/recaptcha/api/siteverify',
       data={
         'secret': settings.GR_SECRETKEY,
-        'response': request.data['reCaptchaValue']
+        'response': body['reCaptchaValue']
       }
     )
 
     if r.json()['success']:
         # Successfully validated, send email
-        first_name = request.data['fname']
-        last_name = request.data['lname']
-        email_addr = request.data['emailaddr']
-        message = request.data['message']
-        company_name = request.data.get('company_name')
-        interest_flags = list(filter(lambda key: request.data[key] and isinstance(request.data[key], bool), request.data.keys()))
+        first_name = body['fname']
+        last_name = body['lname']
+        email_addr = body['emailaddr']
+        message = body['message']
+        company_name = body['company_name'] if 'company_name' in body else None
+        interest_flags = list(filter(lambda key: body[key] and isinstance(body[key], bool), body.keys()))
         contact_democracylab_email(first_name, last_name, email_addr, message, company_name, interest_flags)
         return HttpResponse(status=200)
 
