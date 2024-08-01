@@ -11,8 +11,11 @@
     "dev": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "postinstall": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "watch": "webpack --mode development --watch",
-    "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
-    "test": "jest"
+    "buildtask:collectstatic": "echo python manage.py collectstatic --noinput -i *.scss",
+    "test": "jest",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "test-storybook": "test-storybook"
   },
   "engines": {
     "node": "16.20.x"
@@ -75,6 +78,27 @@
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.0",
     "webpack-merge": "^4.2.2"
+  },
+  "optionalDependencies": {
+    "@storybook/addon-a11y": "^7.5.3",
+    "@storybook/addon-actions": "^7.5.3",
+    "@storybook/addon-essentials": "^7.5.3",
+    "@storybook/addon-interactions": "^7.5.3",
+    "@storybook/addon-links": "^7.5.3",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/addons": "^7.5.3",
+    "@storybook/blocks": "^7.5.3",
+    "@storybook/jest": "^0.2.3",
+    "@storybook/react": "^7.5.3",
+    "@storybook/react-webpack5": "^7.5.3",
+    "@storybook/test-runner": "^0.18.2",
+    "@storybook/testing-library": "^0.2.2",
+    "axe-playwright": "^1.2.3",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.7",
+    "expect": "^23.6.0",
+    "jest-enzyme": "^7.1.2",
+    "storybook": "^7.5.3"
   },
   "resolutions": {
     "fstream": "^1.0.12",
