@@ -37,11 +37,14 @@ module.exports = {
   resolve: {
     aliasFields: ['browser']
   },
-  node: {
-      child_process: "empty",
-      fs: "empty",
-      tls: "empty"
+  resolve:{
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      fs: false,
+      tls: false
+    }
   },
+  node: false,
   plugins: [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -57,14 +60,8 @@ module.exports = {
   ],
   optimization: {
     runtimeChunk: 'single',
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
+    splitChunks: { 
+      chunks: 'all'
     },
   },
 }
