@@ -1,11 +1,11 @@
 /** @type { import('@storybook/react-webpack5').StorybookConfig } */
 
-const merge = require('webpack-merge')
+const merge = require('webpack-merge').default
 const webpack = require("webpack");
 const common = require('../webpack.common.js');
 
 const config = {
-  stories: ['../stories/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: ['../**/stories/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-essentials',
@@ -21,7 +21,6 @@ const config = {
     autodocs: 'tag',
   },
   webpackFinal: async (config) => {
-    console.info("merge",merge)
     const newConfig = merge(config, common, {
       mode: 'development',
       devtool: 'source-map',

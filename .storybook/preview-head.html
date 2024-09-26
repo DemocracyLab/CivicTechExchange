@@ -8,6 +8,8 @@
 
 <!-- Initialize the Web Font Loader -->
 <script>
+  if(!window.global) window.global={}
+  window.DLAB_GLOBAL_CONTEXT={}
   WebFont.load({
     google: { families: ['Inter'] },
     inactive: function () {

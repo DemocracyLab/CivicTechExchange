@@ -131,3 +131,6 @@ docker_environment_init.sh
 
 # Exclude Makefiles
 Makefile
+
+# Exclude runtime files created by storybook
+common/static/

@@ -53,7 +53,6 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: 'css/[name].styles.css',
-      allChunks: true,
     })
   ],
   optimization: {
