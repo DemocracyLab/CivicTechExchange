@@ -561,7 +561,7 @@ PASSWORD_RESET_TIMEOUT_DAYS = os.environ.get("PASSWORD_RESET_TIMEOUT_DAYS", 7)
 
 WEBPACK_LOADER = {
     'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'common/static/',
+        'BUNDLE_DIR_NAME': 'js/',
         'STATS_FILE': 'webpack-stats.json',
     }
 }
