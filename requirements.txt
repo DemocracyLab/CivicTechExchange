@@ -35,3 +35,4 @@ six==1.15.0
 whitenoise==5.2.0
 newrelic
 psutil==5.9.0
+django-webpack-loader==3.1.1
