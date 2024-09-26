@@ -34,10 +34,8 @@ module.exports = {
         }
     ]
   },
-  resolve: {
-    aliasFields: ['browser']
-  },
   resolve:{
+    aliasFields: ['browser'],
     extensions: ['*', '.js', '.jsx'],
     fallback: {
       fs: false,
@@ -55,7 +53,6 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: 'css/[name].styles.css',
-      allChunks: true,
     })
   ],
   optimization: {
