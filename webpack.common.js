@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const BundleTracker = require("webpack-bundle-tracker")
 
 module.exports = {
   entry: ["./common/components/mount-components.js", "./civictechprojects/static/css/styles.scss"],
@@ -34,14 +35,15 @@ module.exports = {
         }
     ]
   },
-  resolve: {
-    aliasFields: ['browser']
+  resolve:{
+    aliasFields: ['browser'],
+    extensions: ['*', '.js', '.jsx'],
+    fallback: {
+      fs: false,
+      tls: false
+    }
   },
-  node: {
-      child_process: "empty",
-      fs: "empty",
-      tls: "empty"
-  },
+  node: false,
   plugins: [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -52,14 +54,15 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: 'css/[name].styles.css',
-      allChunks: true,
-    })
+    }),
+    new BundleTracker({ filename: 'webpack-stats.json' }),
   ],
   optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
+    //runtimeChunk: 'single',
+    splitChunks: { 
+      chunks: 'all',
       cacheGroups: {
-        vendor: {
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
