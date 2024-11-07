@@ -132,5 +132,5 @@ docker_environment_init.sh
 # Exclude Makefiles
 Makefile
 
-# Exclude runtime files created by storybook
+# Exclude files create at runtime - by webpack and storybook
 common/static/
