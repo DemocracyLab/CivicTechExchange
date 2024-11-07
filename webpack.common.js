@@ -37,7 +37,7 @@ module.exports = {
   },
   resolve:{
     aliasFields: ['browser'],
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['.*', '.js', '.jsx'],
     fallback: {
       fs: false,
       tls: false
