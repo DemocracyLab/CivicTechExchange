@@ -12,7 +12,7 @@ import SignUpErrorAdapter from "./componentsBySection/signUp/SignUpErrorAdapter.
 
 // TODO: Figure out a better way to prevent react console error where it's
 // expecting node Environment variables
-global.process = {
+window.process = {
   env: {
     NODE_ENV: "production",
   },
