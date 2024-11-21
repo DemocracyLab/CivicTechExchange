@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     "oauth2.providers.facebook",
     "django_rq",
     "salesforce",
-    "webpack_loader",
 ]
 
 # Apps that embed iframes are going to use the resizer
@@ -558,10 +557,3 @@ MALICIOUS_URL_PATTERNS = os.environ.get("MALICIOUS_URL_PATTERNS", None)
 MALICIOUS_FWD_PATTERNS = os.environ.get("MALICIOUS_FWD_PATTERNS", None)
 
 PASSWORD_RESET_TIMEOUT_DAYS = os.environ.get("PASSWORD_RESET_TIMEOUT_DAYS", 7)
-
-WEBPACK_LOADER = {
-    'DEFAULT': {
-        'BUNDLE_DIR_NAME': 'js/',
-        'STATS_FILE': 'webpack-stats.json',
-    }
-}

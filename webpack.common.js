@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const BundleTracker = require("webpack-bundle-tracker")
 
 module.exports = {
   entry: ["./common/components/mount-components.js", "./civictechprojects/static/css/styles.scss"],
@@ -55,10 +54,8 @@ module.exports = {
       // both options are optional
       filename: 'css/[name].styles.css',
     }),
-    new BundleTracker({ filename: 'webpack-stats.json' }),
   ],
   optimization: {
-    //runtimeChunk: 'single',
     splitChunks: { 
       chunks: 'all',
       cacheGroups: {
