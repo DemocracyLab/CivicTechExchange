@@ -70,8 +70,8 @@ target/
 # IPython Notebook
 .ipynb_checkpoints
 
-# pyenv - according to Heroku we need to use .python-version
-#.python-version
+# pyenv
+.python-version
 
 # dotenv
 .env
