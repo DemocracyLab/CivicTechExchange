@@ -11,7 +11,7 @@
     "dev": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "postinstall": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "watch": "webpack --mode development --watch",
-    "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
+    "buildtask:collectstatic": "bash -c \"$NO_PYTHON_BUILD_IF_SET_TO_ECHO python manage.py collectstatic --noinput -i *.scss\"",
     "test": "jest",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
