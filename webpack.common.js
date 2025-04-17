@@ -36,7 +36,7 @@ module.exports = {
   },
   resolve:{
     aliasFields: ['browser'],
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['.*', '.js', '.jsx'],
     fallback: {
       fs: false,
       tls: false
@@ -57,9 +57,15 @@ module.exports = {
     new webpack.ProgressPlugin({ activeModules: true })
   ],
   optimization: {
-    runtimeChunk: 'single',
     splitChunks: { 
-      chunks: 'all'
+      chunks: 'all',
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
     },
   },
 }
