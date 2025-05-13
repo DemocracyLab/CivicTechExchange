@@ -1,9 +1,8 @@
 import React from 'react';
-import VARFormTitle from '../FormTitle';
-
+import VARFormTitle from '../VARFormTitle';
 
 export default {
-    title: 'VolunteerActivityReporting/FormTitle',
+    title: 'VolunteerActivityReporting/VARFormTitle',
     component: VARFormTitle,
     argTypes: {
         formTitle: {
