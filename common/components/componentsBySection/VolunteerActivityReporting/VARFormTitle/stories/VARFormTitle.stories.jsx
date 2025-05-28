@@ -1,3 +1,5 @@
+//@flow
+
 import React from 'react';
 import VARFormTitle from '../VARFormTitle';
 
@@ -7,6 +9,6 @@ export default {
 };
 
 
-export const Default = () => {
+export const Default = (): React.Node => {
    return( <VARFormTitle /> )
 };
