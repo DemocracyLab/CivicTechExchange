@@ -1,0 +1,13 @@
+.var-form-title {
+    font-weight: 500;
+
+    @include media-breakpoint-up(sm){
+            font-size: 21px;
+    }
+    
+    @include media-breakpoint-up(lg){
+            font-size: 39px;
+    }
+    
+};
+
