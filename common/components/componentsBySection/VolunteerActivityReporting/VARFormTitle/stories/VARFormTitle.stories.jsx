@@ -8,7 +8,5 @@ export default {
     component: VARFormTitle,
 };
 
+export const Default = {args: {}};
 
-export const Default = (): React.Node => {
-   return( <VARFormTitle /> )
-};
