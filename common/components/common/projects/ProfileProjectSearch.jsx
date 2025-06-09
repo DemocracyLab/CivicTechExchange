@@ -26,12 +26,6 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
     };
   }
 
-  handleEmptyProject(): void {
-    this.setState({
-      hidden: false,
-    });
-  }
-
   render(): ?$React$Node {
     return this.state.hidden ? (
       <React.Fragment>
@@ -42,7 +36,6 @@ class ProfileProjectSearch extends React.PureComponent<Props, State> {
             staticHeaderText="Participating Projects"
             fullWidth={true}
             selectableCards={false}
-            handleEmptyProject={this.handleEmptyProject.bind(this)}
           />
         </div>
       </React.Fragment>
