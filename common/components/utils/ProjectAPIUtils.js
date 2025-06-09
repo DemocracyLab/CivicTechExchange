@@ -109,6 +109,13 @@ export type VolunteerDetailsAPIData = {|
   +isUpForRenewal: boolean,
 |};
 
+// Structure for minimal volunteer data exposure
+export type VolunteerMinimalDetailsAPIData = {|
+  +application_id: number,
+  +user: VolunteerUserData,
+  +roleTag: TagDefinition,
+|};
+
 export type ProjectDetailsAPIData = {|
   +project_id: number,
   +project_description: string,
@@ -136,7 +143,7 @@ export type ProjectDetailsAPIData = {|
   +project_links: $ReadOnlyArray<LinkInfo>,
   +project_files: $ReadOnlyArray<FileInfo>,
   +project_owners: $ReadOnlyArray<VolunteerUserData>,
-  +project_volunteers: $ReadOnlyArray<VolunteerDetailsAPIData>,
+  +project_volunteers: $ReadOnlyArray<VolunteerMinimalDetailsAPIData>,
   +project_date_modified: Date,
   +project_events: $ReadOnlyArray<EventTileAPIData>,
   +event_created_from: ?number,
