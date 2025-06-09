@@ -349,7 +349,8 @@ class Group(Archived):
             'group_short_description': self.group_short_description,
             'group_project_count': projects.count(),
             'group_slug': self.group_slug,
-            'is_private': self.is_private
+            'is_private': self.is_private,
+            'group_approved': self.is_searchable
         }
 
         if len(projects) > 0:
@@ -499,7 +500,8 @@ class Event(Archived):
             'event_slug': self.event_slug,
             'is_private': self.is_private,
             'show_headers': self.show_headers,
-            "is_activated": self.is_activated
+            "is_activated": self.is_activated,
+            'event_approved': self.is_searchable
         }
 
         if event_room is not None:
