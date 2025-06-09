@@ -111,6 +111,21 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
     );
   }
 
+  //change href to manage page
+  _renderManageProjectsButton(): React$Node {
+    const id = { id: this.props.group.group_id };
+    return (
+      <Button
+        variant="primary"
+        disabled={this.state.buttonDisabled}
+        title={this.state.buttonTitle}
+        href={url.section(Section.GroupProjects, id)}
+      >
+        Manage Projects
+      </Button>
+    );
+  }
+
   _renderContactGroupButton(): React$Node {
     return (
       <Button
@@ -137,13 +152,13 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
     );
   }
 
-  displayEditGroupButton(): ?React$Node {
+  displayOwnerButtons(): ?React$Node {
     if (
       CurrentUser.userID() === this.props.group.group_creator ||
       CurrentUser.isCoOwner(this.props.group) ||
       CurrentUser.isStaff()
     ) {
-      return <div>{this._renderEditGroupButton()}</div>;
+      return <div className="Profile-owner-button-container"><div>{this._renderEditGroupButton()}</div><div>{this._renderManageProjectsButton()}</div></div>;
     }
   }
 
@@ -172,7 +187,7 @@ class ContactGroupButton extends React.PureComponent<Props, State> {
       if (CurrentUser.isLoggedIn()) {
         return (
           <div>
-            {this.displayEditGroupButton()}
+            {this.displayOwnerButtons()}
             {this.displayContactGroupButton()}
           </div>
         );

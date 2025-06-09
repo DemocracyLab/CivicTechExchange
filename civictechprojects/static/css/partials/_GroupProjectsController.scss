@@ -1,0 +1,16 @@
+.GroupProjectController-root {
+  background: $color-background-default;
+  h3 {
+    margin-top: 24px;
+  }
+}
+.GroupProjectController-header{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.GroupProjectController-return-group-button{
+  margin-left: auto;
+  margin-bottom: 8px;
+  cursor: pointer;
+}

@@ -36,3 +36,13 @@
         max-width: 400px; // this is a test of slightly wider toasts @ desktop viewports
     }
 }
+
+/* The animation code */
+@keyframes slidein {
+  from {translate: 100vw;}
+  to {translate: 0%;}
+}
+/* The element to apply the animation to */
+.Toast-animation {
+  animation: 0.3s linear slidein;
+}

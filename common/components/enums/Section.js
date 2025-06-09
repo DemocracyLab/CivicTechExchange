@@ -11,6 +11,7 @@ const Section = {
   FindEvents: "FindEvents",
   MyProjects: "MyProjects",
   MyGroups: "MyGroups",
+  GroupProjects: "GroupProjects",
   MyEvents: "MyEvents",
   Profile: "Profile",
   SignUp: "SignUp",
