@@ -39,7 +39,7 @@ class RemoteInPersonSelector extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({option: RemoteInPersonSelector.getSelected(nextProps)});
   }
 

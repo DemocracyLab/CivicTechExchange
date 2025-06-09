@@ -7,7 +7,7 @@ const ghostContentAPI =
   new GhostContentAPI({
     url: window.GHOST_URL,
     key: window.GHOST_CONTENT_API_KEY,
-    version: "v3",
+    version: "v3.42",
   });
 
 export type GhostPost = {|

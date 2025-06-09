@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.8" 
 
 services:
   db:
@@ -47,6 +47,7 @@ services:
     depends_on:
       - create_table
   web:
+    image: node:latest
     build: .
     env_file:
       - ./.env

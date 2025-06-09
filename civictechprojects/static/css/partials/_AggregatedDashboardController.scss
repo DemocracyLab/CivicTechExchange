@@ -1,0 +1,76 @@
+.Dashboard-summary {
+  background-color: #F6F7F8;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-top: 72px;
+  padding-bottom: 72px;
+}
+
+.Dashboard-detail {
+  background-color: #fff;
+  padding-top: 128px;
+}
+
+.Dashboard-section {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+// #dashboardDisplay {
+//   margin-top: 80px;
+// }
+
+@include media-breakpoint-up(xs) {
+  .Dashboard-detail {
+    padding-top: 64px;
+  }
+  .Dashboard-section {
+    width: 90%;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .Dashboard-detail {
+    padding-top: 64px;
+  }
+  .Dashboard-section {
+    width: 90%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .Dashboard-detail {
+    padding-top: 128px;
+  }
+  .Dashboard-section {
+    width: 80%;
+  }
+}

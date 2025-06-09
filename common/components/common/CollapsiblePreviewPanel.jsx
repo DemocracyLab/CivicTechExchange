@@ -22,7 +22,7 @@ class CollapsiblePreviewPanel extends React.PureComponent<Props, State> {
     this.state = this.initializeState(props);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState(this.initializeState(nextProps));
   }
 

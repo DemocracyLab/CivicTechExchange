@@ -1,0 +1,242 @@
+.AggregatedDashboard-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; // make titles two rows maximum
+    -webkit-box-orient: vertical;
+    font-size: 23px;
+    font-weight: medium;
+    overflow: hidden;
+    align-self: start; // stops character descenders from getting clipped, weird but works
+}
+
+.volunteer-roles-detail {
+    display: flex;
+    // flex-direction: column;
+    justify-content: space-around;
+    // justify-content: center;
+    align-items: center;
+    margin-top: 88px;
+    margin-bottom: 200px;
+}
+
+.volunteer-roles-summary {
+    flex: 1;
+    // text-align: center;
+    // display: flex;
+    align-items: center;
+    // justify-content: space-around;
+}
+
+.volunteer-roles-summary .card-number {
+    text-align: center;
+    align-items: center;
+}
+
+.volunteer-roles-summary .card-number span {
+    color: #F79E02;
+    font-size: 80px;
+    font-family: Montserrat;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.volunteer-roles-summary .card-number h4 {
+    color: #191919;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 16px 0 0 0;
+    padding: 0;
+}
+
+.volunteer-roles-summary .card-text {
+    margin-top: 56px;
+    align-items: center;
+}
+
+.volunteer-roles-summary .card-text span {
+    color: #191919;
+    font-size: 16px;
+    font-weight: normal;
+    font-family: Montserrat;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}
+
+.volunteer-roles-chart {
+    flex: 1;
+    margin-left: 20px;
+    overflow-x: auto;
+}
+
+@include media-breakpoint-up(xs) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 0px;
+        .volunteer-roles-doughnut {
+            width: 275px !important;
+            height: 600px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        display: block;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 64px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 50px;
+            }
+            .card-text {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 40px;
+            }
+            .card-text span {
+                font-size: 15px;
+            }
+            margin-bottom: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(sm) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 0px;
+        .volunteer-roles-doughnut {
+            width: 275px !important;
+            height: 600px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        display: block;
+        flex-wrap: wrap;
+        margin-top: 5px;
+        margin-bottom: 64px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 50px;
+            }
+            .card-text {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 40px;
+            }
+            .card-text span {
+                font-size: 15px;
+            }
+            margin-bottom: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(md) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 0px;
+        .volunteer-roles-doughnut {
+            width: 300px !important;
+            height: 600px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        display: block;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 100px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 50px;
+            }
+            .card-text {
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 40px;
+            }
+            .card-text span {
+                font-size: 15px;
+            }
+            margin-bottom: 40px;
+        }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 20px;
+        .volunteer-roles-doughnut {
+            width: 375px !important;
+            height: 625px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 15px;
+        margin-bottom: 200px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 80px;
+            }
+            .card-text span {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(xl) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 20px;
+        .volunteer-roles-doughnut {
+            width: 375px !important;
+            height: 625px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 200px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 80px;
+            }
+            .card-text span {
+                font-size: 16px;
+            }
+        }
+    }
+}
+
+@include media-breakpoint-up(xxl) {
+    .volunteer-roles-chart {
+        display: flex;
+        justify-content: space-around;
+        margin-left: 20px;
+        .volunteer-roles-doughnut {
+            width: 375px !important;
+            height: 625px !important;
+        }
+    }
+    .volunteer-roles-detail {
+        flex-wrap: nowrap;
+        margin-top: 88px;
+        margin-bottom: 200px;
+        .volunteer-roles-summary {
+            .card-number span {
+                font-size: 80px;
+            }
+            .card-text span {
+                font-size: 16px;
+            }
+        }
+    }
+}

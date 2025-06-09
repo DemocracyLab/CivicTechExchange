@@ -20,7 +20,7 @@ class FlashMessage extends React.Component<{||}, State> {
     };
   }
 
-  componentWillUpdate(nextProps, nextState: State) {
+  UNSAFE_componentWillUpdate(nextProps, nextState: State) {
     if (nextState.section !== this.state.section) {
       window.DLAB_MESSAGES = [];
     }

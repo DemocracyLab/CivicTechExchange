@@ -35,7 +35,7 @@ class Toast extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({ show: nextProps.show });
   }
 

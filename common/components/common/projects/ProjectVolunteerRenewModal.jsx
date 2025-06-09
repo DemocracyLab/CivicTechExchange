@@ -47,7 +47,7 @@ class ProjectVolunteerRenewModal extends React.PureComponent<Props, State> {
     this.handleMessageChange = this.handleMessageChange.bind(this);
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     let state: State = {
       showModal: nextProps.showModal,
     };

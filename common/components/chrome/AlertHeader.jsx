@@ -99,7 +99,7 @@ class AlertHeader extends React.Component<Props, State> {
     };
   }
 
-  componentWillUpdate(nextProps: Props, nextState: State) {
+  UNSAFE_componentWillUpdate(nextProps: Props, nextState: State) {
     if (!nextState.currentAlert) {
       this.setState({
         currentAlert: this.getCurrentAlert(this.state.alertConfigurations),

@@ -70,7 +70,7 @@ class SocialMediaSignupSection extends React.Component<Props, State> {
     };
   }
 
-  componentWillReceiveProps(nextProps: Props): void {
+  UNSAFE_componentWillReceiveProps(nextProps: Props): void {
     this.setState({
       visibleApps: this.getVisibleApps(nextProps),
     });
