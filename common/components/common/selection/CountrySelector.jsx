@@ -87,7 +87,7 @@ export class CountrySelector extends React.Component<Props, State> {
       <Selector
         id={this.props.id || "country"}
         isSearchable={true}
-        isClearable={false}
+        isClearable={true}
         isMultiSelect={false}
         options={this.state.countryOptions}
         labelGenerator={(country: CountryData) => country.displayName}
