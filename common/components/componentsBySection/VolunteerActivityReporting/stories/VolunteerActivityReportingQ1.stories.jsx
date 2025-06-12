@@ -1,13 +1,13 @@
 import React from 'react';
-import VARQ1 from '../VARQ1'; 
+import VolunteerActivityReportingQ1 from '../VolunteerActivityReportingQ1'; 
 
 
 export default {
-  title: 'VAR/VARQ1',
-  component: VARQ1,
+  title: 'VolunteerActivityReporting/VolunteerAactivityReportingQ1',
+  component: VolunteerActivityReportingQ1,
 };
 
-const Template = (args) => <VARQ1 {...args} />;
+const Template = (args) => <VolunteerActivityReportingQ1 {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {

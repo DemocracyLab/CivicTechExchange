@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const VARQ1 = ({ initialValue = 0.0, hasError, className = '' }) => {
+const VolunteerActivityReportingQ1 = ({ initialValue = 0.0, hasError, className = '' }) => {
   const [value, setValue] = useState(initialValue);
 
   const handleChange = (e) => {
@@ -40,12 +40,12 @@ const VARQ1 = ({ initialValue = 0.0, hasError, className = '' }) => {
   );
 };
 
-VARQ1.propTypes = {
+VolunteerActivityReportingQ1.propTypes = {
   initialValue: PropTypes.number,
   hasError: PropTypes.bool,
   className: PropTypes.string,
 };
 
-export default VARQ1;
+export default VolunteerActivityReportingQ1;
 
 
