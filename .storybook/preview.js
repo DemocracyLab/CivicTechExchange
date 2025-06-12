@@ -1,4 +1,6 @@
 import React from 'react'
+import '../civictechprojects/static/css/styles.scss';
+
 
 
 /** @type { import('@storybook/react').Preview } */
