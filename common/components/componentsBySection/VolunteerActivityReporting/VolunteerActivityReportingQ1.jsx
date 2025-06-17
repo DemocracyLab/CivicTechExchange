@@ -22,6 +22,7 @@ const VolunteerActivityReportingQ1 = ({ initialValue = 0.0, hasError, className 
       </div>
       <div className="VARQ1-input-row">
         <input
+          name="hours_spent"
           type="number"
           className={`VARQ1-input ${hasError ? 'input-error' : ''}`}
           value={value}
