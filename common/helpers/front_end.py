@@ -1,4 +1,3 @@
-import re
 from django.conf import settings
 from html import unescape
 from urllib import parse as urlparse

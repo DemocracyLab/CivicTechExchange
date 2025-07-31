@@ -1,7 +1,6 @@
 from django.conf import settings
 from urllib.parse import urljoin, urlparse
 from civictechprojects.models import Event, EventProject, Project, Group
-from civictechprojects.caching.cache import ProjectCache, GroupCache
 from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from common.helpers.redirectors import RedirectTo
