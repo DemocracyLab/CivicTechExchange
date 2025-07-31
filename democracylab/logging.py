@@ -37,8 +37,22 @@ def censor_sensitive_fields(fields_dict):
 
 
 class CustomErrorHandler(logging.Handler):
-    def emit(self, record):
-        error_msg = 'ERROR: {}'.format(traceback.format_exc())
-        if hasattr(record, 'request'):
-            error_msg += ' REQUEST: {}'.format(dump_request_summary(record.request))
-        print(error_msg)
+  def emit(self, record):
+      if record.exc_info:
+          exctype, value, tb = record.exc_info
+          if os.environ.get('DJANGO_DEBUG') == 'False':
+              exception_msg = {
+                  'exception_type': str(exctype),
+                  'message': str(traceback.format_tb(tb, 10))
+              }
+              error_msg = 'ERROR: {}'.format(str(exception_msg))
+          else:
+              error_msg = ''.join(traceback.format_exception(exctype, value, tb))
+      else:
+          error_msg = 'ERROR: {}'.format(record.getMessage())
+    
+      if hasattr(record, 'request'):
+          error_msg += ' REQUEST: {}'.format(dump_request_summary(record.request))
+      print(error_msg)
+
+

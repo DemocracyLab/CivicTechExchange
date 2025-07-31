@@ -14,7 +14,7 @@ from datetime import timedelta
 from dateutil.parser import parse
 from distutils.util import strtobool
 from django.core.mail.backends.smtp import EmailBackend
-
+from democracylab.excepthook import exception_logging
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
