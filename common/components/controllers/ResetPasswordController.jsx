@@ -3,7 +3,7 @@
 import DjangoCSRFToken from "django-react-csrftoken";
 import React from "react";
 import Button from "react-bootstrap/Button";
-
+import urlHelper from "../utils/url";
 type State = {|
   email: string,
 |};
@@ -16,6 +16,10 @@ class ResetPasswordController extends React.Component<{||}, State> {
     };
   }
 
+ //if the user is logged in, navigate back to home page
+ componentDidMount():void{
+  urlHelper.ifAuthThenRedirect();
+}
   render(): React$Node {
     return (
       <div className="LogInController-root">
