@@ -59,6 +59,7 @@
     "aws-sdk": "^2.289.0",
     "babel-loader": "^8.3.0",
     "child_process": "^1.0.2",
+    "compression-webpack-plugin": "6",
     "core-js": "^3.1.4",
     "fs": "0.0.1-security",
     "indent-string": "2.1.0",

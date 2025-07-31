@@ -28,12 +28,19 @@ var/
 .installed.cfg
 *.egg
 *.js.map
+*.js.map.br
+*.js.map.gz
 *.css.map
+*.css.map.gz
+*.css.map.br
 main.styles.css
-
+main.styles.css.gz
+main.styles.css.br
 # Files that are now built automatically during heroku deployment
 bundle.js
 *.bundle.js
+*.bundle.js.gz
+*.bundle.js.br
 styles.css
 
 
