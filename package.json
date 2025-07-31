@@ -10,7 +10,7 @@
     "build": "webpack --config webpack.prod.js && npm run buildtask:collectstatic",
     "dev": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
     "postinstall": "webpack --config webpack.dev.js && npm run buildtask:collectstatic",
-    "watch": "webpack --mode development --watch",
+    "watch": "webpack --config webpack.dev.js --watch",
     "buildtask:collectstatic": "python manage.py collectstatic --noinput -i *.scss",
     "test": "jest"
   },
