@@ -34,14 +34,15 @@ module.exports = {
         }
     ]
   },
-  resolve: {
-    aliasFields: ['browser']
+  resolve:{
+    aliasFields: ['browser'],
+    extensions: ['.*', '.js', '.jsx'],
+    fallback: {
+      fs: false,
+      tls: false
+    }
   },
-  node: {
-      child_process: "empty",
-      fs: "empty",
-      tls: "empty"
-  },
+  node: false,
   plugins: [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
@@ -52,14 +53,13 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: 'css/[name].styles.css',
-      allChunks: true,
-    })
+    }),
   ],
   optimization: {
-    runtimeChunk: 'single',
-    splitChunks: {
+    splitChunks: { 
+      chunks: 'all',
       cacheGroups: {
-        vendor: {
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
           name: 'vendors',
           chunks: 'all',
