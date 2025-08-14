@@ -21,7 +21,6 @@ ENV PYTHONUNBUFFERED 1
 RUN mkdir /code
 WORKDIR /code
 
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN apt-get update && apt-get install -y libgdal-dev
 
 # Install and set up nvm
@@ -34,16 +33,15 @@ RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.35.0/install.sh | b
     && nvm alias default $NODE_VERSION \
     && nvm use default
 
-# Install pip and yarn depedencies before copying directory to Docker image.
+# Install pip and npm depedencies before copying directory to Docker image.
 COPY requirements.txt /code/requirements.txt
 RUN pip install -r requirements.txt
 
-# Copy files needed for yarn install.
-COPY package.json yarn.lock /code/
-RUN yarn config set ignore-engines true
-RUN yarn --frozen-lockfile --link-duplicates --ignore-scripts
-# Permission issue with node-sass https://github.com/sass/node-sass/issues/1579
-RUN npm rebuild node-sass
+# Copy files needed for npm install.
+COPY package.json /code/
+COPY package-lock.json /code/
+
+RUN npm install --ignore-scripts -frozen-lockfile --link-duplicates
 # Copy folders and files whitelisted by .dockerignore.
 COPY . /code/
 
