@@ -1,0 +1,69 @@
+.VARQ2-wrapper {
+font-family: Arial, sans-serif;
+padding: 1rem;
+max-width: 600px;
+margin: 0 auto;
+}
+
+.VARQ2-label {
+display: block;
+margin-bottom: 0.5rem;
+font-size: 1rem;
+font-weight: bold;
+}
+
+.VARQ2-input-container {
+position: relative;
+border: 1px solid #ccc;
+border-radius: 4px;
+padding: 0.5rem;
+transition: border-color 0.2s ease-in-out;
+background-color: #fff;
+}
+
+.VARQ2-input-container.input-error {
+border-color: red;
+}
+
+.VARQ2-input-container.input-focused {
+border-color: #007bff;
+}
+
+.VARQ2-input {
+width: 100%;
+border: none;
+resize: vertical;
+min-height: 40px;
+font-size: 1rem;
+outline: none;
+padding-bottom: 1.5rem;
+overflow: hidden;
+}
+
+.VARQ2-input::placeholder {
+color: #aaa;
+}
+
+.VARQ2-counter-wrapper {
+position: absolute;
+bottom: 0.25rem;
+right: 0.5rem;
+font-size: 0.75rem;
+color: #666;
+}
+
+.VARQ2-char-count.error-color {
+color: red;
+}
+
+.VARQ2-error-message {
+color: red;
+font-size: 0.875rem;
+margin-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+.VARQ2-wrapper {
+max-width: 900px;
+}
+}
