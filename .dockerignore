@@ -16,8 +16,7 @@
 
 # Third-party dependency files.
 !package.json
-!yarn.lock
-!.yarnrc
+!package-lock.json
 !requirements.txt
 
 # Config
