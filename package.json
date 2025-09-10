@@ -45,7 +45,7 @@
     "react-markdown": "^7.0.1",
     "react-moment": "^0.7.9",
     "react-select": "^2.4.2",
-    "react-sortablejs": "^6.0.0",
+    "react-sortablejs": "6.1.1",
     "repeating": "2.0.0",
     "sass-loader": "^8.0.2",
     "sortablejs": "^1.13.0",
