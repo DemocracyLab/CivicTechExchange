@@ -27,6 +27,10 @@ RUN apt-get update && apt-get install -y libgdal-dev
 RUN mkdir /.nvm
 ENV NVM_DIR /.nvm
 ENV NODE_VERSION 16.20.1
+# Copy files needed for npm install.
+COPY package.json /code/
+COPY package-lock.json /code/
+# Install nvm to get the matching node version and run install - has to be all in one RUN command or the PATH won't get the right version of node
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.35.0/install.sh | bash \
     && . $NVM_DIR/nvm.sh \
     && nvm install $NODE_VERSION \
