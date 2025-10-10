@@ -13,13 +13,14 @@ export default {
 };
 
 
-
-
-export const Default = () => <VARFormIntro userFirstName="Chris" />;
+export const Default = {
+    args: {
+        userFirstName: 'Chris',
+    }
+}; 
 
 export const Interactive = {
     args: {
-        userFirstName: ''
+        userFirstName: '',
     }
-
-}
+};
