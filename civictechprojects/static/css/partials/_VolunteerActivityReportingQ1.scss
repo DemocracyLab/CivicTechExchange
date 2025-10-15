@@ -1,0 +1,47 @@
+.VARQ1-wrapper {
+  margin-bottom: 2rem;
+}
+
+.VARQ1-label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 0.25rem;
+
+  .required-asterisk {
+    color: red;
+  }
+}
+
+.VARQ1-example {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.VARQ1-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.VARQ1-input {
+  padding: 0.5rem;
+  font-size: 1rem;
+  width: 80px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+
+  &.input-error {
+    border-color: red;
+  }
+}
+
+.VARQ1-hours-label {
+  font-size: 1rem;
+}
+
+.error-message {
+  margin-top: 0.25rem;
+  color: red;
+  font-size: 0.875rem;
+}

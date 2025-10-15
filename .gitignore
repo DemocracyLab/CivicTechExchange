@@ -118,8 +118,8 @@ share/
 pyvenv.cfg
 
 
-# Don't check in package-lock, as it will conflict with yarn.lock and break the heroku build
-package-lock.json
+# Don't check in yarn.lock, as it cause heroku to use yarn instead of npm
+yarn.lock
 
 # Docker environment config
 docker_environment_init.sh
