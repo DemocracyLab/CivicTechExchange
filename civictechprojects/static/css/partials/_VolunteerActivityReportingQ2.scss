@@ -1,0 +1,58 @@
+.var-q2 {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  background: $color-background-light;
+  border: 1px solid $color-border-weakest;
+  border-radius: 8px;
+  padding: 10px;
+
+  &__label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: $color-text-strongest;
+  }
+
+  &__input-wrapper {
+    position: relative;
+    display: flex;
+  }
+
+  &__input {
+    padding: 10px 12px;
+    border: 1px solid $color-border-weak;
+    border-radius: 6px;
+    background: $color-background-light;
+    resize: none;
+    overflow: hidden;
+    min-height: 80px;
+    font-family: inherit;
+    font-size: inherit;
+    flex: 1;
+    padding-bottom: 30px;
+
+    &--error {
+      border-color: $color-red-50;
+    }
+  }
+
+  &__counter {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    color: $color-text-strong;
+    font-size: 0.85rem;
+    pointer-events: none;
+
+    &--over-limit {
+      color: $color-red-50;
+      font-weight: 600;
+    }
+  }
+
+  &__error {
+    color: $color-red-50;
+    font-size: 0.85rem;
+    margin-top: 6px;
+  }
+}

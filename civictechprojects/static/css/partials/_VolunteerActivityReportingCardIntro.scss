@@ -1,0 +1,33 @@
+.var-card-intro {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+  background: $color-background-light;
+  border: 1px solid $color-border-weakest;
+  border-radius: 8px;
+  padding: 12px;
+
+  &__label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__title {
+    font-weight: 600;
+    color: $color-text-strongest;
+    font-size: 1rem;
+  }
+
+  &__toggle {
+    width: 40px;
+    height: 24px;
+  }
+
+  &__hint {
+    color: $color-text-strong;
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+}

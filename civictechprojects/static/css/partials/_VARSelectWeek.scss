@@ -1,0 +1,32 @@
+.var-select-week {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+
+  &__label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: $color-text-strongest;
+  }
+
+  &__select {
+    padding: 10px 12px;
+    border: 1px solid $color-border-weak;
+    border-radius: 8px;
+    background: $color-background-light;
+    appearance: none;
+  }
+
+  &__error {
+    color: $color-red-50;
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+
+  /* small responsive tweak */
+  @media (max-width: 480px) {
+    &__select {
+      padding: 8px 10px;
+    }
+  }
+}
