@@ -1,0 +1,64 @@
+.VARCardIntro-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.VARCardIntro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.VARCardIntro-project {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* Toggle */
+.VARCardIntro-toggle {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 20px;
+}
+
+.VARCardIntro-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.VARCardIntro-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: #ccc;
+  border-radius: 999px;
+  transition: background-color 0.2s;
+}
+
+.VARCardIntro-slider::before {
+  content: '';
+  position: absolute;
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  top: 3px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.2s;
+}
+
+.VARCardIntro-toggle input:checked + .VARCardIntro-slider {
+  background-color: #16a34a;
+}
+
+.VARCardIntro-toggle input:checked + .VARCardIntro-slider::before {
+  transform: translateX(16px);
+}
+
+.VARCardIntro-message {
+  font-size: 0.875rem;
+  color: #6b7280;
+}

@@ -1,0 +1,37 @@
+.VARSelectWeek-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.VARSelectWeek-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.required {
+  color: red;
+}
+
+.VARSelectWeek-dropdown {
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  padding: 0 0.5rem;
+  font-size: 1rem;
+  background-color: #fff;
+}
+
+.VARSelectWeek-dropdown.error {
+  border-color: #dc2626;
+}
+
+.VARSelectWeek-helper {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.VARSelectWeek-error {
+  font-size: 0.875rem;
+  color: #dc2626;
+}
