@@ -1,5 +1,4 @@
-// @flow
-import * as React from 'react';
+import React, { useState } from 'react';
 import VARSelectWeek from '../VARSelectWeek';
 
 export default {
@@ -7,43 +6,47 @@ export default {
   component: VARSelectWeek,
 };
 
-export const Default = {
+const Wrapper = (args) => {
+  const [week, setWeek] = useState(args.selectedWeek);
+
+  return (
+    <VARSelectWeek
+      {...args}
+      selectedWeek={week}
+      onUpdate={(selectedWeek) => {
+        setWeek(selectedWeek);
+        console.log('Selected week:', selectedWeek);
+      }}
+    />
+  );
+};
+
+export const DefaultState = {
+  render: Wrapper,
   args: {
-    name: 'week_start',
-    weeksBack: 12,
-    allowFuture: false,
+    selectedWeek: null,
   },
 };
 
-export const WithError = {
+export const SelectedWeek = {
+  render: Wrapper,
   args: {
-    name: 'week_start',
-    errorMessage: 'Please choose a week',
-    weeksBack: 4,
+    selectedWeek: {
+      label: 'August 8 – August 14, 2022',
+      startDate: '2022-08-08',
+      endDate: '2022-08-14',
+    },
   },
 };
 
-export const WithDefaultValue = {
+export const ErrorState = {
+  render: Wrapper,
   args: {
-    name: 'week_start',
-    defaultValue: '2025-11-17',
-    weeksBack: 12,
-    allowFuture: false,
-  },
-};
-
-export const ErrorWithLongMessage = {
-  args: {
-    name: 'week_start',
-    errorMessage: 'Invalid date range. Please select a week within the last 12 weeks.',
-    weeksBack: 12,
-  },
-};
-
-export const LimitedWeeksBack = {
-  args: {
-    name: 'week_start',
-    weeksBack: 4,
-    allowFuture: false,
+    selectedWeek: {
+      label: 'August 8 – August 14, 2022',
+      startDate: '2022-08-08',
+      endDate: '2022-08-14',
+    },
+    errorMessage: 'Report already submitted. Please select a different week to log activity.',
   },
 };

@@ -1,35 +1,64 @@
-// @flow
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 
-type Props = {|
-  className?: string,
-  projectName: string,
-  projectId: string | number,
-  defaultChecked?: boolean,
-|};
-
-export default function VolunteerActivityReportingCardIntro({
+const VolunteerActivityReportingCardIntro = ({
   className = '',
+  style,
   projectName,
-  projectId,
-  defaultChecked = false,
-}: Props): React.Node {
-  const inputName = `project_${projectId}_log_activity`;
+  logActivity: propLogActivity = true,
+  onUpdate,
+}) => {
+  const [logActivity, setLogActivity] = useState(propLogActivity);
+
+  // Sync state if parent updates logActivity (e.g. fetched data)
+  useEffect(() => {
+    setLogActivity(propLogActivity);
+  }, [propLogActivity]);
+
+  const handleToggle = () => {
+    const updatedValue = !logActivity;
+    setLogActivity(updatedValue);
+
+    if (onUpdate) {
+      onUpdate({ logActivity: updatedValue });
+    }
+  };
 
   return (
-    <div className={(className || '') + ' var-card-intro'}>
-      <label className="var-card-intro__label">
-        <span className="var-card-intro__title">{projectName}</span>
-        <input
-          type="checkbox"
-          name={inputName}
-          defaultChecked={defaultChecked}
-          className="var-card-intro__toggle"
-        />
-      </label>
-      {!defaultChecked && (
-        <div className="var-card-intro__hint">No activity to log</div>
-      )}
+    <div
+      className={`VARCardIntro-wrapper ${className}`}
+      style={style}
+    >
+      <div className="VARCardIntro-header">
+        <span className="VARCardIntro-project">
+          Project: {projectName}
+        </span>
+
+        <label className="VARCardIntro-toggle">
+          <input
+            type="checkbox"
+            checked={logActivity}
+            onChange={handleToggle}
+          />
+          <span className="VARCardIntro-slider" />
+        </label>
+      </div>
+
+      <div className="VARCardIntro-message">
+        {logActivity
+          ? 'Log activity for this project'
+          : 'No activity to log'}
+      </div>
     </div>
   );
-}
+};
+
+VolunteerActivityReportingCardIntro.propTypes = {
+  className: PropTypes.string,
+  style: PropTypes.object,
+  projectName: PropTypes.string.isRequired,
+  logActivity: PropTypes.bool,
+  onUpdate: PropTypes.func,
+};
+
+export default VolunteerActivityReportingCardIntro;

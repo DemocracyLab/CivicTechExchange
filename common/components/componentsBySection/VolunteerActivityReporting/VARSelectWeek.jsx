@@ -1,67 +1,83 @@
-// @flow
-import * as React from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { format, startOfWeek, endOfWeek, subWeeks } from 'date-fns';
 
-type Props = {|
-  name?: string,
-  defaultValue?: string,
-  errorMessage?: ?string,
-  weeksBack?: number,
-  allowFuture?: boolean,
-|};
-
-function isoDate(d: Date): string {
-  return d.toISOString().slice(0, 10);
-}
-
-function getWeekStart(date: Date): Date {
-  // Return Monday as week start
-  const d = new Date(date);
-  const day = d.getDay();
-  const diff = (day + 6) % 7; // days since Monday
-  d.setDate(d.getDate() - diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-export default function VARSelectWeek({
-  name = 'week_start',
-  defaultValue,
-  errorMessage,
-  weeksBack = 12,
-  allowFuture = false,
-}: Props): React.Node {
+/**
+ * Helper to generate recent week ranges
+ */
+const generateWeeks = (count = 8) => {
+  const weeks = [];
   const today = new Date();
-  const start = getWeekStart(today);
-  const options = [];
 
-  for (let i = 0; i < weeksBack; i++) {
-    const weekStart = new Date(start);
-    weekStart.setDate(start.getDate() - i * 7);
-    const iso = isoDate(weekStart);
-    const labelStart = weekStart.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekStart.getDate() + 6);
-    const labelEnd = weekEnd.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
-    options.push({ value: iso, label: `${labelStart} - ${labelEnd}` });
+  for (let i = 0; i < count; i += 1) {
+    const start = startOfWeek(subWeeks(today, i), { weekStartsOn: 1 });
+    const end = endOfWeek(start, { weekStartsOn: 1 });
+
+    weeks.push({
+      label: `${format(start, 'MMMM d')} – ${format(end, 'MMMM d, yyyy')}`,
+      startDate: format(start, 'yyyy-MM-dd'),
+      endDate: format(end, 'yyyy-MM-dd'),
+    });
   }
 
-  // optional future weeks
-  if (allowFuture) {
-    const future = new Date(start);
-    future.setDate(start.getDate() + 7);
-    options.unshift({ value: isoDate(future), label: 'Next week' });
-  }
+  return weeks;
+};
+
+const VARSelectWeek = ({ selectedWeek, onUpdate, errorMessage }) => {
+  const weeks = generateWeeks();
+
+  const handleChange = (e) => {
+    const week = weeks.find(w => w.startDate === e.target.value);
+    if (week && onUpdate) {
+      onUpdate(week);
+    }
+  };
 
   return (
-    <div className="var-select-week">
-      <label className="var-select-week__label">Week</label>
-      <select name={name} defaultValue={defaultValue || ''} className="var-select-week__select">
-        <option value="">Select a week</option>
-        {options.map(opt => (
-          <option key={opt.value} value={opt.value}>{opt.label}</option>
+    <div className="VARSelectWeek-wrapper">
+      <label className="VARSelectWeek-label">
+        Logging Activity for Week of: <span className="required">*</span>
+      </label>
+
+      <select
+        className={`VARSelectWeek-dropdown ${errorMessage ? 'error' : ''}`}
+        value={selectedWeek?.startDate || ''}
+        onChange={handleChange}
+      >
+        <option value="" disabled>
+          Select a week
+        </option>
+        {weeks.map((week) => (
+          <option key={week.startDate} value={week.startDate}>
+            {week.label}
+          </option>
         ))}
       </select>
-      {errorMessage && <div className="var-select-week__error">{errorMessage}</div>}
+
+      {!errorMessage && (
+        <div className="VARSelectWeek-helper">
+          Use dropdown to select an earlier week
+        </div>
+      )}
+
+      {errorMessage && (
+        <div className="VARSelectWeek-error">
+          {errorMessage}
+      </div>
+      )}
+
     </div>
   );
-}
+};
+
+VARSelectWeek.propTypes = {
+  selectedWeek: PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    startDate: PropTypes.string.isRequired,
+    endDate: PropTypes.string.isRequired,
+  }),
+  onUpdate: PropTypes.func,
+  errorMessage: PropTypes.string,
+};
+
+export default VARSelectWeek;

@@ -1,32 +1,37 @@
-.var-select-week {
+.VARSelectWeek-wrapper {
   display: flex;
   flex-direction: column;
-  margin-bottom: 16px;
+  gap: 0.25rem;
+}
 
-  &__label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: $color-text-strongest;
-  }
+.VARSelectWeek-label {
+  font-weight: 600;
+  font-size: 1rem;
+}
 
-  &__select {
-    padding: 10px 12px;
-    border: 1px solid $color-border-weak;
-    border-radius: 8px;
-    background: $color-background-light;
-    appearance: none;
-  }
+.required {
+  color: red;
+}
 
-  &__error {
-    color: $color-red-50;
-    margin-top: 6px;
-    font-size: 0.9rem;
-  }
+.VARSelectWeek-dropdown {
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #cbd5e1;
+  padding: 0 0.5rem;
+  font-size: 1rem;
+  background-color: #fff;
+}
 
-  /* small responsive tweak */
-  @media (max-width: 480px) {
-    &__select {
-      padding: 8px 10px;
-    }
-  }
+.VARSelectWeek-dropdown.error {
+  border-color: #dc2626;
+}
+
+.VARSelectWeek-helper {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.VARSelectWeek-error {
+  font-size: 0.875rem;
+  color: #dc2626;
 }

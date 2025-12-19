@@ -1,40 +1,51 @@
-// @flow
-import * as React from 'react';
 import VolunteerActivityReportingCardIntro from '../VolunteerActivityReportingCardIntro';
 
 export default {
-  title: 'VolunteerActivityReporting/VolunteerActivityReportingCardIntro',
+  title: 'VolunteerActivityReporting/VARCardIntro',
   component: VolunteerActivityReportingCardIntro,
 };
 
-export const Default = {
+export const DefaultState = {
   args: {
-    projectName: 'Democracy Lab Project',
-    projectId: '1',
-    defaultChecked: false,
+    projectName: 'DemocracyLab',
+    logActivity: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Displays project name with log activity toggle enabled.',
+      },
+    },
   },
 };
 
-export const Checked = {
+export const NoActivity = {
   args: {
-    projectName: 'Open Data Project',
-    projectId: '2',
-    defaultChecked: true,
+    projectName: 'DemocracyLab',
+    logActivity: false,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Displays placeholder message when there is no activity to log.',
+      },
+    },
   },
 };
 
-export const UncheckedWithHint = {
+export const Interaction = {
   args: {
-    projectName: 'Community Engagement Project',
-    projectId: '3',
-    defaultChecked: false,
+    projectName: 'DemocracyLab',
+    logActivity: true,
+    onUpdate: (state) => {
+      console.log('Updated state:', state);
+    },
   },
-};
-
-export const LongProjectName = {
-  args: {
-    projectName: 'Building Accessible Government Data Portals for Civic Technology Innovation',
-    projectId: '4',
-    defaultChecked: false,
+  parameters: {
+    docs: {
+      description: {
+        story: 'Toggling the switch updates the internal state and triggers onUpdate.',
+      },
+    },
   },
 };

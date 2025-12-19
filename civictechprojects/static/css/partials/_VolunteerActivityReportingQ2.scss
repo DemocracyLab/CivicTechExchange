@@ -1,58 +1,70 @@
-.var-q2 {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 16px;
-  background: $color-background-light;
-  border: 1px solid $color-border-weakest;
-  border-radius: 8px;
-  padding: 10px;
+.VARQ2-wrapper {
+  font-family: Arial, sans-serif;
+  padding: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
 
-  &__label {
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: $color-text-strongest;
-  }
+.VARQ2-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+}
 
-  &__input-wrapper {
-    position: relative;
-    display: flex;
-  }
+.VARQ2-input-container {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  transition: border-color 0.2s ease-in-out;
+  background-color: #fff;
+}
 
-  &__input {
-    padding: 10px 12px;
-    border: 1px solid $color-border-weak;
-    border-radius: 6px;
-    background: $color-background-light;
-    resize: none;
-    overflow: hidden;
-    min-height: 80px;
-    font-family: inherit;
-    font-size: inherit;
-    flex: 1;
-    padding-bottom: 30px;
+.VARQ2-input-container.over-limit {
+  border-color: red;
+}
 
-    &--error {
-      border-color: $color-red-50;
-    }
-  }
+.VARQ2-input {
+  width: 100%;
+  border: none;
+  resize: vertical;
+  min-height: 40px;
+  font-size: 1rem;
+  outline: none;
+  padding-bottom: 1.5rem;
+  overflow: hidden;
+}
 
-  &__counter {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    color: $color-text-strong;
-    font-size: 0.85rem;
-    pointer-events: none;
+/* Focus handled via CSS — no JS state */
+.VARQ2-input:focus {
+  outline: none;
+}
 
-    &--over-limit {
-      color: $color-red-50;
-      font-weight: 600;
-    }
-  }
+.VARQ2-input::placeholder {
+  color: #aaa;
+}
 
-  &__error {
-    color: $color-red-50;
-    font-size: 0.85rem;
-    margin-top: 6px;
+.VARQ2-counter-wrapper {
+  position: absolute;
+  bottom: 0.25rem;
+  right: 0.5rem;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.VARQ2-char-count.error-color {
+  color: red;
+}
+
+.VARQ2-error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .VARQ2-wrapper {
+    max-width: 900px;
   }
 }
