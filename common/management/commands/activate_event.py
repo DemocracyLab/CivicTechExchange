@@ -15,7 +15,6 @@ class Command(BaseCommand):
         room_ids = [0] + list(map(lambda ep: ep.project.id, event_projects))
         event_project_index = {ep.project.id: ep for ep in event_projects}
         # TODO: Batch these calls properly when bug is fixed on Qiqochat's side
-        qiqo_event_id = event.event_live_id
         for room_id in room_ids:
             event_project = event_project_index[room_id] if room_id != 0 else None
             EventConferenceRoom.create_for_entity(event, event_project)

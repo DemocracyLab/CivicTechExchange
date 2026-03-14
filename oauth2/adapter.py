@@ -14,7 +14,6 @@ from civictechprojects.models import ProjectFile, FileCategory
 from democracylab.models import Contributor
 from django.contrib.auth.models import User
 from django.utils import timezone
-import simplejson as json
 
 
 class MissingOAuthFieldError(ReportableError):

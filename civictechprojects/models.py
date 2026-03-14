@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.utils import timezone
 from django.contrib.gis.db.models import PointField
@@ -558,9 +557,6 @@ class Event(Archived):
         project_list = Project.objects.filter(id__in=project_ids)
 
         return [Tag.hydrate_to_json(project.id, list(project.project_issue_area.all().values())) for project in project_list]
-
-    def get_event_files(self):
-        return ProjectFile.objects.filter(file_event=self, file_project=None, file_user=None, file_group=None)
 
     def get_linked_projects(self):
         projects = Project.objects.filter(project_events__event=self, project_events__deleted=False, is_searchable=True)
