@@ -70,8 +70,8 @@
     "regenerator-runtime": "^0.13.2",
     "sass": "^1.52.1",
     "sync-exec": "~0.6.2",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.42.0",
+    "terser-webpack-plugin": "^5.4.0",
+    "webpack": "^5.105.4",
     "webpack-cli": "^3.3.0",
     "webpack-dev-server": "^3.3.0",
     "webpack-merge": "^4.2.2"
