@@ -77,7 +77,11 @@ class MainHeader extends React.Component<{||}, State> {
       <Navbar collapseOnSelect expand="lg" bg="navlight" variant="light">
         <Navbar.Brand>
           <a href={urlHelper.section(Section.Home)}>
-            <img src={cdn.image("dl_logo.png")} alt="DemocracyLab - Home" />
+            <img
+              src={cdn.image("dl_logo.png")}
+              alt="DemocracyLab - Home"
+              style={{ width: "178px", height: "53px" }}
+            />
           </a>
         </Navbar.Brand>
         {CurrentUser.isLoggedIn() ? null : (
@@ -90,7 +94,10 @@ class MainHeader extends React.Component<{||}, State> {
           </Button>
         )}
         <Navbar.Toggle aria-controls="nav-pagenav-container" />
-        <Navbar.Collapse id="nav-pagenav-container" className="MainHeader-nav-flex">
+        <Navbar.Collapse
+          id="nav-pagenav-container"
+          className="MainHeader-nav-flex"
+        >
           <Nav className="MainHeader-usernav ml-auto">
             {CurrentUser.isLoggedIn()
               ? this._renderUserSection()
