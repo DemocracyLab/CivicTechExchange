@@ -42,6 +42,7 @@ import AboutEventProjectController from "./AboutEventProjectController.jsx";
 import CreateEventProjectController from "./CreateEventProjectController.jsx";
 import PrivacyController from "./PrivacyController.jsx";
 import TermsController from "./TermsController.jsx";
+import GroupProjectsController from "./GroupProjectsController.jsx";
 
 type State = {|
   section: SectionType,
@@ -123,6 +124,8 @@ class SectionController extends React.Component<{||}, State> {
         return <MyGroupsController />;
       case Section.MyEvents:
         return <MyEventsController />;
+      case Section.GroupProjects:
+        return <GroupProjectsController/>
       case Section.AboutEvent:
         return <AboutEventController />;
       case Section.LiveEvent:

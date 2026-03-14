@@ -204,6 +204,6 @@ def get_tag_counts(category=None, event=None, group=None):
     for slug in querydict.keys():
         resultdict[slug] = Tag.hydrate_tag_model(querydict[slug])
         resultdict[slug]["num_times"] = (
-            activetagdict[slug] if slug in activetagdict else 0
+            activetagdict[slug] if activetagdict and slug in activetagdict else 0
         )
     return list(resultdict.values())

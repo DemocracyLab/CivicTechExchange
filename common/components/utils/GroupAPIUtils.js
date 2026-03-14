@@ -12,6 +12,7 @@ import type {
   APIError,
 } from "./ProjectAPIUtils.js";
 import type { Dictionary } from "../types/Generics.jsx";
+import htmlDocument from "./htmlDocument.js";
 
 export type GroupTileAPIData = {|
   group_id: string,
@@ -65,7 +66,16 @@ export default class GroupAPIUtils {
           })
       );
   }
-
+  static async removeProjectFromGroup({groupId,projectId,message},callback:?(APIResponse)=>void,errCallback:?(APIError)=>void){
+    const url =
+      `/api/groups/${groupId}/projects/remove/${projectId}/`;
+    return this.post(
+      url,
+      {message},
+      callback,
+      errCallback
+    );
+  }
   static fetchAllTags(
     callback: ($ReadOnlyArray<TagDefinition>) => void,
     errCallback: APIError => void
@@ -81,6 +91,54 @@ export default class GroupAPIUtils {
             errorMessage: JSON.stringify(response),
           })
       );
+  }
+  static post(
+    url: string,
+    body: {||},
+    successCallback: ?(APIResponse) => void,
+    errCallback: ?(APIError) => void,
+    additionalHeaders: ?Dictionary<string>
+  ): Promise<APIResponse> {
+    const doError = response =>
+      errCallback &&
+      errCallback({
+        errorCode: response.status,
+        errorMessage: JSON.stringify(response),
+      });
+
+    const cookies = htmlDocument.cookies();
+    let headers: Dictionary<string> = Object.assign(
+      {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": cookies["csrftoken"],
+      },
+      additionalHeaders
+    );
+
+    let promise: Promise<APIResponse> = fetch(
+      new Request(url, {
+        method: "POST",
+        body: JSON.stringify(body),
+        credentials: "include",
+        headers: headers,
+      })
+    );
+
+    if (successCallback) {
+      promise = promise.then(response =>
+        (response.status < 400)?
+           successCallback(response)
+          : doError(response)
+      );
+    }
+
+    if (errCallback) {
+      promise = promise.catch(response => doError(response));
+    }
+
+    return promise;
   }
 
   static getLocationDisplayName(group: GroupDetailsAPIData): string {
