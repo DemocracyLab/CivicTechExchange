@@ -122,10 +122,16 @@ class CreateEventController extends React.PureComponent<{||}, State> {
   }
 
   onFinalSubmitSuccess(event: EventData): void {
-    window.location.href = url.section(Section.AboutEvent, {
-      id: event.event_id,
-      eventAwaitingApproval: url.encodeNameForUrlPassing(event.event_name),
-    });
+
+    if(!event.event_approved){
+      window.location.href = url.section(Section.AboutEvent, {
+        id: event.event_id,
+        eventAwaitingApproval: url.encodeNameForUrlPassing(event.event_name),
+      });
+    } else {
+      window.location.href = url.section(Section.AboutEvent, null);
+    }
+  
   }
 
   render(): React$Node {
