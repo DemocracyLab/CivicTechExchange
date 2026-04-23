@@ -158,17 +158,54 @@ Components that render lists of items should use CSS flexbox or grid for layout,
 
 **Why:** Flexbox and grid handle item sizing and wrapping automatically, eliminating manual column math and making layouts naturally fluid.
 
+Prefer `auto-fill` with `minmax()` over hardcoding a column count. This lets the grid fit as many columns as the available width allows — a laptop gets 3, a 4K monitor gets 6 or more, a phone gets 1 — all without extra breakpoints.
+
 ```scss
-// Multi-column list — desktop 3 cols, mobile 1 col
+// ❌ Wrong — hardcodes 3 columns regardless of screen width
 .project-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+}
+
+// ✅ Correct — fills columns based on available space
+.project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: 1rem;
+}
+```
+
+`minmax(18rem, 1fr)` means: each column is at least `18rem` wide, and columns share leftover space equally. **The minimum width should reflect the content** — what is the narrowest the item can be before it becomes hard to read or use? This varies significantly by content type:
+
+| Content type | Suggested minimum | Why |
+|---|---|---|
+| Small tags, chips, avatars | `6rem`–`8rem` | Items are compact; many fit comfortably side by side |
+| Project cards with title + description | `16rem`–`20rem` | Need enough width to read a headline and a line or two of text |
+| Article highlights with image + summary | `22rem`–`28rem` | Richer content needs more horizontal space to avoid feeling cramped |
+| Data table rows | avoid `auto-fill` | Use explicit columns; table cells have fixed semantic relationships |
+
+When the minimum is set appropriately, the grid collapses to one column automatically on narrow screens — no explicit `$breakpoint-mobile` is needed just to control column count.
+
+**Use `$breakpoint-mobile` when the item's internal layout needs to change**, not just how many columns there are. A common case is article highlights, where on mobile you might want the image stacked above the text rather than side by side:
+
+```scss
+// Article highlight grid — columns auto-fit, image/text layout changes at mobile
+.article-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+  gap: 1.5rem;
+}
+
+.article-card {
+  display: flex;
+  flex-direction: row;   // image left, text right on desktop
   gap: 1rem;
 
   @media (max-width: $breakpoint-mobile) {
-    grid-template-columns: 1fr;
+    flex-direction: column;  // image stacked above text on mobile
   }
 }
+```
 
 // Horizontal row that wraps — each item fills evenly
 .tag-list {
@@ -176,7 +213,6 @@ Components that render lists of items should use CSS flexbox or grid for layout,
   flex-wrap: wrap;
   gap: 0.5rem;
 }
-```
 
 Prefer `gap` over margins between items — `gap` only applies between items, not on the outside edges.
 
