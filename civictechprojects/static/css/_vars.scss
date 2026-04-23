@@ -135,3 +135,6 @@ $color-background-info: #add8e6; // info messages
 $color-background-success: #a3ffa6; // success messages
 $color-background-error: #ffcfcf; //error messages
 $color-opacity-layer: #231f20; //  overlay opacity, see SplashScreen component. Not used for modals.
+
+// ## breakpoints
+$breakpoint-mobile: 48rem; // mobile vs desktop (equivalent to 768px at default font size)
