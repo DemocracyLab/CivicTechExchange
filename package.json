@@ -20,7 +20,7 @@
   "dependencies": {
     "@tryghost/content-api": "^1.11.13",
     "bluebird": "^3.5.2",
-    "css-loader": "^3.4.2",
+    "css-loader": "^7.1.4",
     "django-react-csrftoken": "^1.0.4",
     "flow-bin": "^0.75.0",
     "flux": "^4.0.0",
@@ -31,7 +31,7 @@
     "mini-css-extract-plugin": "^0.9.0",
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.35",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
     "path": "^0.12.7",
     "react": "^16.11.0",
     "react-bootstrap": "^1.0.1",
