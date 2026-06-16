@@ -1,3 +1,35 @@
+"""
+Mailchimp setup instructions
+
+1. Create a Mailchimp account and audience
+    - In Mailchimp, create or choose the audience that should receive signups.
+    - Turn on audience double opt-in in Mailchimp if your compliance policy requires
+      it. This module already uses member status "pending", which triggers
+      confirmation email flow.
+
+2. Create an API key
+    - In Mailchimp: Profile -> Extras -> API keys -> Create A Key.
+    - Copy the generated key.
+
+3. Configure app environment variables
+    - Set MAILCHIMP_API_KEY to your Mailchimp API key.
+    - Set MAILCHIMP_SUBSCRIBE_LIST_ID to your audience/list id.
+
+4. Find your audience/list id
+    - In Mailchimp audience settings, copy the Audience ID.
+    - Use that value for MAILCHIMP_SUBSCRIBE_LIST_ID.
+
+5. Verify the signup flow
+    - Start the app and submit signup with newsletter opt-in.
+    - Verify the user email first (subscription is deferred until verification).
+    - Confirm a "pending" member appears in Mailchimp and receives opt-in email.
+
+Security notes
+    - Do not change status from "pending" to "subscribed" here unless you also
+      update abuse protections and legal/compliance review.
+    - Keep CAPTCHA and signup rate limiting enabled on the signup endpoint.
+"""
+
 import threading
 from mailchimp3 import MailChimp
 from django.conf import settings

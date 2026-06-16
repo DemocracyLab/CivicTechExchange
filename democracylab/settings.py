@@ -414,6 +414,10 @@ CSP_CONNECT_SRC = (
     "*.google-analytics.com",
     "*.nr-data.net",
     "*.hereapi.com",
+    # reCAPTCHA posts token validation requests to Google endpoints.
+    "https://www.google.com",
+    # reCAPTCHA also loads assets from Google's static CDN.
+    "https://www.gstatic.com",
     "https://*.hotjar.com",
     "https://*.hotjar.io",
     "wss://*.hotjar.com",
