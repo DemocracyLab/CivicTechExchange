@@ -16,6 +16,7 @@ class UserTaggedTechnologies(TaggedItemBase):
 
 class Contributor(User):
     email_verified = models.BooleanField(default=False)
+    newsletter_signup_requested = models.BooleanField(default=False)
     country = models.CharField(max_length=2, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     phone_primary = models.CharField(max_length=200, blank=True)

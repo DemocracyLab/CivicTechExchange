@@ -16,10 +16,18 @@ class SubscribeToMailingList(object):
         err_msg = "Failed to subscribe {first} {last}({email}) to mailing list: {err_msg}".format(
             first=self.first_name,
             last=self.last_name,
-            email=self.email,
+            email=self.masked_email(),
             err_msg=err_msg,
         )
         print(err_msg)
+
+    def masked_email(self):
+        if not self.email or '@' not in self.email:
+            return '***'
+
+        local, domain = self.email.split('@', 1)
+        visible = local[:2] if len(local) >= 2 else local[:1]
+        return '{local}***@{domain}'.format(local=visible, domain=domain)
 
     def run(self):
         if settings.MAILCHIMP_API_KEY is None:
@@ -36,7 +44,7 @@ class SubscribeToMailingList(object):
                 list_id,
                 {
                     "email_address": self.email,
-                    "status": "subscribed",
+                    "status": "pending",
                     "merge_fields": merge_fields,
                 },
             )

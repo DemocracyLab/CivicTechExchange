@@ -2,19 +2,71 @@ from common.helpers.constants import FrontEndSection
 from common.helpers.front_end import section_url
 from common.helpers.mailing_list import SubscribeToMailingList
 from common.helpers.qiqo_chat import SubscribeUserToQiqoChat
+from django.conf import settings
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib import messages
+from django.core.cache import cache
 from django.shortcuts import redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import simplejson as json
+import requests
 from .emails import send_verification_email, send_password_reset_email
 from .forms import DemocracyLabUserCreationForm, DemocracyLabUserAddDetailsForm
 from .models import Contributor, get_request_contributor, get_contributor_by_username
 from .tokens import email_verify_token_generator
 from oauth2 import registry
 from salesforce import contact as salesforce_contact
+
+
+def _client_ip(request):
+    forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if forwarded_for:
+        return forwarded_for.split(',')[0].strip()
+    return request.META.get('REMOTE_ADDR', '')
+
+
+def _is_signup_rate_limited(request):
+    ip = _client_ip(request)
+    cache_key = 'signup-attempts:{ip}'.format(ip=ip)
+    limit = settings.SIGNUP_RATE_LIMIT_ATTEMPTS
+    window_seconds = settings.SIGNUP_RATE_LIMIT_WINDOW_SECONDS
+
+    attempts = cache.get(cache_key, 0)
+    if attempts >= limit:
+        return True
+
+    if attempts == 0:
+        cache.set(cache_key, 1, timeout=window_seconds)
+    else:
+        try:
+            cache.incr(cache_key)
+        except ValueError:
+            cache.set(cache_key, attempts + 1, timeout=window_seconds)
+    return False
+
+
+def _is_signup_captcha_valid(request):
+    if not settings.GR_SECRETKEY:
+        return True
+
+    recaptcha_value = request.POST.get('reCaptchaValue')
+    if not recaptcha_value:
+        return False
+
+    try:
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={
+                'secret': settings.GR_SECRETKEY,
+                'response': recaptcha_value,
+            },
+            timeout=5,
+        )
+        return response.status_code == 200 and response.json().get('success') is True
+    except Exception:
+        return False
 
 
 def login_view(request, provider=None):
@@ -60,17 +112,27 @@ def logout_view(request):
 
 def signup(request):
     if request.method == 'POST':
+        if _is_signup_rate_limited(request):
+            messages.error(request, 'Too many signup attempts. Please wait a minute and try again.')
+            return redirect(section_url(FrontEndSection.SignUp))
+
+        if not _is_signup_captcha_valid(request):
+            messages.error(request, 'Captcha validation failed. Please try again.')
+            return redirect(section_url(FrontEndSection.SignUp))
+
         form = DemocracyLabUserCreationForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data.get('email')
             raw_password = form.cleaned_data.get('password1')
+            subscribe_checked = bool(form.data.get('newsletter_signup'))
             # TODO: Form validation
             contributor = Contributor(
                 username=email.lower(),
                 email=email.lower(),
                 first_name=form.cleaned_data.get('first_name'),
                 last_name=form.cleaned_data.get('last_name'),
-                email_verified=False
+                email_verified=False,
+                newsletter_signup_requested=subscribe_checked,
             )
             contributor.set_password(raw_password)
             contributor.save()
@@ -78,11 +140,6 @@ def signup(request):
             user = authenticate(username=contributor.username, password=raw_password)
             login(request, user)
             send_verification_email(contributor)
-
-            subscribe_checked = form.data.get('newsletter_signup')
-            if subscribe_checked:
-                SubscribeToMailingList(email=contributor.email, first_name=contributor.first_name,
-                                       last_name=contributor.last_name)
 
             SubscribeUserToQiqoChat(contributor)
 
@@ -139,7 +196,17 @@ def verify_user(request, user_id, token):
         # TODO: Add feedback from the frontend to indicate success/failure
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
+        subscribe_to_newsletter = contributor.newsletter_signup_requested
+        contributor.newsletter_signup_requested = False
         contributor.save()
+
+        if subscribe_to_newsletter:
+            SubscribeToMailingList(
+                email=contributor.email,
+                first_name=contributor.first_name,
+                last_name=contributor.last_name,
+            )
+
         return redirect(section_url(FrontEndSection.EmailVerified))
     else:
         return HttpResponse(status=401)

@@ -2,6 +2,7 @@
 
 import DjangoCSRFToken from "django-react-csrftoken";
 import React from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import type { Validator } from "../forms/FormValidation.jsx";
 import FormValidation from "../forms/FormValidation.jsx";
 import metrics from "../utils/metrics.js";
@@ -27,6 +28,7 @@ type State = {|
   validations: $ReadOnlyArray<Validator>,
   termsOpen: boolean,
   didCheckTerms: boolean,
+  reCaptchaValue: ?string,
   isValid: boolean,
 |};
 
@@ -50,6 +52,7 @@ class SignUpController extends React.Component<Props, State> {
       password2: "",
       termsOpen: false,
       didCheckTerms: false,
+      reCaptchaValue: null,
       isValid: false,
       validations: [
         {
@@ -88,8 +91,21 @@ class SignUpController extends React.Component<Props, State> {
           checkFunc: (state: State) => state.didCheckTerms,
           errorMessage: "Agree to terms of service",
         },
+        {
+          checkFunc: (state: State) =>
+            !this.isCaptchaEnabled() || !_.isEmpty(state.reCaptchaValue),
+          errorMessage: "Please complete the captcha",
+        },
       ],
     };
+  }
+
+  isCaptchaEnabled(): boolean {
+    return !_.isEmpty(window.GR_SITEKEY);
+  }
+
+  reCaptchaOnChange(value: ?string): void {
+    this.setState({ reCaptchaValue: value });
   }
 
   onValidationCheck(isValid: boolean): void {
@@ -153,6 +169,11 @@ class SignUpController extends React.Component<Props, State> {
               />
             </div>
             <input name="password" value={this.state.password1} type="hidden" />
+            <input
+              name="reCaptchaValue"
+              value={this.state.reCaptchaValue || ""}
+              type="hidden"
+            />
 
             <div>
               <input name="newsletter_signup" type="checkbox" />
@@ -205,6 +226,15 @@ class SignUpController extends React.Component<Props, State> {
               onValidationCheck={this.onValidationCheck.bind(this)}
               formState={this.state}
             />
+
+            {this.isCaptchaEnabled() ? (
+              <div className="LogInController-captcha">
+                <ReCAPTCHA
+                  sitekey={window.GR_SITEKEY}
+                  onChange={this.reCaptchaOnChange.bind(this)}
+                />
+              </div>
+            ) : null}
 
             <Button
               variant="success"

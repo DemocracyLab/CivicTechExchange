@@ -312,6 +312,8 @@ GOOGLE_CONVERSION_IDS = ast.literal_eval(
 # Google ReCaptcha keys - site key is exposed to the front end, secret is not
 GR_SITEKEY = os.environ.get("GOOGLE_RECAPTCHA_SITE_KEY", "")
 GR_SECRETKEY = os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY", "")
+SIGNUP_RATE_LIMIT_ATTEMPTS = int(os.environ.get("SIGNUP_RATE_LIMIT_ATTEMPTS", "10"))
+SIGNUP_RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("SIGNUP_RATE_LIMIT_WINDOW_SECONDS", "60"))
 
 # Heap Analytics app id
 HEAP_ANALYTICS_ID = os.environ.get("HEAP_ANALYTICS_ID", "")
