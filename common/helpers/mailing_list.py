@@ -3,9 +3,8 @@ Mailchimp setup instructions
 
 1. Create a Mailchimp account and audience
     - In Mailchimp, create or choose the audience that should receive signups.
-    - Turn on audience double opt-in in Mailchimp if your compliance policy requires
-      it. This module already uses member status "pending", which triggers
-      confirmation email flow.
+    - This module uses member status "subscribed" after DemocracyLab email
+      verification, so users are not prompted with a second Mailchimp opt-in email.
 
 2. Create an API key
     - In Mailchimp: Profile -> Extras -> API keys -> Create A Key.
@@ -22,11 +21,10 @@ Mailchimp setup instructions
 5. Verify the signup flow
     - Start the app and submit signup with newsletter opt-in.
     - Verify the user email first (subscription is deferred until verification).
-    - Confirm a "pending" member appears in Mailchimp and receives opt-in email.
+    - Confirm a "subscribed" member appears in Mailchimp after verification.
 
 Security notes
-    - Do not change status from "pending" to "subscribed" here unless you also
-      update abuse protections and legal/compliance review.
+    - Keep subscription deferred until after DemocracyLab email verification.
     - Keep CAPTCHA and signup rate limiting enabled on the signup endpoint.
 """
 
@@ -76,7 +74,7 @@ class SubscribeToMailingList(object):
                 list_id,
                 {
                     "email_address": self.email,
-                    "status": "pending",
+                    "status": "subscribed",
                     "merge_fields": merge_fields,
                 },
             )
