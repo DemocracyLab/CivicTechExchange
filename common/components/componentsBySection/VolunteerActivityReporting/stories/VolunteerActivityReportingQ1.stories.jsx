@@ -3,7 +3,7 @@ import VolunteerActivityReportingQ1 from '../VolunteerActivityReportingQ1';
 
 
 export default {
-  title: 'VolunteerActivityReporting/VolunteerAactivityReportingQ1',
+  title: 'VolunteerActivityReporting/VolunteerActivityReportingQ1',
   component: VolunteerActivityReportingQ1,
 };
 
