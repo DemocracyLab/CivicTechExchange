@@ -1,31 +1,9 @@
 """
 Mailchimp setup instructions
 
-1. Create a Mailchimp account and audience
-    - In Mailchimp, create or choose the audience that should receive signups.
-    - This module uses member status "subscribed" after DemocracyLab email
-      verification, so users are not prompted with a second Mailchimp opt-in email.
+see https://docs.google.com/document/d/1OLQPFFJ8oz_BxpuxRxKKdZ2brmlUkVN3ICTdbA_axxY/edit?tab=t.0#heading=h.91rbt9r6gf9e
+and keep it up to date
 
-2. Create an API key
-    - In Mailchimp: Profile -> Extras -> API keys -> Create A Key.
-    - Copy the generated key.
-
-3. Configure app environment variables
-    - Set MAILCHIMP_API_KEY to your Mailchimp API key.
-    - Set MAILCHIMP_SUBSCRIBE_LIST_ID to your audience/list id.
-
-4. Find your audience/list id
-    - In Mailchimp audience settings, copy the Audience ID.
-    - Use that value for MAILCHIMP_SUBSCRIBE_LIST_ID.
-
-5. Verify the signup flow
-    - Start the app and submit signup with newsletter opt-in.
-    - Verify the user email first (subscription is deferred until verification).
-    - Confirm a "subscribed" member appears in Mailchimp after verification.
-
-Security notes
-    - Keep subscription deferred until after DemocracyLab email verification.
-    - Keep CAPTCHA and signup rate limiting enabled on the signup endpoint.
 """
 
 import threading
