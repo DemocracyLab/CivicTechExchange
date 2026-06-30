@@ -174,6 +174,10 @@ LOGIN_REDIRECT_URL = "/"
 
 REDIS_ENABLED = os.environ.get("REDIS_ENABLED", False) == "True"
 
+if not REDIS_ENABLED:
+    import warnings
+    warnings.warn("Rate limiting is non-functional across multiple dynos without Redis (REDIS_ENABLED=False).")
+
 RQ_QUEUES = {
     "default": {
         # If you're on Heroku
