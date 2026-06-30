@@ -5,6 +5,7 @@ from common.helpers.constants import FrontEndSection
 from common.helpers.dictionaries import merge_dicts, keys_subset, keys_omit
 from common.helpers.form_helpers import is_json_string
 from common.helpers.front_end import section_path, section_url, get_page_section, get_clean_url, clean_invalid_args
+from common.helpers.mailing_list import SubscribeToMailingList
 from civictechprojects.sitemaps import SitemapPages
 
 
@@ -83,3 +84,18 @@ class FormHelperTests(TestCase):
         self.assertFalse(is_json_string('blah'), 'Plain text should not be json')
         self.assertFalse(is_json_string(''), 'Empty string should not be json')
 
+class MailingListTests(TestCase):
+    def test_masked_email(self):
+        tests = [
+            ("test@example.com", "te***@example.com"),
+            ("a@example.com", "a***@example.com"),
+            ("short@example.com", "sh***@example.com"),
+            ("longemail@example.com", "lo***@example.com"),
+            ("invalidemail", "***"),
+            ("", "***"),
+            (None, "***"),
+        ]
+        
+        for email, expected in tests:
+            subscriber = SubscribeToMailingList(email, "First", "Last")
+            self.assertEqual(expected, subscriber.masked_email())
