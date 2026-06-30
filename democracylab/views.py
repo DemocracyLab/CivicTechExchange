@@ -23,7 +23,10 @@ from salesforce import contact as salesforce_contact
 def _client_ip(request):
     forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if forwarded_for:
-        return forwarded_for.split(',')[0].strip()
+        # Trust the real IP appended by the reverse proxy. 
+        # Heroku's router appends the trusted client IP to the right side of the list, 
+        # so reading index [0] is vulnerable to spoofing.
+        return forwarded_for.split(',')[-1].strip()
     return request.META.get('REMOTE_ADDR', '')
 
 
@@ -197,6 +200,10 @@ def verify_user(request, user_id, token):
         contributor = Contributor.objects.get(id=user_id)
         contributor.email_verified = True
         subscribe_to_newsletter = contributor.newsletter_signup_requested
+
+        # The user has verified their email address by clicking on the verification email sent by this flow.
+        # We clear the signup_requested flag to avoid annoying
+        # the user with a second email verification from Mailchimp to verify the email again.
         contributor.newsletter_signup_requested = False
         contributor.save()
 
