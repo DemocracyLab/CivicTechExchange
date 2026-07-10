@@ -174,6 +174,10 @@ LOGIN_REDIRECT_URL = "/"
 
 REDIS_ENABLED = os.environ.get("REDIS_ENABLED", False) == "True"
 
+if not REDIS_ENABLED:
+    import warnings
+    warnings.warn("Rate limiting is non-functional across multiple dynos without Redis (REDIS_ENABLED=False).")
+
 RQ_QUEUES = {
     "default": {
         # If you're on Heroku
@@ -312,6 +316,8 @@ GOOGLE_CONVERSION_IDS = ast.literal_eval(
 # Google ReCaptcha keys - site key is exposed to the front end, secret is not
 GR_SITEKEY = os.environ.get("GOOGLE_RECAPTCHA_SITE_KEY", "")
 GR_SECRETKEY = os.environ.get("GOOGLE_RECAPTCHA_SECRET_KEY", "")
+SIGNUP_RATE_LIMIT_ATTEMPTS = int(os.environ.get("SIGNUP_RATE_LIMIT_ATTEMPTS", "10"))
+SIGNUP_RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("SIGNUP_RATE_LIMIT_WINDOW_SECONDS", "60"))
 
 # Heap Analytics app id
 HEAP_ANALYTICS_ID = os.environ.get("HEAP_ANALYTICS_ID", "")
@@ -412,6 +418,10 @@ CSP_CONNECT_SRC = (
     "*.google-analytics.com",
     "*.nr-data.net",
     "*.hereapi.com",
+    # reCAPTCHA posts token validation requests to Google endpoints.
+    "https://www.google.com",
+    # reCAPTCHA also loads assets from Google's static CDN.
+    "https://www.gstatic.com",
     "https://*.hotjar.com",
     "https://*.hotjar.io",
     "wss://*.hotjar.com",

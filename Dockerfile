@@ -1,6 +1,20 @@
 # https://hub.docker.com/r/nikolaik/python-nodejs
 FROM nikolaik/python-nodejs:python3.10-nodejs16
 
+# Refresh Yarn repo GPG key (old key 62D54FD4003F6525 expired; fetch the
+# current one so apt-get update succeeds on bookworm-based images).
+# The nikolaik base image ships a Yarn apt source whose bundled GPG key
+# (62D54FD4003F6525) expired, and Debian Bookworm dropped the legacy apt-key
+# trust store in favour of per-source signed-by keyrings.  This block:
+#   1. Downloads the current Yarn public key as a binary keyring.
+#   2. Updates /etc/apt/sources.list.d/yarn.list to reference it via signed-by.
+# Without this, `apt-get update` fails with "NO_PUBKEY 62D54FD4003F6525".
+# To verify: docker build --no-cache and watch the apt-get update step.
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg \
+    | gpg --dearmor -o /usr/share/keyrings/yarn-archive-keyring.gpg \
+    && sed -i 's|^deb \[.*\] https://dl.yarnpkg.com|deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com|;s|^deb https://dl.yarnpkg.com|deb [signed-by=/usr/share/keyrings/yarn-archive-keyring.gpg] https://dl.yarnpkg.com|' \
+        /etc/apt/sources.list.d/yarn.list 2>/dev/null || true
+
 # This to get GDAL thanks to https://stackoverflow.com/questions/62546706/how-do-i-install-gdal-in-a-python-docker-environment
 RUN apt-get update && apt-get install
 
