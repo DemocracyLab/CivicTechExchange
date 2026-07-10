@@ -1,24 +1,26 @@
 import re
 from django.conf import settings
-from django.core.exceptions import MiddlewareNotUsed, SuspiciousOperation
+from django.core.exceptions import SuspiciousOperation
+
+# TRACE and TRACK have no legitimate use in a web application and are
+# commonly used as cheap flood vectors (TRACE also enables Cross-Site Tracing).
+_ALWAYS_BLOCKED_METHODS = frozenset({'TRACE', 'TRACK'})
 
 
 class MaliciousRequestsMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
-        # One-time configuration and initialization.
-        used = False
         if settings.MALICIOUS_URL_PATTERNS is not None:
             url_patterns = settings.MALICIOUS_URL_PATTERNS.split(',')
             self.malicious_url_patterns = list(map(lambda pattern: re.compile(pattern, re.IGNORECASE), url_patterns))
-            used = True
         if settings.MALICIOUS_FWD_PATTERNS is not None:
             fwd_patterns = settings.MALICIOUS_FWD_PATTERNS.split(',')
             self.malicious_fwd_patterns = list(map(lambda pattern: re.compile(pattern, re.IGNORECASE), fwd_patterns))
-            used = True
 
-        if not used:
-            raise MiddlewareNotUsed
+    def check_request_method(self, request):
+        if request.method in _ALWAYS_BLOCKED_METHODS:
+            self.log_filter_action(f'Blocking disallowed HTTP method "{request.method}"')
+            raise SuspiciousOperation("Disallowed HTTP method")
 
     def check_request_url(self, request):
         path = request.get_full_path()
@@ -39,16 +41,9 @@ class MaliciousRequestsMiddleware:
         print(f'[MaliciousRequestsMiddleware] {log_msg}')
 
     def __call__(self, request):
-        # Code to be executed for each request before
-        # the view (and later middleware) are called.
-
+        self.check_request_method(request)
         hasattr(self, 'malicious_url_patterns') and self.check_request_url(request)
         hasattr(self, 'malicious_fwd_patterns') and self.check_request_fwd(request)
 
-        response = self.get_response(request)
-
-        # Code to be executed for each request/response after
-        # the view is called.
-
-        return response
+        return self.get_response(request)
 
