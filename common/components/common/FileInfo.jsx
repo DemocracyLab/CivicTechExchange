@@ -1,3 +1,5 @@
+//@flow
+
 export type FileInfo = {|
   id: ?number,
   key: string,

@@ -15,22 +15,25 @@ type Props = {|
   iconClass: string,
   aspect: ?number,
   currentImage: FileInfo,
+  isCropping: boolean,
+  _onIsCroppingChanged: (boolean) => void,
 |};
 
 type State = {|
   s3Key: string,
+  src: string,
   croppedImageUrl: ?string,
+  crop: any
 |};
 
-let lastFileUploadUrl: string = null;
+let lastFileUploadUrl: string = "";
 
 class ImageCropUploadButton extends React.PureComponent<Props, State> {
   constructor(props): void {
     super(props);
     this.state = {
       s3Key: "",
-      src: null,
-      isCropping: false,
+      src: "",
       croppedImageUrl: "",
       crop: this.initializeCropSettings(),
     };
@@ -40,9 +43,9 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
     const previewImage =
       this.state.croppedImageUrl ||
       (this.props.currentImage && this.props.currentImage.publicUrl);
-    return (
+      return (
       <div className="ImageCropUploadButton-root">
-        {this.state.src && this.state.isCropping && (
+        {this.state.src && this.props.isCropping && (
           <div className="ImageCropUploadButton-cropper">
             <ReactCrop
               src={this.state.src}
@@ -65,7 +68,7 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
             </div>
           </div>
         )}
-        {!this.state.isCropping && (
+        {!this.props.isCropping && (
           <FileSelectButton
             hasImagePreview="true"
             previewImage={previewImage}
@@ -80,7 +83,8 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   }
 
   _handleDoneCropping(): void {
-    this.setState({ isCropping: false, crop: this.initializeCropSettings() });
+    this.setState({ crop: this.initializeCropSettings() });
+    this.props._onIsCroppingChanged(false);
     if (this.fileBlob) {
       this.launchPresignedUploadToS3(this.fileBlob);
     }
@@ -89,17 +93,16 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   _handleCancelCropping(): void {
     if (lastFileUploadUrl) {
       this.setState({
-        isCropping: false,
         crop: this.initializeCropSettings(),
         croppedImageUrl: lastFileUploadUrl,
       });
     } else {
       this.setState({
-        isCropping: false,
         crop: this.initializeCropSettings(),
         croppedImageUrl: this.props.currentImage,
       });
     }
+    this.props._onIsCroppingChanged(false);
   }
 
   _onCropChange(crop): void {
@@ -116,7 +119,8 @@ class ImageCropUploadButton extends React.PureComponent<Props, State> {
   }
 
   _handleFileSelection(file): void {
-    this.setState({ src: file, isCropping: true });
+    this.setState({ src: file});
+    this.props._onIsCroppingChanged(true);
   }
 
   makeClientCrop(crop) {
