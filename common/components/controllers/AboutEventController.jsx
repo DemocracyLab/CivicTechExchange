@@ -6,6 +6,7 @@ import type { ProjectDetailsAPIData } from "../utils/ProjectAPIUtils.js";
 import metrics from "../utils/metrics.js";
 import Truncate from "../utils/truncate.js";
 import AboutProjectDisplay from "../common/projects/AboutProjectDisplay.jsx";
+import LoadingFrame from "../chrome/LoadingFrame.jsx";
 import { APIError } from "../utils/api.js";
 import url from "../utils/url.js";
 import EventAPIUtils, { EventData } from "../utils/EventAPIUtils.js";
@@ -36,11 +37,9 @@ class AboutEventController extends React.PureComponent<{||}, State> {
   }
 
   loadEventDetails(event: EventData) {
-    this.setState(
-      {
-        event: event,
-      },
-    );
+    this.setState({
+      event: event,
+    });
   }
 
   handleLoadEventFailure(error: APIError) {
@@ -63,11 +62,7 @@ class AboutEventController extends React.PureComponent<{||}, State> {
   }
 
   _renderLoadMessage(): React$Node {
-    return (
-      <React.Fragment>
-        <div>{this.state.loadStatusMsg}</div>
-      </React.Fragment>
-    );
+    return <LoadingFrame height="80vh" />;
   }
 }
 

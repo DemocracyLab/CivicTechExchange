@@ -10,7 +10,7 @@ import { List } from "immutable";
 import ProjectCard from "./ProjectCard.jsx";
 import EntitySearchStore from "../../stores/EntitySearchStore.js";
 import UniversalDispatcher from "../../stores/UniversalDispatcher.js";
-import LoadingMessage from "../../chrome/LoadingMessage.jsx";
+import LoadingFrame from "../../chrome/LoadingFrame.jsx";
 import metrics from "../../utils/metrics.js";
 import { ProjectData } from "../../utils/ProjectAPIUtils.js";
 import type { LocationRadius } from "../../common/location/LocationRadius.js";
@@ -113,7 +113,7 @@ class ProjectCardsContainer extends React.Component<Props, State> {
       this.props.handleEmptyProject && this.props.handleEmptyProject();
     }
     return !this.state.projects ? (
-      <LoadingMessage message="Loading projects..." />
+      <LoadingFrame height="80vh" />
     ) : this.state.projects.size === 0 ? (
       "No projects match the provided criteria. Try a different set of filters or search term."
     ) : (
