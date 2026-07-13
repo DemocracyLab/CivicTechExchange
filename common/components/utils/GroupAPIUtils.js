@@ -34,6 +34,7 @@ export type GroupDetailsAPIData = {|
   group_links: $ReadOnlyArray<LinkInfo>,
   group_files: $ReadOnlyArray<FileInfo>,
   is_private: boolean,
+  group_approved: boolean,
 |} & GroupTileAPIData;
 
 export type ProjectRelationshipAPIData = {|

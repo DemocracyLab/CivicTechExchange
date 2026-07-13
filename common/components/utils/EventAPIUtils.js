@@ -41,6 +41,7 @@ export type EventData = {|
   event_conference_admin_url: ?string,
   event_conference_participants: ?string,
   event_time_zones: $ReadOnlyArray<LocationTimezone>,
+  event_approved: boolean,
 |};
 
 export type EventTileAPIData = {|
