@@ -37,6 +37,7 @@ import EventProjectRSVPModal from "../../common/event_projects/EventProjectRSVPM
 type Props = {|
   event: ?EventData,
   viewOnly: boolean,
+  showHeaders: boolean
 |};
 
 type State = {|
@@ -85,6 +86,7 @@ class AboutEventDisplay extends React.PureComponent<Props, State> {
       showPostRSVPModal: false,
       showCancelRSVPConfirmModal: false,
       startDate: startDate,
+      showHeaders: false,
       endDate: endDate,
       isPastEvent: endDate < datetime.now(),
       showPostRSVPToast: false,
