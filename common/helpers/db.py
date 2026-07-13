@@ -16,5 +16,6 @@ def bulk_delete(Table, delete_results):
 
 
 def unique_column_values(model, column, filter_func):
-    values = map(lambda obj_property: obj_property[column], model.objects.values(column).distinct())
+    # the condition `is_searchable` is to filter the countries without approved projects.
+    values = map(lambda obj_property: obj_property[column], model.objects.filter(is_searchable=True).values(column).distinct())
     return list(filter(filter_func, values))
