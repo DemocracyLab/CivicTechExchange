@@ -1,6 +1,11 @@
 from django.shortcuts import redirect
 from urllib.parse import urlparse
-from common.helpers.front_end import clean_invalid_args, get_clean_url, get_page_section, redirect_from_deprecated_url
+from common.helpers.front_end import (
+    clean_invalid_args,
+    get_clean_url,
+    get_page_section,
+    redirect_from_deprecated_url,
+)
 
 
 class RedirectTo(Exception):
@@ -13,7 +18,10 @@ class RedirectMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        # Nothing to do here, just using this middleware for redirect exception handling
+        # Redirect to localhost if the host starts with '0.0.0.0'
+        if request.get_host().startswith("0.0.0.0"):
+            new_url = request.build_absolute_uri().replace("0.0.0.0", "127.0.0.1", 1)
+            return redirect(new_url)
         return self.get_response(request)
 
     @staticmethod
@@ -25,12 +33,12 @@ class RedirectMiddleware:
 class RedirectorInterface:
     @staticmethod
     def redirect_to(full_path):
-        '''
+        """
         Redirects url to a new url, if redirection is needed
 
         :param full_path:   string containing full url path
         :return:            string path to redirect to, or None if no redirection is necessary
-        '''
+        """
         pass
 
 
@@ -43,10 +51,15 @@ class InvalidArgumentsRedirector(RedirectorInterface):
         prefix_portion = url_args.netloc + url_args.path
         query_portion = url_args.query
         clean_url_args = clean_invalid_args(query_portion)
-        if query_portion != "" and clean_url_args != '?' + query_portion:
+        if query_portion != "" and clean_url_args != "?" + query_portion:
             clean_url_valid_args = prefix_portion + clean_url_args
-            print('Redirecting invalid arguments in {old_url} to {new_url}'.format(old_url=full_path, new_url=clean_url_valid_args))
+            print(
+                "Redirecting invalid arguments in {old_url} to {new_url}".format(
+                    old_url=full_path, new_url=clean_url_valid_args
+                )
+            )
             return clean_url_valid_args
+
 
 # Redirects away from dirty urls
 class DirtyUrlsRedirector(RedirectorInterface):
@@ -54,8 +67,13 @@ class DirtyUrlsRedirector(RedirectorInterface):
     def redirect_to(full_path):
         clean_url = get_clean_url(full_path)
         if clean_url != full_path:
-            print('Redirecting unclean {old_url} to {new_url}'.format(old_url=full_path, new_url=clean_url))
+            print(
+                "Redirecting unclean {old_url} to {new_url}".format(
+                    old_url=full_path, new_url=clean_url
+                )
+            )
             return clean_url
+
 
 # Redirects away from deprecated urls
 class DeprecatedUrlsRedirector(RedirectorInterface):
@@ -65,8 +83,13 @@ class DeprecatedUrlsRedirector(RedirectorInterface):
         section_name = get_page_section(clean_url)
         deprecated_redirect_url = redirect_from_deprecated_url(section_name)
         if deprecated_redirect_url:
-            print('Redirecting deprecated url {name}: {url}'.format(name=section_name, url=clean_url))
+            print(
+                "Redirecting deprecated url {name}: {url}".format(
+                    name=section_name, url=clean_url
+                )
+            )
             return deprecated_redirect_url
+
 
 def redirect_by(redirectors, full_path):
     for redirector in redirectors:
