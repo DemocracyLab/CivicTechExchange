@@ -50,9 +50,7 @@ services:
     build: .
     env_file:
       - ./.env
-    command: bash -c '. /.nvm/nvm.sh use default &&
-                      npm run dev &&
-                      python manage.py runserver 0.0.0.0:8000'
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
       - "8000:8000"
     depends_on:
@@ -67,6 +65,15 @@ services:
       - ./manage.py:/code/manage.py
       - ./webpack.common.js:/code/webpack.common.js
       - ./webpack.dev.js:/code/webpack.dev.js
-
+  frontend:
+    build: .
+    command: bash -c '. /.nvm/nvm.sh use default && npm run watch'
+    volumes:
+      - .:/code
+      - /code/node_modules
+    ports:
+      - "80:3000"
+    depends_on:
+      - web
 volumes:
   demolab:

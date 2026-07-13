@@ -55,6 +55,10 @@ module.exports = {
       allChunks: true,
     })
   ],
+
+  watchOptions: {
+    ignored: '**/node_modules',
+  },
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
