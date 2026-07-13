@@ -17,7 +17,7 @@ django-timezone-field==4.2.3
 django-debreach==2.0.1
 djangorestframework==3.14.0
 docutils==0.14
-gunicorn==19.6.0
+gunicorn==22.0.0
 jmespath==0.9.3
 mailchimp3==3.0.21
 psycopg2==2.9.6
