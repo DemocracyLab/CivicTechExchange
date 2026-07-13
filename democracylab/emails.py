@@ -69,8 +69,8 @@ class HtmlEmailTemplate:
     def text_line(self, text):
         return self.add(EmailSection.Text_Line, {'text': text})
 
-    def button(self, url, text):
-        return self.add(EmailSection.Button, {'url': url, 'text': text})
+    def button(self, url, text,text_color='#FFFFFF',text_decoration='underline'):
+        return self.add(EmailSection.Button, {'url': url, 'text': text,'color':text_color,'text_decoration':text_decoration})
 
     def render(self, email_msg, context=None):
         if self.hydrated_template is None:

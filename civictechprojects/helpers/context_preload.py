@@ -134,6 +134,12 @@ def my_groups_preload(context, request):
     context['description'] = 'My Groups page'
     return context
 
+def group_projects_preload(context, request):
+    context = default_preload(context, request)
+    context['title'] = 'Participating Projects | DemocracyLab'
+    context['description'] = 'Projects that the group participate'
+    return context
+
 def find_events_preload(context, request):
     context = default_preload(context, request)
     context['title'] = 'Find Events | DemocracyLab'
@@ -229,6 +235,7 @@ preload_urls = [
     {'section': FrontEndSection.CreateProject.value,'handler':create_project_preload},
     {'section': FrontEndSection.MyProjects.value, 'handler': my_projects_preload},
     {'section': FrontEndSection.MyGroups.value, 'handler': my_groups_preload},
+    {'section': FrontEndSection.GroupProjects.value, 'handler': group_projects_preload},
     {'section': FrontEndSection.MyEvents.value, 'handler': my_events_preload},
     {'section': FrontEndSection.Donate.value, 'handler': donate_preload},
     {'section': FrontEndSection.AboutGroup.value, 'handler': about_group_preload},

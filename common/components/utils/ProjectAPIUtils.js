@@ -247,6 +247,35 @@ class ProjectAPIUtils {
       );
   }
 
+  // fetch project by group id
+  static fetchProjectsByGroupId(
+    group_id: number,
+    callback: ProjectDetailsAPIData => void,
+    errCallback: APIError => void
+  ): void {
+    //if user is owner of group, then also fetch the private project
+    let url: string = "/api/projects?group_id=" + group_id;
+    fetch(new Request(url, { credentials: "include" }))
+      .then(response => {
+        if (!response.ok) {
+          throw Error();
+        }
+        return response.json();
+      })
+      .then(projectsDetails => {
+        callback(projectsDetails);
+        // TODO: Get catch to return http status code
+      })
+      .catch(
+        response =>
+          errCallback &&
+          errCallback({
+            errorCode: response.status,
+            errorMessage: JSON.stringify(response),
+          })
+      );
+  }
+
   // fetch project volunteers list
   static fetchProjectVolunteerList(
     id: number,

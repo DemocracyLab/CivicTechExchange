@@ -34,7 +34,13 @@
   margin-left: auto;
   align-items: flex-end;
 }
-
+.Profile-owner-button-container{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
 .Profile-top-details {
   flex-basis: 100%;
   order: 3;

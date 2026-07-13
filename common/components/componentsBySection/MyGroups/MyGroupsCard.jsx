@@ -37,7 +37,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
           <div>{this.state.isOwner ? "Group Owner" : "Volunteer"}</div>
         </div>
         <div className="col-sm-3">{this._renderGroupStatus()}</div>
-        <div className="col-sm-3">{this._renderButtons()}</div>
+        <div className="col-sm-3 MyProjectCard-groupButtons">{this._renderButtons()}</div>
       </div>
     );
   }
@@ -84,6 +84,7 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
 
     if (this.state.isOwner) {
       const editUrl: string = url.section(Section.CreateGroup, id);
+      const groupProjectsUrl:string = url.section(Section.GroupProjects,id);
       buttons = buttons.concat([
         <Button
           className="MyProjectCard-button"
@@ -92,6 +93,15 @@ class MyGroupsCard extends React.PureComponent<Props, State> {
         >
           Edit
         </Button>,
+        <Button
+        className="MyProjectCard-button"
+        // change href to manage page
+        href={groupProjectsUrl}
+        variant="secondary"
+        >
+          Projects
+        </Button>
+        ,
         <Button
           className="MyProjectCard-button"
           variant="destructive"

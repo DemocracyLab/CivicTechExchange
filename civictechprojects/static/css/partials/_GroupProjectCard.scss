@@ -1,0 +1,53 @@
+.GroupProjectCard-root {
+    color: inherit;
+    background-color: $color-background-light;
+    border: solid 1px $color-grey-frame-border;
+    margin: 20px auto;
+    padding: 16px;
+  }
+
+  .GroupProjectCard-header {
+    color: $color-text-dark;
+    font-style: italic;
+  }
+  
+  .GroupProjectCard-projectName {
+    font-weight: bold;
+  }
+  
+  .GroupProjectCard-item{
+    margin-top: 10px;
+  }
+  .GroupProjectCard-button-container{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .GroupProjectCard-button {
+    margin: 5px;
+  }
+  
+  .GroupProjectCard-viewButton{
+    margin-left: 0;
+  }
+
+  .GroupProjectCard-table td {
+    display: inline-block;
+    width: 100%;
+   }
+  
+   @include media-breakpoint-up(sm) {
+    .GroupProjectCard-table td {
+      display: table-cell;
+      width: 250px;
+      }
+    .GroupProjectCard-item{
+      margin-top: 0;
+    }
+    .GroupProjectCard-viewButton{
+      margin-left: 5;
+    }
+    .GroupProjectCard-button-container{
+      justify-content: flex-end;
+    }
+  }

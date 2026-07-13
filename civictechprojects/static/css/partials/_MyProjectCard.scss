@@ -6,6 +6,12 @@
   padding: 16px;
 }
 
+.MyProjectCard-groupButtons{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .MyProjectCard-header {
   color: $color-text-dark;
   font-style: italic;
@@ -28,5 +34,10 @@
   .MyProjectCard-table td {
     display: table-cell;
     width: 250px;
-    }
+  }
+}
+@media only screen and (max-width: 1440px) {
+  .MyProjectCard-groupButtons{
+    justify-content: flex-start;
+  }
 }
