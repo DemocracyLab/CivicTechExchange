@@ -1,8 +1,11 @@
-from unittest.mock import MagicMock
-from django.core.exceptions import SuspiciousOperation
+from unittest.mock import MagicMock, patch
 from django.test import TestCase, override_settings
 
-from common.helpers.malicious_requests import MaliciousRequestsMiddleware, _ALWAYS_BLOCKED_METHODS
+from common.helpers.malicious_requests import (
+    MaliciousRequestsMiddleware,
+    _ALWAYS_BLOCKED_METHODS,
+    _LOG_THROTTLE_SECONDS,
+)
 
 
 def _make_request(method='GET', path='/', fwd=None):
@@ -29,13 +32,13 @@ class AlwaysBlockedMethodsTests(TestCase):
 
     def test_trace_is_blocked(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(MagicMock(method='TRACE', get_full_path=MagicMock(return_value='/')))
+        response = mw(MagicMock(method='TRACE', get_full_path=MagicMock(return_value='/')))
+        self.assertEqual(response.status_code, 400)
 
     def test_track_is_blocked(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(MagicMock(method='TRACK', get_full_path=MagicMock(return_value='/')))
+        response = mw(MagicMock(method='TRACK', get_full_path=MagicMock(return_value='/')))
+        self.assertEqual(response.status_code, 400)
 
     def test_get_is_allowed(self):
         mw = _middleware()
@@ -71,13 +74,13 @@ class AlwaysBlockedMethodsTests(TestCase):
 class UrlPatternTests(TestCase):
     def test_malicious_url_is_blocked(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(_make_request(path='/index.php'))
+        response = mw(_make_request(path='/index.php'))
+        self.assertEqual(response.status_code, 400)
 
     def test_another_malicious_url_is_blocked(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(_make_request(path='/wp-admin/login'))
+        response = mw(_make_request(path='/wp-admin/login'))
+        self.assertEqual(response.status_code, 400)
 
     def test_clean_url_is_allowed(self):
         mw = _middleware()
@@ -88,13 +91,13 @@ class UrlPatternTests(TestCase):
 class FwdPatternTests(TestCase):
     def test_malicious_fwd_is_blocked(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(_make_request(fwd='10.0.0.1'))
+        response = mw(_make_request(fwd='10.0.0.1'))
+        self.assertEqual(response.status_code, 400)
 
     def test_malicious_fwd_header_takes_precedence_over_remote_addr(self):
         mw = _middleware()
-        with self.assertRaises(SuspiciousOperation):
-            mw(_make_request(fwd='10.1.2.3'))
+        response = mw(_make_request(fwd='10.1.2.3'))
+        self.assertEqual(response.status_code, 400)
 
     def test_clean_fwd_is_allowed(self):
         mw = _middleware()
@@ -103,3 +106,56 @@ class FwdPatternTests(TestCase):
     def test_remote_addr_used_when_no_fwd_header(self):
         mw = _middleware()
         mw(_make_request())  # REMOTE_ADDR is 127.0.0.1, should not match ^10\.
+
+
+@override_settings(MALICIOUS_URL_PATTERNS=None, MALICIOUS_FWD_PATTERNS=None)
+class LogThrottlingTests(TestCase):
+    def _trace_request(self):
+        return MagicMock(method='TRACE', get_full_path=MagicMock(return_value='/'))
+
+    @patch('common.helpers.malicious_requests.print')
+    @patch('common.helpers.malicious_requests.time.monotonic')
+    def test_repeated_blocks_within_window_log_once(self, mock_monotonic, mock_print):
+        mock_monotonic.return_value = 0
+        mw = _middleware()
+
+        for _ in range(5):
+            response = mw(self._trace_request())
+            self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(mock_print.call_count, 1)
+
+    @patch('common.helpers.malicious_requests.print')
+    @patch('common.helpers.malicious_requests.time.monotonic')
+    def test_block_after_window_logs_again_with_suppressed_count(self, mock_monotonic, mock_print):
+        mw = _middleware()
+
+        mock_monotonic.return_value = 0
+        response = mw(self._trace_request())
+        self.assertEqual(response.status_code, 400)
+
+        mock_monotonic.return_value = 5
+        for _ in range(3):
+            response = mw(self._trace_request())
+            self.assertEqual(response.status_code, 400)
+
+        mock_monotonic.return_value = _LOG_THROTTLE_SECONDS + 1
+        response = mw(self._trace_request())
+        self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(mock_print.call_count, 2)
+        second_call_msg = mock_print.call_args_list[1].args[0]
+        self.assertIn('+3 more suppressed', second_call_msg)
+
+    @patch('common.helpers.malicious_requests.print')
+    @patch('common.helpers.malicious_requests.time.monotonic')
+    def test_different_block_reasons_throttle_independently(self, mock_monotonic, mock_print):
+        mock_monotonic.return_value = 0
+        mw = _middleware()
+
+        response = mw(self._trace_request())
+        self.assertEqual(response.status_code, 400)
+        response = mw(MagicMock(method='TRACK', get_full_path=MagicMock(return_value='/')))
+        self.assertEqual(response.status_code, 400)
+
+        self.assertEqual(mock_print.call_count, 2)
