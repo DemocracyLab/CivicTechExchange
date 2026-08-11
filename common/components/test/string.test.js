@@ -57,4 +57,13 @@ describe("stringHelper", () => {
       expect(stringHelper.isValidSlug(slug)).toEqual(false)
     );
   });
+
+  test("randomAlphanumeric", () => {
+    const result = stringHelper.randomAlphanumeric();
+    expect(typeof result).toEqual("string");
+    expect(result.length).toBeGreaterThan(0);
+
+    const anotherResult = stringHelper.randomAlphanumeric();
+    expect(result).not.toEqual(anotherResult);
+  });
 });
