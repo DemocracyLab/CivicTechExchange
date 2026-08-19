@@ -8,6 +8,17 @@ describe("stringHelper", () => {
     expect(stringHelper.isEmptyOrWhitespace(" notwhitespace ")).toEqual(false);
   });
 
+  test("contains", () => {
+    let substringList = ["cat", "dog"];
+    expect(stringHelper.contains("dogs are great", substringList)).toEqual(
+      true
+    );
+    expect(stringHelper.contains("i have a cat", substringList)).toEqual(true);
+
+    expect(stringHelper.contains("no pets here", substringList)).toEqual(false);
+    expect(stringHelper.contains("anything", [])).toEqual(false);
+  });
+
   test("trimStartString", () => {
     const trimmed = stringHelper.trimStartString("prefix_suffix", "prefix_");
     expect(trimmed).toEqual("suffix");
@@ -45,5 +56,14 @@ describe("stringHelper", () => {
     invalidSlugs.forEach(slug =>
       expect(stringHelper.isValidSlug(slug)).toEqual(false)
     );
+  });
+
+  test("randomAlphanumeric", () => {
+    const result = stringHelper.randomAlphanumeric();
+    expect(typeof result).toEqual("string");
+    expect(result.length).toBeGreaterThan(0);
+
+    const anotherResult = stringHelper.randomAlphanumeric();
+    expect(result).not.toEqual(anotherResult);
   });
 });
