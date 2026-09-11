@@ -25,7 +25,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     };
   }
   //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
-  //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
+  //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Board of Directors section
 
   componentDidMount() {
     ProjectAPIUtils.fetchTeamDetails((teamResponse: TeamAPIData) =>
