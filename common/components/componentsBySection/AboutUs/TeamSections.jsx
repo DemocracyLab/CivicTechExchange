@@ -77,7 +77,6 @@ class TeamSections extends React.PureComponent<Props, State> {
         <div className="about-us-team-card-container about-us-board-container">
           {this._renderBios(this.state.board_of_directors, true)}
         </div>
-        <hr />
       </div>
     ) : null;
   }
