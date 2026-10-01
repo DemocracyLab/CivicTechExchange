@@ -10,7 +10,6 @@ import SplashScreen, {
 import url from "../utils/url.js";
 import Section from "../enums/Section.js";
 import TeamSections from "../componentsBySection/AboutUs/TeamSections.jsx";
-import { Glyph, GlyphStyles, GlyphSizes, GlyphWidth } from "../utils/glyphs.js";
 import Button from "react-bootstrap/Button";
 
 type State = {|
@@ -26,7 +25,7 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     };
   }
   //componentDidMount and loadProjectDetails copied from AboutProjectController, since we're retrieving a project's information the same way
-  //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Our Team section
+  //in this case we use the value provided as an env key to get DemocracyLab's project info, to use in the Board of Directors section
 
   componentDidMount() {
     ProjectAPIUtils.fetchTeamDetails((teamResponse: TeamAPIData) =>
@@ -228,28 +227,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
     );
   }
 
-  _annualReport(): $React$Node {
-    return (
-      <div className="about-us-annualreport row">
-        <div className="col about-us-annualreport-container">
-          <div className="about-us-annualreport-left">
-            <i className={Glyph(GlyphStyles.PDF, GlyphSizes.X5)}></i>
-          </div>
-          <div className="about-us-annualreport-right">
-            <h3>Annual Report</h3>
-            <p>
-              Please review our{" "}
-              <a href="https://d1agxr2dqkgkuy.cloudfront.net/documents/2023%20Annual%20Report.pdf">
-                2023 Annual Report
-              </a>{" "}
-              to learn about the impact of our programs and platform last year.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render(): $React$Node {
     return (
       <React.Fragment>
@@ -260,7 +237,6 @@ class AboutUsController extends React.PureComponent<{||}, State> {
         <div className="container about-us-root">
           {this._ourValues()}
           {this._problemSolution()}
-          {this._annualReport()}
           <TeamSections teamResponse={this.state.teamResponse} />
           {this._volunteerWithUs()}
         </div>
