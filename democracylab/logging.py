@@ -18,7 +18,7 @@ def dump_request_summary(request):
     user = (hasattr(request, 'user') and request.user.is_authenticated and request.user.username) or ''
     url = request.path
     method = request.method
-    body = censor_sensitive_fields(dict(getattr(request, method)))
+    body = censor_sensitive_fields(dict(getattr(request, method, None) or {}))
 
     return '({user}) {method} {url} {body}'.format(user=user, url=url, method=method, body=body)
 
